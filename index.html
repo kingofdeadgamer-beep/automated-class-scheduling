@@ -59,6 +59,79 @@
       overflow-x: hidden;
     }
 
+    /* ================= DARK / LIGHT THEME SYSTEM ================= */
+    body.dark-theme {
+      background-color: #090d16 !important;
+      color: #f1f5f9 !important;
+    }
+    body.dark-theme header,
+    body.dark-theme aside,
+    body.dark-theme #config-toolbar,
+    body.dark-theme #chart-container {
+      background-color: #0f172a !important;
+      border-color: #1e293b !important;
+      color: #f1f5f9 !important;
+    }
+    body.dark-theme .bg-white {
+      background-color: #1e293b !important;
+      color: #f1f5f9 !important;
+    }
+    body.dark-theme .bg-slate-50,
+    body.dark-theme .bg-slate-50\/70,
+    body.dark-theme .bg-slate-50\/60,
+    body.dark-theme .bg-slate-100 {
+      background-color: #162032 !important;
+      color: #e2e8f0 !important;
+    }
+    body.dark-theme .border-slate-100,
+    body.dark-theme .border-slate-200,
+    body.dark-theme .border-slate-200\/80,
+    body.dark-theme .border-slate-200\/90,
+    body.dark-theme .border-slate-300 {
+      border-color: #334155 !important;
+    }
+    body.dark-theme .text-slate-900,
+    body.dark-theme .text-slate-800,
+    body.dark-theme .text-slate-700 {
+      color: #f1f5f9 !important;
+    }
+    body.dark-theme .text-slate-600,
+    body.dark-theme .text-slate-500 {
+      color: #94a3b8 !important;
+    }
+    body.dark-theme input,
+    body.dark-theme select,
+    body.dark-theme textarea {
+      background-color: #0f172a !important;
+      color: #f8fafc !important;
+      border-color: #334155 !important;
+    }
+    body.dark-theme .desk-card {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+    }
+    body.dark-theme .group-pod-0 { background-color: #1e1b4b !important; border-color: #6366f1 !important; }
+    body.dark-theme .group-pod-1 { background-color: #064e3b !important; border-color: #10b981 !important; }
+    body.dark-theme .group-pod-2 { background-color: #451a03 !important; border-color: #f59e0b !important; }
+    body.dark-theme .group-pod-3 { background-color: #500724 !important; border-color: #ec4899 !important; }
+    body.dark-theme .group-pod-4 { background-color: #083344 !important; border-color: #06b6d4 !important; }
+    body.dark-theme .group-pod-5 { background-color: #2e1065 !important; border-color: #8b5cf6 !important; }
+
+    body.dark-theme .paired-gap-right::after {
+      background: repeating-linear-gradient(to bottom, #475569 0, #475569 4px, transparent 4px, transparent 8px);
+    }
+    body.dark-theme ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    body.dark-theme ::-webkit-scrollbar-thumb {
+      background: #334155;
+    }
+
+    /* Smooth Auto-Fit Scaling Wrapper for Any Device Screen */
+    #seating-scale-wrapper {
+      transform-origin: top center;
+      transition: transform 0.25s ease, width 0.25s ease;
+    }
+
     /* Custom Scrollbars */
     ::-webkit-scrollbar {
       width: 6px;
@@ -355,6 +428,17 @@
         >
           <i class="fa-solid fa-tv text-amber-600"></i>
           <span class="hidden xl:inline">ขึ้นจอหน้าห้อง</span>
+        </button>
+
+        <!-- Theme Switcher Button (Light White / Dark Black) -->
+        <button
+          id="btn-theme-toggle"
+          onclick="toggleAppTheme()"
+          class="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-bold text-xs sm:text-sm transition"
+          title="เปลี่ยนสีพื้นหลัง (โหมดสีขาว / โหมดสีดำ)"
+        >
+          <i id="theme-toggle-icon" class="fa-solid fa-moon text-indigo-600"></i>
+          <span id="theme-toggle-label" class="hidden xl:inline">พื้นหลังดำ</span>
         </button>
 
         <!-- Print Button -->
@@ -673,10 +757,17 @@
 
             <div class="h-4 w-[1px] bg-slate-300"></div>
 
-            <!-- Seat Card Size Selector -->
+            <!-- Seat Card Size Selector (with Auto-Fit Device Mode) -->
             <div class="flex items-center gap-1">
-              <label class="text-xs font-medium text-slate-600">ขนาดโต๊ะ:</label>
+              <label class="text-xs font-medium text-slate-600">ขนาดจอ:</label>
               <div class="inline-flex rounded-lg border border-slate-300 bg-white p-0.5">
+                <button
+                  type="button"
+                  id="size-btn-auto"
+                  onclick="setSeatSize('auto')"
+                  class="px-2 py-0.5 rounded-md text-[11px] font-semibold transition"
+                  title="ปรับขนาดผังโต๊ะอัตโนมัติให้พอดีกับหน้าจอมือถือ แท็บเล็ต และคอมพิวเตอร์"
+                ><i class="fa-solid fa-mobile-screen mr-0.5"></i>อัตโนมัติ</button>
                 <button
                   type="button"
                   id="size-btn-xs"
@@ -689,7 +780,7 @@
                   id="size-btn-sm"
                   onclick="setSeatSize('sm')"
                   class="px-2 py-0.5 rounded-md text-[11px] font-semibold transition"
-                  title="ขนาดเล็กกะทัดรัด (ค่าเริ่มต้น)"
+                  title="ขนาดเล็กกะทัดรัด"
                 >เล็ก</button>
                 <button
                   type="button"
@@ -826,10 +917,12 @@
           </div>
         </div>
 
-        <!-- SEATING GRID CONTAINER -->
-        <div class="my-auto py-1 flex items-center justify-center min-w-fit">
-          <div id="seating-grid" class="grid gap-1.5 sm:gap-2 mx-auto transition-all duration-300 max-w-5xl">
-            <!-- Desks dynamically generated here -->
+        <!-- SEATING GRID CONTAINER (Auto-Responsive Wrapper) -->
+        <div id="seating-viewport" class="my-auto py-1 w-full overflow-x-auto flex items-start justify-center">
+          <div id="seating-scale-wrapper" class="flex items-center justify-center">
+            <div id="seating-grid" class="grid gap-1.5 sm:gap-2 mx-auto transition-all duration-300 max-w-5xl">
+              <!-- Desks dynamically generated here -->
+            </div>
           </div>
         </div>
 
@@ -1742,7 +1835,7 @@
         classroomTitle: title,
         rows,
         cols,
-        seatSize: 'sm',
+        seatSize: 'auto',
         preset: 'pairs',
         perspective: 'student',
         projectorMode: false,
@@ -1824,6 +1917,14 @@
       syncUIControlsFromState();
       renderClassroomSelector();
       renderAll();
+
+      // Apply saved White/Black theme preference
+      applySavedTheme();
+
+      // Auto-fit seating grid whenever screen size or orientation changes
+      window.addEventListener('resize', () => {
+        applyResponsiveGridFit();
+      });
 
       // Start background cloud polling every 12 seconds for live Student Portal updates (auto task check + help alerts)
       setInterval(() => {
@@ -2181,7 +2282,7 @@
 
       // Configure dynamic CSS grid template columns & compact gaps based on seatSize
       gridEl.style.gridTemplateColumns = `repeat(${state.cols}, minmax(0, 1fr))`;
-      const seatSize = state.seatSize || 'sm';
+      const seatSize = getResolvedSeatSize();
       gridEl.className = `grid mx-auto transition-all duration-300 ${
         seatSize === 'xs'
           ? 'gap-1 sm:gap-1.5 max-w-4xl'
@@ -2508,6 +2609,7 @@
       });
 
       gridEl.innerHTML = html;
+      requestAnimationFrame(() => applyResponsiveGridFit());
     }
 
     /*************************************************************************
@@ -3060,11 +3162,14 @@
       state.seatSize = size;
       updateSeatSizeButtonsUI();
       renderAll(false);
+      if (size === 'auto') {
+        showToast('เปิดโหมดปรับขนาดอัตโนมัติให้พอดีกับหน้าจออุปกรณ์แล้ว 📱💻', 'indigo');
+      }
     }
 
     function updateSeatSizeButtonsUI() {
-      const sizes = ['xs', 'sm', 'md'];
-      const current = state.seatSize || 'sm';
+      const sizes = ['auto', 'xs', 'sm', 'md'];
+      const current = state.seatSize || 'auto';
       sizes.forEach(sz => {
         const btn = document.getElementById(`size-btn-${sz}`);
         if (!btn) return;
@@ -3074,6 +3179,80 @@
           btn.className = 'px-2 py-0.5 rounded-md text-[11px] font-medium text-slate-600 hover:bg-slate-100 transition';
         }
       });
+    }
+
+    function getResolvedSeatSize() {
+      const mode = state.seatSize || 'auto';
+      if (mode !== 'auto') return mode;
+
+      const w = window.innerWidth;
+      // Automatically choose optimal card density based on device width and column count
+      if (w < 640) {
+        return 'xs'; // Mobile phone
+      } else if (w < 1180) {
+        return state.cols >= 7 ? 'xs' : 'sm'; // Tablet / iPad / Small laptop
+      } else {
+        return state.cols >= 8 ? 'xs' : state.cols >= 7 ? 'sm' : 'md'; // Desktop / Projector
+      }
+    }
+
+    function applyResponsiveGridFit() {
+      const viewport = document.getElementById('seating-viewport');
+      const wrapper = document.getElementById('seating-scale-wrapper');
+      const gridEl = document.getElementById('seating-grid');
+      if (!viewport || !wrapper || !gridEl) return;
+
+      // Reset transform first to measure natural width
+      wrapper.style.transform = 'none';
+      wrapper.style.height = 'auto';
+
+      if ((state.seatSize || 'auto') !== 'auto') return;
+
+      const availableWidth = viewport.clientWidth - 8;
+      const naturalWidth = gridEl.scrollWidth;
+
+      if (naturalWidth > availableWidth && availableWidth > 200) {
+        const scale = Math.max(0.52, availableWidth / naturalWidth);
+        wrapper.style.transform = `scale(${scale.toFixed(3)})`;
+        // Adjust wrapper height so there is no empty gap below scaled grid
+        const naturalHeight = gridEl.offsetHeight;
+        wrapper.style.height = `${Math.ceil(naturalHeight * scale)}px`;
+      }
+    }
+
+    // --- THEME SWITCHER (WHITE / BLACK BACKGROUND) ---
+    const THEME_STORAGE_KEY = 'SMART_SEATING_THEME_MODE';
+
+    function applySavedTheme() {
+      const saved = localStorage.getItem(THEME_STORAGE_KEY) || 'light';
+      setAppTheme(saved, false);
+    }
+
+    function toggleAppTheme() {
+      const isCurrentlyDark = document.body.classList.contains('dark-theme');
+      setAppTheme(isCurrentlyDark ? 'light' : 'dark', true);
+    }
+
+    function setAppTheme(themeMode, notify = false) {
+      const icon = document.getElementById('theme-toggle-icon');
+      const label = document.getElementById('theme-toggle-label');
+      const btn = document.getElementById('btn-theme-toggle');
+
+      if (themeMode === 'dark') {
+        document.body.classList.add('dark-theme');
+        localStorage.setItem(THEME_STORAGE_KEY, 'dark');
+        if (icon) icon.className = 'fa-solid fa-sun text-amber-400';
+        if (label) label.textContent = 'พื้นหลังขาว';
+        if (btn) btn.title = 'เปลี่ยนเป็นพื้นหลังสีขาว (Light Mode)';
+        if (notify) showToast('เปลี่ยนเป็นพื้นหลังสีดำ (Dark Mode) เรียบร้อยแล้ว 🌙', 'slate');
+      } else {
+        document.body.classList.remove('dark-theme');
+        localStorage.setItem(THEME_STORAGE_KEY, 'light');
+        if (icon) icon.className = 'fa-solid fa-moon text-indigo-600';
+        if (label) label.textContent = 'พื้นหลังดำ';
+        if (btn) btn.title = 'เปลี่ยนเป็นพื้นหลังสีดำ (Dark Mode)';
+        if (notify) showToast('เปลี่ยนเป็นพื้นหลังสีขาว (Light Mode) เรียบร้อยแล้ว ☀️', 'indigo');
+      }
     }
 
     function toggleEditDesksMode() {
