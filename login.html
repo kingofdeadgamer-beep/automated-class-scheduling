@@ -3,29 +3,93 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>เข้าสู่ระบบ | ระบบจัดผังที่นั่งนักเรียนอัจฉริยะ</title>
+  <title>เข้าสู่ระบบ | Smart Classroom</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="config.js"></script>
   <style>
     body { font-family: 'Kanit', sans-serif; }
+    body.dark-theme {
+      background: linear-gradient(135deg, #090d16 0%, #0f172a 50%, #1e1b4b 100%) !important;
+      color: #f1f5f9 !important;
+    }
+    body.dark-theme .auth-card {
+      background-color: #0f172a !important;
+      border-color: #1e293b !important;
+    }
+    body.dark-theme .auth-surface {
+      background-color: #162032 !important;
+      border-color: #334155 !important;
+    }
+    body.dark-theme input {
+      background-color: #1e293b !important;
+      color: #f8fafc !important;
+      border-color: #334155 !important;
+    }
+    body.dark-theme label,
+    body.dark-theme .text-slate-700,
+    body.dark-theme .text-slate-800 {
+      color: #e2e8f0 !important;
+    }
+    body.dark-theme .text-slate-500 {
+      color: #94a3b8 !important;
+    }
   </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-slate-100 to-violet-100 flex items-center justify-center p-4">
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-slate-100 to-sky-100 flex items-center justify-center p-4 transition-colors duration-300">
 
-  <div class="max-w-md w-full bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden">
-    <!-- Header Banner -->
-    <div class="bg-gradient-to-r from-indigo-600 to-violet-600 p-6 text-center text-white">
-      <div class="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-xs flex items-center justify-center mx-auto mb-3 shadow-inner">
-        <i class="fa-solid fa-chair text-2xl"></i>
+  <!-- Top-right quick theme button -->
+  <button
+    type="button"
+    id="login-theme-btn"
+    onclick="toggleLoginTheme()"
+    class="fixed top-4 right-4 w-11 h-11 rounded-2xl bg-white/90 hover:bg-white shadow-md border border-slate-200 text-indigo-600 flex items-center justify-center transition z-20"
+    title="เปลี่ยนสีพื้นหลัง (ขาว / ดำ)"
+  >
+    <i id="login-theme-icon" class="fa-solid fa-moon text-lg"></i>
+  </button>
+
+  <div class="auth-card max-w-md w-full bg-white rounded-3xl shadow-2xl border border-slate-200/80 overflow-hidden">
+    <!-- Dynamic Header Banner -->
+    <div id="auth-banner" class="bg-gradient-to-r from-indigo-600 to-violet-600 p-6 text-center text-white transition-all duration-300">
+      <div class="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-xs flex items-center justify-center mx-auto mb-3 shadow-inner">
+        <i id="auth-banner-icon" class="fa-solid fa-chalkboard-user text-3xl"></i>
       </div>
-      <h1 class="text-xl font-bold">ระบบจัดผังที่นั่งนักเรียนอัจฉริยะ</h1>
-      <p class="text-xs text-indigo-100 mt-1">Smart Seating Chart Cloud • ใช้งานออนไลน์ได้ทุกที่</p>
+      <h1 class="text-xl font-extrabold">Smart Classroom Cloud</h1>
+      <p id="auth-banner-sub" class="text-xs text-indigo-100 mt-1">ระบบจัดการห้องเรียนสำหรับครูผู้สอนและนักเรียน</p>
     </div>
 
-    <!-- Mode Switcher Tabs -->
-    <div class="grid grid-cols-2 border-b border-slate-200 bg-slate-50/70">
+    <!-- ROLE SELECTION (Teacher vs Student) -->
+    <div class="p-4 pb-2 auth-surface bg-slate-50/80 border-b border-slate-200">
+      <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center mb-2">
+        เลือกบทบาทผู้ใช้งาน (Select Role)
+      </div>
+      <div class="grid grid-cols-2 gap-2.5">
+        <button
+          type="button"
+          id="role-btn-teacher"
+          onclick="selectRole('teacher')"
+          class="py-3 px-3 rounded-2xl border-2 border-indigo-600 bg-indigo-50 text-indigo-800 font-extrabold text-sm flex flex-col items-center gap-1 shadow-xs transition"
+        >
+          <i class="fa-solid fa-chalkboard-user text-xl"></i>
+          <span>ครูผู้สอน (Teacher)</span>
+        </button>
+
+        <button
+          type="button"
+          id="role-btn-student"
+          onclick="selectRole('student')"
+          class="py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-sky-300 text-slate-600 font-bold text-sm flex flex-col items-center gap-1 transition"
+        >
+          <i class="fa-solid fa-graduation-cap text-xl"></i>
+          <span>นักเรียน (Student)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mode Switcher Tabs (Login vs Register) -->
+    <div class="grid grid-cols-2 border-b border-slate-200 auth-surface bg-slate-50/50">
       <button id="tab-login" onclick="switchMode('login')" class="py-3 text-sm font-bold text-indigo-600 border-b-2 border-indigo-600 bg-white transition">
         <i class="fa-solid fa-right-to-bracket mr-1.5"></i> เข้าสู่ระบบ
       </button>
@@ -36,167 +100,468 @@
 
     <div class="p-6">
       <!-- Alert Box -->
-      <div id="alert-box" class="hidden mb-4 p-3 rounded-xl text-xs font-medium flex items-center gap-2"></div>
+      <div id="alert-box" class="hidden mb-4 p-3 rounded-xl text-xs font-semibold flex items-center gap-2"></div>
 
-      <!-- FORM: LOGIN -->
+      <!-- FORM: LOGIN (Shared for Teacher & Student, routes based on selected role) -->
       <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">ชื่อผู้ใช้งาน (Username)</label>
+          <label id="login-user-label" class="block text-xs font-bold text-slate-700 mb-1">ชื่อผู้ใช้งานครู (Username)</label>
           <div class="relative">
-            <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
             <input type="text" id="login-username" required placeholder="กรอกชื่อผู้ใช้งานของคุณ"
-              class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-sm outline-none" />
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-sm outline-none" />
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">รหัสผ่าน (Password)</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1">รหัสผ่าน (Password)</label>
           <div class="relative">
-            <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
             <input type="password" id="login-password" required placeholder="กรอกรหัสผ่าน"
-              class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-sm outline-none" />
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-sm outline-none" />
           </div>
         </div>
 
         <button type="submit" id="btn-login"
-          class="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold text-sm shadow-md shadow-indigo-200 transition active:scale-[0.99]">
-          เข้าสู่ระบบ
+          class="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-extrabold text-sm shadow-md shadow-indigo-200 transition active:scale-[0.99]">
+          <i class="fa-solid fa-right-to-bracket mr-1.5"></i> เข้าสู่ระบบครูผู้สอน
         </button>
       </form>
 
-      <!-- FORM: REGISTER -->
-      <form id="form-register" onsubmit="handleRegister(event)" class="space-y-3.5 hidden">
+      <!-- FORM: TEACHER REGISTER -->
+      <form id="form-register-teacher" onsubmit="handleTeacherRegister(event)" class="space-y-3.5 hidden">
         <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">ชื่อ-นามสกุล (ครูผู้สอน)</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1">ชื่อ-นามสกุล (ครูผู้สอน)</label>
           <input type="text" id="reg-fullname" required placeholder="เช่น นายนวชล ประตา"
-            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-sm outline-none" />
+            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 text-sm outline-none" />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">โรงเรียน / สถานศึกษา</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1">โรงเรียน / สถานศึกษา</label>
           <input type="text" id="reg-school" required placeholder="เช่น โรงเรียนมอสวนขิงพิทยาสรรพ์"
-            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-sm outline-none" />
+            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 text-sm outline-none" />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">ตั้งชื่อผู้ใช้งาน (Username ภาษาอังกฤษ/ตัวเลข)</label>
-          <input type="text" id="reg-username" required pattern="[a-zA-Z0-9_]{4,20}" placeholder="อย่างน้อย 4 ตัวอักษร (เช่น teacher_k)"
-            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-sm outline-none" />
+          <label class="block text-xs font-bold text-slate-700 mb-1">ตั้งชื่อผู้ใช้งาน (Username ภาษาอังกฤษ/ตัวเลข)</label>
+          <input type="text" id="reg-username" required pattern="[a-zA-Z0-9_]{3,20}" placeholder="อย่างน้อย 3 ตัวอักษร (เช่น teacher_k)"
+            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 text-sm outline-none" />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">ตั้งรหัสผ่าน (Password)</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1">ตั้งรหัสผ่าน (Password)</label>
           <input type="password" id="reg-password" required minlength="4" placeholder="อย่างน้อย 4 ตัวอักษร"
-            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-sm outline-none" />
+            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 text-sm outline-none" />
         </div>
 
-        <button type="submit" id="btn-register"
-          class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-200 transition active:scale-[0.99]">
-          สมัครสมาชิกและเริ่มใช้งาน
+        <button type="submit" id="btn-register-teacher"
+          class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-md shadow-emerald-200 transition active:scale-[0.99]">
+          <i class="fa-solid fa-user-plus mr-1.5"></i> สมัครสมาชิกครูผู้สอน
+        </button>
+      </form>
+
+      <!-- FORM: STUDENT REGISTER -->
+      <form id="form-register-student" onsubmit="handleStudentRegister(event)" class="space-y-3 hidden">
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">เลขที่</label>
+            <input type="number" id="st-reg-number" min="1" max="80" required placeholder="12"
+              class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-sky-500 text-sm font-bold text-center outline-none" />
+          </div>
+          <div class="col-span-2">
+            <label class="block text-xs font-bold text-slate-700 mb-1">ชื่อเล่น</label>
+            <input type="text" id="st-reg-nickname" required placeholder="เช่น น้องกิต / แพรว"
+              class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-sky-500 text-sm outline-none" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">ชื่อ-นามสกุลจริง</label>
+          <input type="text" id="st-reg-fullname" required placeholder="เช่น ด.ช. กิตติพงศ์ ทองดี"
+            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-sky-500 text-sm outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">ระดับชั้น / ห้องเรียน</label>
+          <input type="text" id="st-reg-classroom" required placeholder="เช่น ม.1/1"
+            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-sky-500 text-sm outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">รหัสนักเรียน / Username</label>
+          <input type="text" id="st-reg-username" required pattern="[a-zA-Z0-9_]{3,20}" placeholder="ภาษาอังกฤษหรือตัวเลข 3-20 ตัว"
+            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-sky-500 text-sm outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">ตั้งรหัสผ่าน (Password)</label>
+          <input type="password" id="st-reg-password" required minlength="4" placeholder="อย่างน้อย 4 ตัวอักษร"
+            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-sky-500 text-sm outline-none" />
+        </div>
+
+        <button type="submit" id="btn-register-student"
+          class="w-full py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-sm shadow-md shadow-sky-200 transition active:scale-[0.99]">
+          <i class="fa-solid fa-graduation-cap mr-1.5"></i> สมัครสมาชิกนักเรียน
         </button>
       </form>
     </div>
   </div>
 
   <script>
-    if (localStorage.getItem(APP_CONFIG.SESSION_KEY)) {
-      window.location.href = 'index.html';
+    const TEACHER_SESSION_KEY = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.SESSION_KEY)
+      ? APP_CONFIG.SESSION_KEY
+      : 'SMART_SEATING_CURRENT_USER';
+    const STUDENT_SESSION_KEY = 'SMART_SEATING_STUDENT_SESSION_V1';
+    const LOCAL_TEACHERS_DB_KEY = 'SMART_SEATING_LOCAL_TEACHER_ACCOUNTS_V1';
+    const LOCAL_STUDENTS_DB_KEY = 'SMART_SEATING_LOCAL_STUDENT_ACCOUNTS_V1';
+    const MULTI_CLASS_KEY = 'SMART_SEATING_MULTI_CLASSES_V1';
+    const THEME_STORAGE_KEY = 'SMART_SEATING_THEME_MODE';
+
+    let selectedRole = 'teacher'; // 'teacher' | 'student'
+    let currentMode = 'login';    // 'login' | 'register'
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Apply saved theme
+    function applyLoginTheme() {
+      const mode = localStorage.getItem(THEME_STORAGE_KEY) || 'light';
+      const icon = document.getElementById('login-theme-icon');
+      if (mode === 'dark') {
+        document.body.classList.add('dark-theme');
+        if (icon) icon.className = 'fa-solid fa-sun text-amber-400 text-lg';
+      } else {
+        document.body.classList.remove('dark-theme');
+        if (icon) icon.className = 'fa-solid fa-moon text-indigo-600 text-lg';
+      }
+    }
+    function toggleLoginTheme() {
+      const next = document.body.classList.contains('dark-theme') ? 'light' : 'dark';
+      localStorage.setItem(THEME_STORAGE_KEY, next);
+      applyLoginTheme();
+    }
+
+    function buildStudentRedirectUrl() {
+      const params = new URLSearchParams();
+      if (urlParams.get('classId')) params.set('classId', urlParams.get('classId'));
+      if (urlParams.get('teacher')) params.set('teacher', urlParams.get('teacher'));
+      const qs = params.toString();
+      return qs ? `student.html?${qs}` : 'student.html';
+    }
+
+    window.onload = function () {
+      applyLoginTheme();
+
+      const requestedRole = urlParams.get('role');
+      const forceSwitch = urlParams.get('switch') === '1';
+
+      // Preserve scanned QR params in localStorage for student flow
+      if (urlParams.get('classId')) {
+        localStorage.setItem('LAST_SCANNED_CLASS_ID', urlParams.get('classId'));
+      }
+      if (urlParams.get('teacher')) {
+        localStorage.setItem('LAST_SCANNED_TEACHER', urlParams.get('teacher'));
+      }
+
+      // Auto-redirect if already authenticated (unless explicitly switching accounts)
+      if (!forceSwitch) {
+        if (requestedRole === 'student' && localStorage.getItem(STUDENT_SESSION_KEY)) {
+          window.location.href = buildStudentRedirectUrl();
+          return;
+        }
+        if (requestedRole !== 'student' && localStorage.getItem(TEACHER_SESSION_KEY)) {
+          window.location.href = 'index.html';
+          return;
+        }
+        if (!requestedRole && localStorage.getItem(STUDENT_SESSION_KEY)) {
+          window.location.href = buildStudentRedirectUrl();
+          return;
+        }
+      }
+
+      if (requestedRole === 'student' || urlParams.get('portal') === '1') {
+        selectRole('student');
+      } else {
+        selectRole('teacher');
+      }
+    };
+
+    function selectRole(role) {
+      selectedRole = role;
+      document.getElementById('alert-box').classList.add('hidden');
+
+      const banner = document.getElementById('auth-banner');
+      const bannerIcon = document.getElementById('auth-banner-icon');
+      const bannerSub = document.getElementById('auth-banner-sub');
+      const btnT = document.getElementById('role-btn-teacher');
+      const btnS = document.getElementById('role-btn-student');
+      const userLabel = document.getElementById('login-user-label');
+      const btnLogin = document.getElementById('btn-login');
+
+      if (role === 'teacher') {
+        banner.className = 'bg-gradient-to-r from-indigo-600 to-violet-600 p-6 text-center text-white transition-all duration-300';
+        bannerIcon.className = 'fa-solid fa-chalkboard-user text-3xl';
+        bannerSub.textContent = 'เข้าสู่ระบบสำหรับครูผู้สอน • จัดผังที่นั่ง เช็คชื่อ และมอบหมายงาน';
+        btnT.className = 'py-3 px-3 rounded-2xl border-2 border-indigo-600 bg-indigo-50 text-indigo-800 font-extrabold text-sm flex flex-col items-center gap-1 shadow-xs transition';
+        btnS.className = 'py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-sky-300 text-slate-600 font-bold text-sm flex flex-col items-center gap-1 transition';
+        userLabel.textContent = 'ชื่อผู้ใช้งานครู (Username)';
+        btnLogin.className = 'w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-extrabold text-sm shadow-md shadow-indigo-200 transition active:scale-[0.99]';
+        btnLogin.innerHTML = '<i class="fa-solid fa-right-to-bracket mr-1.5"></i> เข้าสู่ระบบครูผู้สอน';
+      } else {
+        banner.className = 'bg-gradient-to-r from-sky-600 via-cyan-600 to-teal-600 p-6 text-center text-white transition-all duration-300';
+        bannerIcon.className = 'fa-solid fa-graduation-cap text-3xl';
+        bannerSub.textContent = 'เข้าสู่ระบบสำหรับนักเรียน • สแกน QR ส่งงาน และขอความช่วยเหลือ';
+        btnS.className = 'py-3 px-3 rounded-2xl border-2 border-sky-600 bg-sky-50 text-sky-900 font-extrabold text-sm flex flex-col items-center gap-1 shadow-xs transition';
+        btnT.className = 'py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-indigo-300 text-slate-600 font-bold text-sm flex flex-col items-center gap-1 transition';
+        userLabel.textContent = 'รหัสนักเรียน / Username';
+        btnLogin.className = 'w-full py-3 rounded-xl bg-gradient-to-r from-sky-600 to-teal-600 hover:from-sky-700 hover:to-teal-700 text-white font-extrabold text-sm shadow-md shadow-sky-200 transition active:scale-[0.99]';
+        btnLogin.innerHTML = '<i class="fa-solid fa-right-to-bracket mr-1.5"></i> เข้าสู่ระบบนักเรียน';
+      }
+
+      switchMode(currentMode);
     }
 
     function switchMode(mode) {
-      const alertBox = document.getElementById('alert-box');
-      alertBox.classList.add('hidden');
+      currentMode = mode;
+      document.getElementById('alert-box').classList.add('hidden');
+
+      const formLogin = document.getElementById('form-login');
+      const formRegTeacher = document.getElementById('form-register-teacher');
+      const formRegStudent = document.getElementById('form-register-student');
+      const tabLogin = document.getElementById('tab-login');
+      const tabReg = document.getElementById('tab-register');
+
+      const accentText = selectedRole === 'teacher' ? 'text-indigo-600 border-indigo-600' : 'text-sky-600 border-sky-600';
 
       if (mode === 'login') {
-        document.getElementById('form-login').classList.remove('hidden');
-        document.getElementById('form-register').classList.add('hidden');
-        document.getElementById('tab-login').className = 'py-3 text-sm font-bold text-indigo-600 border-b-2 border-indigo-600 bg-white transition';
-        document.getElementById('tab-register').className = 'py-3 text-sm font-medium text-slate-500 hover:text-slate-700 transition';
+        formLogin.classList.remove('hidden');
+        formRegTeacher.classList.add('hidden');
+        formRegStudent.classList.add('hidden');
+        tabLogin.className = `py-3 text-sm font-bold ${accentText} border-b-2 bg-white transition`;
+        tabReg.className = 'py-3 text-sm font-medium text-slate-500 hover:text-slate-700 transition';
       } else {
-        document.getElementById('form-login').classList.add('hidden');
-        document.getElementById('form-register').classList.remove('hidden');
-        document.getElementById('tab-register').className = 'py-3 text-sm font-bold text-emerald-600 border-b-2 border-emerald-600 bg-white transition';
-        document.getElementById('tab-login').className = 'py-3 text-sm font-medium text-slate-500 hover:text-slate-700 transition';
+        formLogin.classList.add('hidden');
+        if (selectedRole === 'teacher') {
+          formRegTeacher.classList.remove('hidden');
+          formRegStudent.classList.add('hidden');
+        } else {
+          formRegTeacher.classList.add('hidden');
+          formRegStudent.classList.remove('hidden');
+        }
+        tabReg.className = 'py-3 text-sm font-bold text-emerald-600 border-b-2 border-emerald-600 bg-white transition';
+        tabLogin.className = 'py-3 text-sm font-medium text-slate-500 hover:text-slate-700 transition';
       }
     }
 
     function showAlert(msg, isError = true) {
       const box = document.getElementById('alert-box');
-      box.className = `mb-4 p-3 rounded-xl text-xs font-medium flex items-center gap-2 ${
+      box.className = `mb-4 p-3 rounded-xl text-xs font-semibold flex items-center gap-2 ${
         isError ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
       }`;
       box.innerHTML = `<i class="fa-solid ${isError ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i> <span>${msg}</span>`;
       box.classList.remove('hidden');
     }
 
+    function isCloudConfigured() {
+      return typeof APP_CONFIG !== 'undefined' && APP_CONFIG.API_URL && !APP_CONFIG.API_URL.includes('YOUR_SCRIPT_ID');
+    }
+
     async function handleLogin(e) {
       e.preventDefault();
       const btn = document.getElementById('btn-login');
-      const username = document.getElementById('login-username').value.trim();
+      const username = document.getElementById('login-username').value.trim().toLowerCase();
       const password = document.getElementById('login-password').value;
 
+      const origHtml = btn.innerHTML;
       btn.disabled = true;
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> กำลังตรวจสอบข้อมูล...';
 
       try {
-        const res = await fetch(APP_CONFIG.API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: 'login', username, password })
-        });
-        const data = await res.json();
-
-        if (data.status === 'success') {
-          localStorage.setItem(APP_CONFIG.SESSION_KEY, JSON.stringify(data.user));
-          if (data.savedState) {
-            localStorage.setItem('SMART_SEATING_CHART_STATE_V2', data.savedState);
+        if (selectedRole === 'teacher') {
+          // 1. Try Cloud Apps Script first
+          if (isCloudConfigured()) {
+            try {
+              const res = await fetch(APP_CONFIG.API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'login', username, password })
+              });
+              const data = await res.json();
+              if (data.status === 'success' && data.user) {
+                const teacherUser = { ...data.user, role: 'teacher' };
+                localStorage.setItem(TEACHER_SESSION_KEY, JSON.stringify(teacherUser));
+                if (data.savedState) {
+                  localStorage.setItem('SMART_SEATING_CHART_STATE_V2', data.savedState);
+                  try {
+                    const parsedSaved = JSON.parse(data.savedState);
+                    if (parsedSaved && parsedSaved._multiClasses && parsedSaved._multiClasses.classes) {
+                      localStorage.setItem(MULTI_CLASS_KEY, JSON.stringify(parsedSaved._multiClasses));
+                    }
+                  } catch (ex) {}
+                }
+                window.location.href = 'index.html';
+                return;
+              }
+              if (data.status === 'error' && data.message) {
+                // Check local fallback before failing
+                const localT = JSON.parse(localStorage.getItem(LOCAL_TEACHERS_DB_KEY) || '{}');
+                if (localT[username] && localT[username].password === password) {
+                  localStorage.setItem(TEACHER_SESSION_KEY, JSON.stringify({ ...localT[username], role: 'teacher' }));
+                  window.location.href = 'index.html';
+                  return;
+                }
+                showAlert(data.message);
+                return;
+              }
+            } catch (err) {
+              // Network fallback to local storage
+            }
           }
-          window.location.href = 'index.html';
+
+          // 2. Local fallback for Teacher
+          const localTeachers = JSON.parse(localStorage.getItem(LOCAL_TEACHERS_DB_KEY) || '{}');
+          if (localTeachers[username] && localTeachers[username].password === password) {
+            localStorage.setItem(TEACHER_SESSION_KEY, JSON.stringify({ ...localTeachers[username], role: 'teacher' }));
+            window.location.href = 'index.html';
+            return;
+          }
+          showAlert('ชื่อผู้ใช้งานหรือรหัสผ่านครูไม่ถูกต้อง หรือไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
         } else {
-          showAlert(data.message || 'เข้าสู่ระบบไม่สำเร็จ');
+          // STUDENT LOGIN
+          // 1. Check local student accounts first for fast response
+          const localStudents = JSON.parse(localStorage.getItem(LOCAL_STUDENTS_DB_KEY) || '{}');
+          if (localStudents[username] && localStudents[username].password === password) {
+            localStorage.setItem(STUDENT_SESSION_KEY, JSON.stringify({ ...localStudents[username], role: 'student' }));
+            window.location.href = buildStudentRedirectUrl();
+            return;
+          }
+
+          // 2. Check Cloud Apps Script
+          if (isCloudConfigured()) {
+            try {
+              const res = await fetch(APP_CONFIG.API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'loginStudent', username, password })
+              });
+              const data = await res.json();
+              if (data.status === 'success' && data.user) {
+                localStorage.setItem(STUDENT_SESSION_KEY, JSON.stringify({ ...data.user, role: 'student' }));
+                window.location.href = buildStudentRedirectUrl();
+                return;
+              }
+              if (data.status === 'error' && data.message) {
+                showAlert(data.message);
+                return;
+              }
+            } catch (err) {}
+          }
+
+          showAlert('รหัสนักเรียนหรือรหัสผ่านไม่ถูกต้อง (หากยังไม่มีบัญชี กดแท็บสมัครสมาชิกใหม่)');
         }
-      } catch (err) {
-        showAlert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาตรวจสอบอินเทอร์เน็ตหรือ API_URL');
       } finally {
         btn.disabled = false;
-        btn.innerHTML = 'เข้าสู่ระบบ';
+        btn.innerHTML = origHtml;
       }
     }
 
-    async function handleRegister(e) {
+    async function handleTeacherRegister(e) {
       e.preventDefault();
-      const btn = document.getElementById('btn-register');
+      const btn = document.getElementById('btn-register-teacher');
       const payload = {
         action: 'register',
+        role: 'teacher',
         fullname: document.getElementById('reg-fullname').value.trim(),
         school: document.getElementById('reg-school').value.trim(),
-        username: document.getElementById('reg-username').value.trim(),
+        username: document.getElementById('reg-username').value.trim().toLowerCase(),
         password: document.getElementById('reg-password').value
       };
 
+      const origHtml = btn.innerHTML;
       btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> กำลังสร้างบัญชี...';
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> กำลังสร้างบัญชีครู...';
 
       try {
-        const res = await fetch(APP_CONFIG.API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
+        // Save locally as backup
+        const localTeachers = JSON.parse(localStorage.getItem(LOCAL_TEACHERS_DB_KEY) || '{}');
+        localTeachers[payload.username] = payload;
+        localStorage.setItem(LOCAL_TEACHERS_DB_KEY, JSON.stringify(localTeachers));
 
-        if (data.status === 'success') {
-          showAlert('สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบด้วยบัญชีที่สร้างใหม่', false);
-          document.getElementById('login-username').value = payload.username;
-          setTimeout(() => switchMode('login'), 1200);
-        } else {
-          showAlert(data.message || 'สมัครสมาชิกไม่สำเร็จ');
+        if (isCloudConfigured()) {
+          const res = await fetch(APP_CONFIG.API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (data.status !== 'success') {
+            showAlert(data.message || 'สมัครสมาชิกไม่สำเร็จ');
+            return;
+          }
         }
+
+        showAlert('สมัครสมาชิกครูผู้สอนสำเร็จ! กรุณาเข้าสู่ระบบ', false);
+        document.getElementById('login-username').value = payload.username;
+        setTimeout(() => switchMode('login'), 1000);
       } catch (err) {
-        showAlert('เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง');
+        showAlert('บันทึกบัญชีในเครื่องแล้ว (ไม่สามารถเชื่อมต่อ Cloud ในขณะนี้)', false);
+        document.getElementById('login-username').value = payload.username;
+        setTimeout(() => switchMode('login'), 1200);
       } finally {
         btn.disabled = false;
-        btn.innerHTML = 'สมัครสมาชิกและเริ่มใช้งาน';
+        btn.innerHTML = origHtml;
+      }
+    }
+
+    async function handleStudentRegister(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-register-student');
+      const payload = {
+        action: 'registerStudent',
+        role: 'student',
+        number: parseInt(document.getElementById('st-reg-number').value, 10),
+        nickname: document.getElementById('st-reg-nickname').value.trim(),
+        fullname: document.getElementById('st-reg-fullname').value.trim(),
+        classroom: document.getElementById('st-reg-classroom').value.trim(),
+        username: document.getElementById('st-reg-username').value.trim().toLowerCase(),
+        password: document.getElementById('st-reg-password').value
+      };
+
+      const origHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> กำลังสร้างบัญชีนักเรียน...';
+
+      try {
+        const localStudents = JSON.parse(localStorage.getItem(LOCAL_STUDENTS_DB_KEY) || '{}');
+        if (localStudents[payload.username]) {
+          showAlert('ชื่อผู้ใช้งานนี้ถูกสมัครไปแล้ว กรุณาใช้ชื่ออื่น');
+          return;
+        }
+        localStudents[payload.username] = payload;
+        localStorage.setItem(LOCAL_STUDENTS_DB_KEY, JSON.stringify(localStudents));
+
+        if (isCloudConfigured()) {
+          try {
+            const res = await fetch(APP_CONFIG.API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.status === 'error' && data.message) {
+              showAlert(data.message);
+              return;
+            }
+          } catch (cloudErr) {
+            // Continue with local account fallback
+          }
+        }
+
+        showAlert('สมัครสมาชิกนักเรียนสำเร็จ! กรุณาเข้าสู่ระบบ', false);
+        document.getElementById('login-username').value = payload.username;
+        setTimeout(() => switchMode('login'), 1000);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = origHtml;
       }
     }
   </script>

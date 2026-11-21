@@ -59,6 +59,58 @@
       overflow-x: hidden;
     }
 
+
+    /* ================= ADJUSTABLE UI ICON SIZE SYSTEM (M / L / XL) ================= */
+    :root {
+      --ui-btn-size: 44px;
+      --ui-icon-size: 1.18rem;
+      --ui-tb-btn-size: 40px;
+      --ui-tb-icon-size: 1.08rem;
+    }
+    body.icon-size-md {
+      --ui-btn-size: 38px;
+      --ui-icon-size: 0.95rem;
+      --ui-tb-btn-size: 36px;
+      --ui-tb-icon-size: 0.9rem;
+    }
+    body.icon-size-lg {
+      --ui-btn-size: 44px;
+      --ui-icon-size: 1.18rem;
+      --ui-tb-btn-size: 40px;
+      --ui-tb-icon-size: 1.08rem;
+    }
+    body.icon-size-xl {
+      --ui-btn-size: 50px;
+      --ui-icon-size: 1.38rem;
+      --ui-tb-btn-size: 46px;
+      --ui-tb-icon-size: 1.26rem;
+    }
+
+    header .ui-icon-btn {
+      width: var(--ui-btn-size) !important;
+      height: var(--ui-btn-size) !important;
+      min-width: var(--ui-btn-size);
+      min-height: var(--ui-btn-size);
+    }
+    header .ui-icon-btn i {
+      font-size: var(--ui-icon-size) !important;
+    }
+    #config-toolbar .ui-tb-btn,
+    #student-sidebar .ui-tb-btn {
+      width: var(--ui-tb-btn-size) !important;
+      height: var(--ui-tb-btn-size) !important;
+      min-width: var(--ui-tb-btn-size);
+      min-height: var(--ui-tb-btn-size);
+    }
+    #config-toolbar .ui-tb-btn i,
+    #student-sidebar .ui-tb-btn i {
+      font-size: var(--ui-tb-icon-size) !important;
+    }
+    #config-toolbar .ui-tb-emoji {
+      font-size: var(--ui-tb-icon-size) !important;
+      line-height: 1;
+    }
+
     /* ================= DARK / LIGHT THEME SYSTEM ================= */
     body.dark-theme {
       background-color: #090d16 !important;
@@ -105,6 +157,42 @@
       background-color: #0f172a !important;
       color: #f8fafc !important;
       border-color: #334155 !important;
+    }
+    body.dark-theme .bg-sky-50\/80,
+    body.dark-theme .bg-indigo-50\/80,
+    body.dark-theme .bg-indigo-50\/50 {
+      background-color: #1e293b !important;
+      border-color: #38bdf8 !important;
+      color: #e0f2fe !important;
+    }
+    body.dark-theme .bg-rose-50\/80,
+    body.dark-theme .bg-rose-50 {
+      background-color: #3f1520 !important;
+      border-color: #fb7185 !important;
+      color: #ffe4e6 !important;
+    }
+    body.dark-theme .bg-purple-50\/80,
+    body.dark-theme .bg-violet-50\/70 {
+      background-color: #2e1065 !important;
+      border-color: #a78bfa !important;
+      color: #ede9fe !important;
+    }
+    body.dark-theme .bg-amber-50,
+    body.dark-theme .bg-amber-50\/70 {
+      background-color: #451a03 !important;
+      border-color: #f59e0b !important;
+      color: #fef3c7 !important;
+    }
+    body.dark-theme .bg-emerald-50\/70,
+    body.dark-theme .bg-emerald-50 {
+      background-color: #064e3b !important;
+      border-color: #34d399 !important;
+      color: #d1fae5 !important;
+    }
+    body.dark-theme .bg-sky-100 {
+      background-color: #0c4a6e !important;
+      border-color: #38bdf8 !important;
+      color: #e0f2fe !important;
     }
     body.dark-theme .desk-card {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
@@ -298,157 +386,183 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col icon-size-lg">
 
-  <!-- ================= TOP NAVIGATION & CLASSROOM HEADER ================= -->
+  <!-- ================= TOP NAVIGATION & CLASSROOM HEADER (ADJUSTABLE ICON-ONLY) ================= -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 no-print shadow-sm">
-    <div class="max-w-[1600px] mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
+    <div class="max-w-[1600px] mx-auto px-3 sm:px-5 min-h-14 py-1.5 flex items-center justify-between gap-2">
       
-      <!-- Left: Brand & Editable Classroom Name -->
-      <div class="flex items-center gap-3 min-w-0">
-        <button id="btn-toggle-sidebar" onclick="toggleSidebar()" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 focus:outline-none" title="เปิด/ปิดรายชื่อนักเรียน">
-          <i class="fa-solid fa-bars text-lg"></i>
+      <!-- Left: Brand Icon, Classroom Selector & Icon-Only Class Controls -->
+      <div class="flex items-center gap-2 min-w-0">
+        <button
+          id="btn-toggle-sidebar"
+          onclick="toggleSidebar()"
+          class="ui-icon-btn lg:hidden rounded-xl text-slate-600 hover:bg-slate-100 flex items-center justify-center shrink-0 transition"
+          title="เปิด/ปิดรายชื่อนักเรียน"
+        >
+          <i class="fa-solid fa-bars"></i>
         </button>
 
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-md shadow-indigo-200 shrink-0">
-          <i class="fa-solid fa-chair text-lg"></i>
+        <div
+          class="ui-icon-btn rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-sm shrink-0"
+          title="ระบบจัดผังที่นั่งนักเรียนอัจฉริยะ"
+        >
+          <i class="fa-solid fa-chair"></i>
         </div>
 
-        <div class="min-w-0">
-          <div class="flex items-center gap-2">
-            <h1 class="text-base sm:text-lg font-bold text-slate-800 truncate">ระบบจัดผังที่นั่งนักเรียนอัจฉริยะ</h1>
-            <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">
-              Smart Seating v2.0
-            </span>
-          </div>
-          <div class="flex flex-wrap items-center gap-1.5 text-xs text-slate-600 mt-0.5">
-            <i class="fa-solid fa-school text-indigo-500"></i>
-            <!-- Multi-Classroom Dropdown -->
-            <select
-              id="classroom-selector"
-              onchange="switchClassroom(this.value)"
-              class="bg-indigo-50/80 hover:bg-indigo-100/80 border border-indigo-200 text-indigo-950 font-bold rounded-lg px-2 py-0.5 text-xs outline-none cursor-pointer max-w-[190px] sm:max-w-[240px] truncate transition"
-              title="สลับห้องเรียน / ชั้นเรียน"
-            ></select>
+        <!-- Multi-Classroom Dropdown -->
+        <select
+          id="classroom-selector"
+          onchange="switchClassroom(this.value)"
+          class="bg-indigo-50/80 hover:bg-indigo-100/80 border border-indigo-200 text-indigo-950 font-bold rounded-xl px-2.5 h-10 text-xs sm:text-sm outline-none cursor-pointer max-w-[140px] sm:max-w-[220px] truncate transition"
+          title="สลับห้องเรียน / ชั้นเรียน"
+        ></select>
 
-            <button
-              type="button"
-              onclick="openClassroomManagerModal()"
-              class="px-2 py-0.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center gap-1 shadow-2xs transition"
-              title="เพิ่มชั้นเรียนใหม่ / แก้ไขชื่อห้อง / ลบห้องเรียน"
-            >
-              <i class="fa-solid fa-plus"></i> <span class="hidden sm:inline">เพิ่มชั้นเรียน</span>
-            </button>
+        <!-- Add / Manage Classroom (Icon-only) -->
+        <button
+          type="button"
+          onclick="openClassroomManagerModal()"
+          class="ui-icon-btn rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center shadow-2xs shrink-0 transition active:scale-95"
+          title="จัดการ / เพิ่มชั้นเรียนใหม่"
+        >
+          <i class="fa-solid fa-plus"></i>
+        </button>
 
-            <button
-              type="button"
-              onclick="openStudentJoinQrModal()"
-              class="px-2 py-0.5 rounded-lg bg-sky-100 hover:bg-sky-200 text-sky-900 border border-sky-300 text-[11px] font-bold flex items-center gap-1 transition"
-              title="แสดง QR Code ให้นักเรียนสแกนเข้าร่วมห้องเรียน เช็คชื่อ ส่งงาน และกดยกมือขอความช่วยเหลือ"
-            >
-              <i class="fa-solid fa-qrcode text-sky-700"></i> <span>QR เข้าห้องเรียน</span>
-            </button>
-          </div>
-        </div>
+        <!-- Student Join Classroom QR (Icon-only) -->
+        <button
+          type="button"
+          onclick="openStudentJoinQrModal()"
+          class="ui-icon-btn rounded-xl bg-sky-100 hover:bg-sky-200 text-sky-800 border border-sky-300 flex items-center justify-center shrink-0 transition active:scale-95"
+          title="QR Code สำหรับนักเรียนเข้าร่วมห้องเรียน"
+        >
+          <i class="fa-solid fa-qrcode"></i>
+        </button>
       </div>
 
-      <!-- Right: Primary Action Buttons -->
-      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-        <!-- Help Request Alert Bell -->
+      <!-- Right: Icon-Only Action Controls + Icon Size Adjuster + Logout Icon -->
+      <div id="header-right-controls" class="flex items-center gap-1.5 shrink-0 overflow-x-auto py-1">
+        <!-- Clickable Cloud Sync Status Button (pulls student submissions & help requests) -->
+        <button
+          type="button"
+          id="cloud-sync-status"
+          onclick="syncClassroomPortalFromCloud(true)"
+          class="ui-icon-btn rounded-xl bg-slate-100 hover:bg-emerald-50 border border-slate-200 text-emerald-600 flex items-center justify-center shrink-0 transition"
+          title="ซิงก์ข้อมูลล่าสุดกับนักเรียนและ Cloud"
+        >
+          <i class="fa-solid fa-cloud"></i>
+        </button>
+
+        <!-- Help Request Alert Bell (Icon + Count Badge) -->
         <button
           id="header-help-btn"
           onclick="openHelpQueueModal()"
-          class="flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-700 border border-slate-200 font-bold text-xs sm:text-sm transition relative"
-          title="รายการนักเรียนที่กดยกมือขอความช่วยเหลือ"
+          class="ui-icon-btn rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-700 border border-slate-200 flex items-center justify-center transition relative shrink-0"
+          title="รายการนักเรียนที่ขอความช่วยเหลือ"
         >
           <i class="fa-solid fa-hand-sparkles text-rose-500"></i>
-          <span class="hidden xl:inline">ขอความช่วยเหลือ</span>
-          <span id="header-help-count" class="px-1.5 py-0.2 rounded-full bg-slate-200 text-slate-700 text-[10px] font-extrabold">0</span>
+          <span id="header-help-count" class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-slate-600 text-white text-[10px] font-extrabold flex items-center justify-center leading-none">0</span>
         </button>
 
-        <!-- Attendance Check-in Button -->
+        <!-- Attendance Check-in Button (Icon + Count Badge) -->
         <button
           onclick="openAttendanceModal()"
-          class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs sm:text-sm shadow-sm shadow-emerald-200 transition active:scale-95"
-          title="เช็คชื่อนักเรียนรายวันและดูสรุปการเข้าเรียน"
+          class="ui-icon-btn rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-sm transition active:scale-95 relative shrink-0"
+          title="เช็คชื่อนักเรียนเข้าเรียน"
         >
-          <i class="fa-solid fa-clipboard-user text-sm"></i>
-          <span class="hidden md:inline">เช็คชื่อ</span>
-          <span id="header-attendance-pill" class="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px] font-bold">0/0</span>
+          <i class="fa-solid fa-clipboard-user"></i>
+          <span id="header-attendance-pill" class="absolute -top-1 -right-1 px-1 h-[18px] rounded-full bg-emerald-950 text-emerald-100 text-[9px] font-bold flex items-center justify-center leading-none border border-emerald-400">0/0</span>
         </button>
 
-        <!-- QR Code Task & Assignment Button -->
+        <!-- QR Code Task & Assignment Button (Icon + Count Badge) -->
         <button
           onclick="openTaskModal()"
-          class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs sm:text-sm shadow-sm shadow-amber-200 transition active:scale-95"
-          title="สร้าง QR Code มอบหมายงาน และเช็คสถานะการส่งงานรายคน"
+          class="ui-icon-btn rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 flex items-center justify-center shadow-sm transition active:scale-95 relative shrink-0"
+          title="มอบหมายงาน QR Code และเช็คสถานะการส่งงาน"
         >
-          <i class="fa-solid fa-qrcode text-sm"></i>
-          <span class="hidden md:inline">มอบหมายงาน QR</span>
-          <span id="header-task-pill" class="px-1.5 py-0.2 rounded-full bg-black/15 text-[10px] font-extrabold">0 งาน</span>
+          <i class="fa-solid fa-file-signature"></i>
+          <span id="header-task-pill" class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-slate-900 text-amber-300 text-[10px] font-extrabold flex items-center justify-center leading-none">0</span>
         </button>
 
-        <!-- Random Student Roulette Button -->
+        <!-- Random Student Roulette Button (Icon-only) -->
         <button
           onclick="startRandomRoulette()"
-          class="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-medium text-xs sm:text-sm shadow-sm shadow-rose-200 transition active:scale-95"
-          title="สุ่มเรียกชื่อนักเรียนที่มีที่นั่งบนผัง"
+          class="ui-icon-btn rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white flex items-center justify-center shadow-sm transition active:scale-95 shrink-0"
+          title="สุ่มเรียกชื่อนักเรียนบนผัง"
         >
-          <i class="fa-solid fa-dice text-sm"></i>
-          <span class="hidden sm:inline">สุ่มเรียกชื่อ</span>
+          <i class="fa-solid fa-dice"></i>
         </button>
 
-        <!-- Smart Auto-Assign Button -->
+        <!-- Smart Auto-Assign Button (Icon-only) -->
         <button
           onclick="smartAssignSeating()"
-          class="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-medium text-xs sm:text-sm shadow-sm shadow-indigo-200 transition active:scale-95"
-          title="จัดที่นั่งอัตโนมัติตามเงื่อนไข (นั่งหน้าห้อง / แยกคนคุยเก่ง)"
+          class="ui-icon-btn rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white flex items-center justify-center shadow-sm transition active:scale-95 shrink-0"
+          title="จัดที่นั่งอัตโนมัติตามเงื่อนไข"
         >
-          <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
-          <span>จัดที่นั่งอัตโนมัติ</span>
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
         </button>
 
-        <!-- Flip Perspective Button -->
+        <!-- Flip Perspective Button (Icon-only) -->
         <button
           id="btn-flip-view"
           onclick="togglePerspective()"
-          class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs sm:text-sm transition"
-          title="สลับมุมมองหน้าห้อง/หลังห้อง"
+          class="ui-icon-btn rounded-xl bg-slate-100 hover:bg-slate-200 text-indigo-600 border border-slate-200 flex items-center justify-center transition shrink-0"
+          title="สลับมุมมองนักเรียน / มุมมองครูหน้าห้อง"
         >
-          <i class="fa-solid fa-rotate text-indigo-600"></i>
-          <span id="perspective-label" class="hidden md:inline">มุมมองนักเรียน</span>
+          <i class="fa-solid fa-rotate"></i>
+          <span id="perspective-label" class="hidden">มุมมองนักเรียน</span>
         </button>
 
-        <!-- Projector Mode Button -->
+        <!-- Projector Mode Button (Icon-only) -->
         <button
           id="btn-projector-mode"
           onclick="toggleProjectorMode()"
-          class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-medium text-xs sm:text-sm transition"
-          title="โหมดขึ้นจอโปรเจกเตอร์หน้าห้อง (ขยายเต็มจอ)"
+          class="ui-icon-btn rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-600 border border-amber-200 flex items-center justify-center transition shrink-0"
+          title="โหมดขึ้นจอโปรเจกเตอร์หน้าห้อง"
         >
-          <i class="fa-solid fa-tv text-amber-600"></i>
-          <span class="hidden xl:inline">ขึ้นจอหน้าห้อง</span>
+          <i class="fa-solid fa-tv"></i>
         </button>
 
-        <!-- Theme Switcher Button (Light White / Dark Black) -->
+        <!-- Adjustable Icon Size Button (M / L / XL) -->
+        <button
+          id="btn-icon-size-toggle"
+          onclick="cycleUiIconSize()"
+          class="ui-icon-btn rounded-xl bg-slate-100 hover:bg-indigo-100 text-indigo-600 border border-slate-200 flex items-center justify-center transition relative shrink-0"
+          title="ปรับขนาดไอคอน (M / L / XL)"
+        >
+          <i class="fa-solid fa-magnifying-glass-plus"></i>
+          <span id="ui-icon-size-badge" class="absolute -bottom-1 -right-1 px-1 h-4 rounded-full bg-indigo-600 text-white text-[9px] font-extrabold flex items-center justify-center leading-none">L</span>
+        </button>
+
+        <!-- Theme Switcher Button (Icon-only) -->
         <button
           id="btn-theme-toggle"
           onclick="toggleAppTheme()"
-          class="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-bold text-xs sm:text-sm transition"
-          title="เปลี่ยนสีพื้นหลัง (โหมดสีขาว / โหมดสีดำ)"
+          class="ui-icon-btn rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 flex items-center justify-center transition shrink-0"
+          title="เปลี่ยนสีพื้นหลัง (ขาว / ดำ)"
         >
           <i id="theme-toggle-icon" class="fa-solid fa-moon text-indigo-600"></i>
-          <span id="theme-toggle-label" class="hidden xl:inline">พื้นหลังดำ</span>
+          <span id="theme-toggle-label" class="hidden">พื้นหลังดำ</span>
         </button>
 
-        <!-- Print Button -->
+        <!-- Print Button (Icon-only) -->
         <button
           onclick="window.print()"
-          class="p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs sm:text-sm transition"
-          title="พิมพ์ผังที่นั่ง หรือบันทึกเป็น PDF (A4)"
+          class="ui-icon-btn rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 flex items-center justify-center transition shrink-0"
+          title="พิมพ์ผังที่นั่ง / บันทึกเป็น PDF"
         >
           <i class="fa-solid fa-print"></i>
-          <span class="hidden xl:inline ml-1">พิมพ์ผัง</span>
+        </button>
+
+        <div class="h-6 w-[1px] bg-slate-300 mx-0.5 shrink-0"></div>
+
+        <!-- Logout Button (Top bar alongside other controls, triggers confirmation dialog) -->
+        <button
+          id="btn-header-logout"
+          onclick="confirmLogout()"
+          class="ui-icon-btn rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white border border-rose-200 flex items-center justify-center transition active:scale-95 shrink-0"
+          title="ออกจากระบบ"
+        >
+          <i class="fa-solid fa-right-from-bracket"></i>
         </button>
       </div>
     </div>
@@ -460,197 +574,158 @@
     <!-- ================= LEFT SIDEBAR: STUDENT ROSTER & TAGS ================= -->
     <aside
       id="student-sidebar"
-      class="w-80 sm:w-96 bg-white border-r border-slate-200 flex flex-col shrink-0 z-20 fixed lg:static inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out no-print shadow-xl lg:shadow-none"
-      style="top: 64px; height: calc(100vh - 64px);"
+      class="w-80 sm:w-88 bg-white border-r border-slate-200 flex flex-col shrink-0 z-20 fixed lg:static inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out no-print shadow-xl lg:shadow-none"
+      style="top: 56px; height: calc(100vh - 56px);"
     >
-      <!-- Sidebar Header Stats -->
-      <div class="p-3.5 border-b border-slate-100 bg-slate-50/70">
-        <div class="flex items-center justify-between mb-2.5">
-          <div class="flex items-center gap-2">
-            <h2 class="font-bold text-slate-800 text-sm sm:text-base">รายชื่อนักเรียน</h2>
-            <span id="student-count-badge" class="px-2 py-0.5 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-700">24 คน</span>
-          </div>
-          <div class="flex items-center gap-1">
-            <button
-              onclick="openBulkImportModal()"
-              class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium flex items-center gap-1.5 shadow-sm transition"
-              title="นำเข้ารายชื่อจากไฟล์ Excel, PDF หรือวางข้อความ"
-            >
-              <i class="fa-solid fa-file-import"></i>
-              <span>นำเข้า Excel / PDF</span>
-            </button>
-            <button onclick="toggleSidebar()" class="lg:hidden p-1.5 text-slate-400 hover:text-slate-600">
-              <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Direct Student Count Setter -->
-        <form onsubmit="handleSetStudentCount(event)" class="mb-2.5 bg-white p-2 rounded-xl border border-slate-200/90 flex items-center justify-between gap-2 shadow-2xs">
-          <label for="total-student-count-input" class="text-xs font-semibold text-slate-700 flex items-center gap-1.5 shrink-0">
-            <i class="fa-solid fa-users text-indigo-500"></i>
-            <span>ระบุจำนวนนักเรียน:</span>
-          </label>
-          <div class="flex items-center gap-1.5">
+      <!-- Sidebar Compact Icon-Only Header Controls -->
+      <div class="p-3 border-b border-slate-100 bg-slate-50/70 space-y-2.5">
+        <div class="flex items-center justify-between gap-2">
+          <!-- Student Count Setter (Icon + Input + Check Icon) -->
+          <form onsubmit="handleSetStudentCount(event)" class="flex items-center gap-1.5 bg-white px-2 py-1 rounded-xl border border-slate-200/90 shadow-2xs">
+            <i class="fa-solid fa-users text-indigo-500 text-xs" title="จำนวนนักเรียนทั้งหมด"></i>
             <input
               id="total-student-count-input"
               type="number"
               min="1"
               max="80"
               value="24"
-              class="w-16 px-2 py-1 text-center text-xs font-bold text-indigo-700 bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none"
-              title="กรอกจำนวนนักเรียนทั้งหมดในห้อง (1 - 80 คน)"
+              class="w-12 px-1 py-0.5 text-center text-xs font-bold text-indigo-700 bg-slate-50 border border-slate-300 rounded-lg outline-none"
+              title="ระบุจำนวนนักเรียน (1 - 80 คน)"
             />
-            <span class="text-xs text-slate-500">คน</span>
             <button
               type="submit"
-              class="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-semibold transition shadow-2xs"
-              title="ปรับจำนวนนักเรียนและสร้างที่นั่งอัตโนมัติ"
+              class="w-6 h-6 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] flex items-center justify-center transition"
+              title="บันทึกจำนวนนักเรียน"
             >
-              ตั้งค่า
+              <i class="fa-solid fa-check"></i>
+            </button>
+            <span id="student-count-badge" class="hidden">24</span>
+          </form>
+
+          <!-- Icon-Only Import & Photo Action Buttons -->
+          <div class="flex items-center gap-1.5">
+            <!-- Bulk Import Modal -->
+            <button
+              type="button"
+              onclick="openBulkImportModal()"
+              class="ui-tb-btn rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-2xs transition"
+              title="นำเข้ารายชื่อจาก Excel / PDF / ข้อความ"
+            >
+              <i class="fa-solid fa-file-import text-xs"></i>
+            </button>
+
+            <!-- Direct File Upload (Dropzone Button) -->
+            <div
+              id="sidebar-dropzone"
+              ondragover="handleFileDragOver(event, 'sidebar-dropzone')"
+              ondragleave="handleFileDragLeave(event, 'sidebar-dropzone')"
+              ondrop="handleFileDrop(event, true)"
+              onclick="document.getElementById('sidebar-file-input').click()"
+              class="ui-tb-btn rounded-xl border border-dashed border-indigo-400 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-700 flex items-center justify-center cursor-pointer transition"
+              title="อัปโหลดหรือลากไฟล์ Excel (.xlsx, .csv) / PDF มาวางที่นี่"
+            >
+              <input
+                id="sidebar-file-input"
+                type="file"
+                accept=".xlsx,.xls,.csv,.pdf"
+                class="hidden"
+                onchange="handleDirectFileSelect(event, true)"
+              />
+              <i class="fa-solid fa-file-excel text-xs"></i>
+            </div>
+
+            <!-- Batch Photos Upload -->
+            <input
+              id="batch-photo-input"
+              type="file"
+              accept="image/*"
+              multiple
+              class="hidden"
+              onchange="handleBatchPhotoSelect(event)"
+            />
+            <button
+              type="button"
+              onclick="document.getElementById('batch-photo-input').click()"
+              class="ui-tb-btn rounded-xl bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-center shadow-2xs transition"
+              title="อัปโหลดรูปภาพนักเรียนหลายคนพร้อมกัน"
+            >
+              <i class="fa-solid fa-images text-xs"></i>
+            </button>
+
+            <button onclick="toggleSidebar()" class="lg:hidden w-8 h-8 rounded-xl text-slate-400 hover:text-slate-600 flex items-center justify-center" title="ปิดแถบข้าง">
+              <i class="fa-solid fa-xmark text-base"></i>
             </button>
           </div>
-        </form>
-
-        <!-- Direct File Upload Bar in Sidebar (Excel / CSV / PDF) -->
-        <div
-          id="sidebar-dropzone"
-          ondragover="handleFileDragOver(event, 'sidebar-dropzone')"
-          ondragleave="handleFileDragLeave(event, 'sidebar-dropzone')"
-          ondrop="handleFileDrop(event, true)"
-          onclick="document.getElementById('sidebar-file-input').click()"
-          class="mb-2.5 p-2 rounded-xl border border-dashed border-indigo-300 bg-indigo-50/50 hover:bg-indigo-50 transition cursor-pointer flex items-center justify-between gap-2"
-          title="คลิกเลือกไฟล์ หรือลากไฟล์ Excel (.xlsx, .csv) / PDF (.pdf) มาวางที่นี่เพื่อนำเข้ารายชื่อทันที"
-        >
-          <input
-            id="sidebar-file-input"
-            type="file"
-            accept=".xlsx,.xls,.csv,.pdf"
-            class="hidden"
-            onchange="handleDirectFileSelect(event, true)"
-          />
-          <div class="flex items-center gap-2 min-w-0">
-            <div class="w-7 h-7 rounded-lg bg-white border border-indigo-200 flex items-center justify-center shrink-0 text-xs">
-              <i class="fa-solid fa-file-excel text-emerald-600 mr-0.5"></i>
-              <i class="fa-solid fa-file-pdf text-rose-600"></i>
-            </div>
-            <div class="truncate">
-              <div class="text-[11px] font-bold text-indigo-900 leading-tight">อัปโหลดไฟล์ Excel หรือ PDF ด่วน</div>
-              <div class="text-[10px] text-indigo-600/80 truncate">คลิกเลือกไฟล์ .xlsx, .csv, .pdf หรือลากมาวาง</div>
-            </div>
-          </div>
-          <span class="px-2 py-1 rounded-lg bg-indigo-600 text-white text-[10px] font-semibold shrink-0">
-            เลือกไฟล์
-          </span>
         </div>
 
-        <!-- Batch Student Photos Upload Bar -->
-        <div class="mb-2.5 flex items-center justify-between gap-2 bg-violet-50/70 border border-violet-200 rounded-xl p-2">
-          <input
-            id="batch-photo-input"
-            type="file"
-            accept="image/*"
-            multiple
-            class="hidden"
-            onchange="handleBatchPhotoSelect(event)"
-          />
-          <div class="flex items-center gap-2 min-w-0">
-            <div class="w-7 h-7 rounded-lg bg-white border border-violet-200 text-violet-600 flex items-center justify-center shrink-0 text-xs">
-              <i class="fa-solid fa-images"></i>
-            </div>
-            <div class="truncate">
-              <div class="text-[11px] font-bold text-violet-900 leading-tight">เพิ่มรูปนักเรียนหลายคนพร้อมกัน</div>
-              <div class="text-[10px] text-violet-600/90 truncate">ตั้งชื่อไฟล์เป็นเลขที่ เช่น 1.jpg, 2.png หรือคลิกที่รูปรายคน</div>
-            </div>
+        <!-- Compact Icon + Number Summary Counters -->
+        <div class="grid grid-cols-4 gap-1.5 text-center">
+          <div class="bg-white p-1.5 rounded-xl border border-slate-200/80 shadow-2xs flex flex-col items-center" title="มีที่นั่งแล้ว">
+            <i class="fa-solid fa-chair text-[10px] text-indigo-500 mb-0.5"></i>
+            <div id="stat-seated" class="text-xs font-bold text-indigo-600 leading-none">0</div>
           </div>
-          <button
-            type="button"
-            onclick="document.getElementById('batch-photo-input').click()"
-            class="px-2.5 py-1 rounded-lg bg-violet-600 hover:bg-violet-700 text-white text-[10px] font-semibold shrink-0 transition shadow-2xs"
-          >
-            เลือกรูปหมู่
-          </button>
-        </div>
-
-        <!-- Quick Summary Counters -->
-        <div class="grid grid-cols-4 gap-1 text-center">
-          <div class="bg-white p-1.5 rounded-xl border border-slate-200/80 shadow-2xs">
-            <div class="text-[9px] text-slate-500">มีที่นั่ง</div>
-            <div id="stat-seated" class="text-xs font-bold text-indigo-600">0</div>
+          <div class="bg-white p-1.5 rounded-xl border border-slate-200/80 shadow-2xs flex flex-col items-center" title="รอจัดที่นั่ง">
+            <i class="fa-solid fa-hourglass-half text-[10px] text-amber-500 mb-0.5"></i>
+            <div id="stat-unassigned" class="text-xs font-bold text-amber-600 leading-none">0</div>
           </div>
-          <div class="bg-white p-1.5 rounded-xl border border-slate-200/80 shadow-2xs">
-            <div class="text-[9px] text-slate-500">รอจัดโต๊ะ</div>
-            <div id="stat-unassigned" class="text-xs font-bold text-amber-600">0</div>
+          <div onclick="openAttendanceModal()" class="bg-emerald-50/70 hover:bg-emerald-100/80 cursor-pointer p-1.5 rounded-xl border border-emerald-200 shadow-2xs flex flex-col items-center transition" title="มาเรียนวันนี้ (คลิกเพื่อเช็คชื่อ)">
+            <i class="fa-solid fa-user-check text-[10px] text-emerald-600 mb-0.5"></i>
+            <div id="stat-present" class="text-xs font-bold text-emerald-700 leading-none">0</div>
           </div>
-          <div onclick="openAttendanceModal()" class="bg-emerald-50/70 hover:bg-emerald-100/80 cursor-pointer p-1.5 rounded-xl border border-emerald-200 shadow-2xs transition" title="คลิกเพื่อเช็คชื่อนักเรียน">
-            <div class="text-[9px] text-emerald-700 font-semibold">มาเรียน</div>
-            <div id="stat-present" class="text-xs font-bold text-emerald-700">0</div>
-          </div>
-          <div onclick="openTaskModal()" class="bg-amber-50/70 hover:bg-amber-100/80 cursor-pointer p-1.5 rounded-xl border border-amber-200 shadow-2xs transition" title="คลิกเพื่อเช็คสถานะส่งงาน">
-            <div class="text-[9px] text-amber-800 font-semibold">ส่งงาน</div>
-            <div id="stat-task-done" class="text-xs font-bold text-amber-800">0/0</div>
+          <div onclick="openTaskModal()" class="bg-amber-50/70 hover:bg-amber-100/80 cursor-pointer p-1.5 rounded-xl border border-amber-200 shadow-2xs flex flex-col items-center transition" title="ส่งงานแล้ว (คลิกเพื่อตรวจงาน)">
+            <i class="fa-solid fa-file-circle-check text-[10px] text-amber-600 mb-0.5"></i>
+            <div id="stat-task-done" class="text-xs font-bold text-amber-800 leading-none">0/0</div>
           </div>
         </div>
         <span id="stat-empty-desks" class="hidden">0</span>
       </div>
 
-      <!-- Quick Add Single Student & Filter Tabs -->
-      <div class="p-3 border-b border-slate-200 space-y-2.5 bg-white">
-        <!-- Quick Add Form -->
+      <!-- Quick Add Single Student & Search/Filter -->
+      <div class="p-2.5 border-b border-slate-200 space-y-2 bg-white">
         <form onsubmit="handleQuickAddStudent(event)" class="flex gap-1.5">
           <input
             id="quick-add-name"
             type="text"
-            placeholder="เพิ่มชื่อนักเรียน เช่น 25 สมปอง (ปอง)"
-            class="flex-1 text-xs sm:text-sm px-3 py-2 rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none"
+            placeholder="25 ชื่อ-สกุล (ชื่อเล่น)"
+            class="flex-1 text-xs px-3 py-1.5 rounded-xl border border-slate-200 focus:border-indigo-500 outline-none"
           />
           <button
             type="submit"
-            class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-medium shrink-0 transition"
+            class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs flex items-center justify-center shrink-0 transition"
             title="เพิ่มนักเรียน"
           >
-            <i class="fa-solid fa-plus"></i> เพิ่ม
+            <i class="fa-solid fa-plus"></i>
           </button>
         </form>
 
-        <!-- Filter & Search -->
         <div class="flex items-center gap-1.5">
           <div class="relative flex-1">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
             <input
               id="student-search-input"
               type="text"
               oninput="renderSidebarStudents()"
-              placeholder="ค้นหาชื่อ, เลขที่, ชื่อเล่น..."
-              class="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg bg-slate-100 focus:bg-white border border-transparent focus:border-slate-300 outline-none"
+              placeholder="ค้นหา..."
+              class="w-full pl-7 pr-2.5 py-1.5 text-xs rounded-xl bg-slate-100 focus:bg-white border border-transparent focus:border-slate-300 outline-none"
             />
           </div>
           <select
             id="student-filter-select"
             onchange="renderSidebarStudents()"
-            class="text-xs py-1.5 px-2 rounded-lg bg-slate-100 border border-transparent focus:border-slate-300 text-slate-700 outline-none font-medium"
+            class="text-xs py-1.5 px-2 rounded-xl bg-slate-100 border border-transparent focus:border-slate-300 text-slate-700 outline-none font-medium max-w-[115px]"
+            title="กรองรายชื่อนักเรียน"
           >
             <option value="all">ทั้งหมด</option>
-            <option value="help">🙋 ต้องการความช่วยเหลือ</option>
-            <option value="present">✅ มาเรียนวันนี้</option>
+            <option value="help">🙋 ช่วยเหลือ</option>
+            <option value="present">✅ มาเรียน</option>
             <option value="absent">❌ ขาด/ลา/สาย</option>
-            <option value="task_pending">⏳ ยังไม่ส่งงานปัจจุบัน</option>
-            <option value="task_done">📄 ส่งงานปัจจุบันแล้ว</option>
-            <option value="unassigned">ยังไม่มีที่นั่ง</option>
-            <option value="role">👑 มีตำแหน่งในห้อง</option>
-            <option value="front">👓 นั่งหน้าห้อง</option>
-            <option value="talkative">💬 แยกนั่งห่างกัน</option>
+            <option value="task_pending">⏳ ค้างส่งงาน</option>
+            <option value="task_done">📄 ส่งงานแล้ว</option>
+            <option value="unassigned">รอจัดโต๊ะ</option>
+            <option value="role">👑 ตำแหน่ง</option>
+            <option value="front">👓 หน้าห้อง</option>
+            <option value="talkative">💬 แยกคุย</option>
           </select>
-        </div>
-
-        <!-- Legend / Tag Helper Info -->
-        <div class="flex items-center justify-between text-[11px] text-slate-500 pt-0.5 px-1">
-          <span>ตั้งตำแหน่งและเงื่อนไขรายคน:</span>
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center gap-1 text-amber-700 font-medium" title="ระบุตำแหน่ง เช่น หัวหน้าห้อง, รองหัวหน้าห้อง">👑 ตำแหน่ง</span>
-            <span class="inline-flex items-center gap-1 text-sky-700 font-medium" title="ล็อกให้อยู่แถวหน้าสุด 1-2 แถวแรก">👓 หน้าห้อง</span>
-            <span class="inline-flex items-center gap-1 text-rose-700 font-medium" title="ระบบสุ่มจะไม่ให้คนที่มีป้ายนี้นั่งติดกัน">💬 แยกคุย</span>
-          </div>
         </div>
       </div>
 
@@ -659,23 +734,21 @@
         <!-- Rendered dynamically via JS -->
       </div>
 
-      <!-- Sidebar Footer Actions -->
-      <div class="p-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between gap-2">
+      <!-- Sidebar Footer Actions (Icon-Only) -->
+      <div class="p-2.5 border-t border-slate-200 bg-slate-50 flex items-center justify-center gap-2">
         <button
           onclick="unassignAllStudents()"
-          class="flex-1 py-2 px-3 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-medium transition flex items-center justify-center gap-1.5"
-          title="นำนักเรียนทุกคนออกจากโต๊ะ (ยกเว้นโต๊ะที่ล็อกไว้)"
+          class="flex-1 h-9 rounded-xl border border-slate-300 hover:bg-slate-200 text-slate-700 text-sm transition flex items-center justify-center"
+          title="เก็บนักเรียนออกจากโต๊ะทั้งหมด (ยกเว้นที่ล็อกไว้)"
         >
           <i class="fa-solid fa-arrow-rotate-left"></i>
-          <span>เก็บเข้าคิวทั้งหมด</span>
         </button>
         <button
           onclick="resetToSampleData()"
-          class="py-2 px-3 rounded-xl border border-rose-200 hover:bg-rose-50 text-rose-600 text-xs font-medium transition flex items-center justify-center gap-1"
-          title="รีเซ็ตข้อมูลกลับเป็นค่าเริ่มต้น"
+          class="flex-1 h-9 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white text-sm transition flex items-center justify-center"
+          title="รีเซ็ตข้อมูลห้องเรียนกลับเป็นค่าเริ่มต้น"
         >
           <i class="fa-solid fa-trash-can"></i>
-          <span>รีเซ็ต</span>
         </button>
       </div>
     </aside>
@@ -690,169 +763,158 @@
     <!-- ================= MAIN WORKSPACE: TOOLBAR & SEATING CHART ================= -->
     <main id="main-workspace" class="flex-1 flex flex-col min-w-0 p-2.5 sm:p-4 lg:p-5 overflow-y-auto">
       
-      <!-- 1. CONFIGURATION TOOLBAR (Hidden in Projector & Print Mode) -->
-      <section id="config-toolbar" class="bg-white rounded-2xl border border-slate-200/90 p-3 mb-3.5 shadow-xs no-print">
-        <div class="flex flex-wrap items-center justify-between gap-2.5">
+      <!-- 1. CONFIGURATION TOOLBAR (ICON-ONLY, NO TEXT DESCRIPTIONS) -->
+      <section id="config-toolbar" class="bg-white rounded-2xl border border-slate-200/90 p-2.5 mb-3 shadow-xs no-print">
+        <div class="flex flex-wrap items-center justify-between gap-2">
           
-          <!-- Left Group: Layout Presets -->
-          <div class="flex flex-wrap items-center gap-1.5">
-            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-0.5 flex items-center gap-1">
-              <i class="fa-solid fa-table-cells-large text-indigo-500"></i> รูปแบบ:
-            </span>
-            
+          <!-- Left Group: Layout Presets (Icon-only) -->
+          <div class="flex items-center gap-1.5">
             <button
               onclick="applyLayoutPreset('single')"
               id="preset-btn-single"
-              class="preset-btn px-2.5 py-1.5 rounded-xl text-xs font-medium border transition flex items-center gap-1"
+              class="preset-btn ui-tb-btn rounded-xl border transition flex items-center justify-center"
+              title="จัดโต๊ะแบบแถวเดี่ยว"
             >
-              <i class="fa-solid fa-grip-vertical"></i> แถวเดี่ยว
+              <i class="fa-solid fa-grip-vertical"></i>
             </button>
 
             <button
               onclick="applyLayoutPreset('pairs')"
               id="preset-btn-pairs"
-              class="preset-btn px-2.5 py-1.5 rounded-xl text-xs font-medium border transition flex items-center gap-1"
+              class="preset-btn ui-tb-btn rounded-xl border transition flex items-center justify-center"
+              title="จัดโต๊ะแบบโต๊ะคู่"
             >
-              <i class="fa-solid fa-user-group"></i> โต๊ะคู่
+              <i class="fa-solid fa-user-group"></i>
             </button>
 
             <button
               onclick="applyLayoutPreset('groups')"
               id="preset-btn-groups"
-              class="preset-btn px-2.5 py-1.5 rounded-xl text-xs font-medium border transition flex items-center gap-1"
+              class="preset-btn ui-tb-btn rounded-xl border transition flex items-center justify-center"
+              title="จัดโต๊ะแบบกลุ่ม 4 คน"
             >
-              <i class="fa-solid fa-cubes"></i> กลุ่ม 4 คน
+              <i class="fa-solid fa-cubes"></i>
             </button>
 
             <button
               onclick="applyLayoutPreset('ushape')"
               id="preset-btn-ushape"
-              class="preset-btn px-2.5 py-1.5 rounded-xl text-xs font-medium border transition flex items-center gap-1"
+              class="preset-btn ui-tb-btn rounded-xl border transition flex items-center justify-center"
+              title="จัดโต๊ะแบบรูปตัวยู"
             >
-              <i class="fa-solid fa-magnet fa-rotate-180"></i> รูปตัวยู
+              <i class="fa-solid fa-magnet fa-rotate-180"></i>
             </button>
           </div>
 
-          <!-- Center Group: Rows, Columns & Seat Size Adjuster -->
-          <div class="flex flex-wrap items-center gap-2.5 bg-slate-50 px-2.5 py-1 rounded-xl border border-slate-200/80">
-            <div class="flex items-center gap-1.5">
-              <label class="text-xs font-medium text-slate-600">แถว:</label>
+          <!-- Center Group: Rows, Columns & Seat Size Selector (Icon-only) -->
+          <div class="flex flex-wrap items-center gap-2 bg-slate-50 px-2.5 py-1 rounded-xl border border-slate-200/80">
+            <div class="flex items-center gap-1" title="จำนวนแถว (Rows)">
+              <i class="fa-solid fa-arrows-up-down text-slate-400 text-[11px]"></i>
               <div class="flex items-center">
-                <button onclick="changeGridDimensions(-1, 0)" class="w-6 h-6 rounded-l-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold">-</button>
-                <span id="rows-display" class="px-2 h-6 flex items-center bg-white border-t border-b border-slate-300 text-xs font-bold text-indigo-700">4</span>
-                <button onclick="changeGridDimensions(1, 0)" class="w-6 h-6 rounded-r-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold">+</button>
+                <button onclick="changeGridDimensions(-1, 0)" class="w-6 h-6 rounded-l-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold" title="ลดแถว">-</button>
+                <span id="rows-display" class="px-2 h-6 flex items-center bg-white border-t border-b border-slate-300 text-xs font-bold text-indigo-600">4</span>
+                <button onclick="changeGridDimensions(1, 0)" class="w-6 h-6 rounded-r-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold" title="เพิ่มแถว">+</button>
               </div>
             </div>
 
             <div class="h-4 w-[1px] bg-slate-300"></div>
 
-            <div class="flex items-center gap-1.5">
-              <label class="text-xs font-medium text-slate-600">คอลัมน์:</label>
+            <div class="flex items-center gap-1" title="จำนวนคอลัมน์ (Columns)">
+              <i class="fa-solid fa-arrows-left-right text-slate-400 text-[11px]"></i>
               <div class="flex items-center">
-                <button onclick="changeGridDimensions(0, -1)" class="w-6 h-6 rounded-l-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold">-</button>
-                <span id="cols-display" class="px-2 h-6 flex items-center bg-white border-t border-b border-slate-300 text-xs font-bold text-indigo-700">6</span>
-                <button onclick="changeGridDimensions(0, 1)" class="w-6 h-6 rounded-r-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold">+</button>
+                <button onclick="changeGridDimensions(0, -1)" class="w-6 h-6 rounded-l-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold" title="ลดคอลัมน์">-</button>
+                <span id="cols-display" class="px-2 h-6 flex items-center bg-white border-t border-b border-slate-300 text-xs font-bold text-indigo-600">6</span>
+                <button onclick="changeGridDimensions(0, 1)" class="w-6 h-6 rounded-r-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold" title="เพิ่มคอลัมน์">+</button>
               </div>
             </div>
 
             <div class="h-4 w-[1px] bg-slate-300"></div>
 
-            <!-- Seat Card Size Selector (with Auto-Fit Device Mode) -->
-            <div class="flex items-center gap-1">
-              <label class="text-xs font-medium text-slate-600">ขนาดจอ:</label>
-              <div class="inline-flex rounded-lg border border-slate-300 bg-white p-0.5">
-                <button
-                  type="button"
-                  id="size-btn-auto"
-                  onclick="setSeatSize('auto')"
-                  class="px-2 py-0.5 rounded-md text-[11px] font-semibold transition"
-                  title="ปรับขนาดผังโต๊ะอัตโนมัติให้พอดีกับหน้าจอมือถือ แท็บเล็ต และคอมพิวเตอร์"
-                ><i class="fa-solid fa-mobile-screen mr-0.5"></i>อัตโนมัติ</button>
-                <button
-                  type="button"
-                  id="size-btn-xs"
-                  onclick="setSeatSize('xs')"
-                  class="px-2 py-0.5 rounded-md text-[11px] font-semibold transition"
-                  title="ขนาดจิ๋ว (เหมาะสำหรับห้อง 40-60 คน)"
-                >จิ๋ว</button>
-                <button
-                  type="button"
-                  id="size-btn-sm"
-                  onclick="setSeatSize('sm')"
-                  class="px-2 py-0.5 rounded-md text-[11px] font-semibold transition"
-                  title="ขนาดเล็กกะทัดรัด"
-                >เล็ก</button>
-                <button
-                  type="button"
-                  id="size-btn-md"
-                  onclick="setSeatSize('md')"
-                  class="px-2 py-0.5 rounded-md text-[11px] font-semibold transition"
-                  title="ขนาดกลาง"
-                >กลาง</button>
-              </div>
+            <!-- Seat Card Size Selector (Compact Icons) -->
+            <div class="inline-flex rounded-lg border border-slate-300 bg-white p-0.5" title="ขนาดโต๊ะบนหน้าจอ">
+              <button
+                type="button"
+                id="size-btn-auto"
+                onclick="setSeatSize('auto')"
+                class="w-7 h-6 rounded-md text-[11px] flex items-center justify-center transition"
+                title="ปรับขนาดอัตโนมัติตามอุปกรณ์"
+              ><i class="fa-solid fa-mobile-screen"></i></button>
+              <button
+                type="button"
+                id="size-btn-xs"
+                onclick="setSeatSize('xs')"
+                class="w-7 h-6 rounded-md text-[10px] font-bold flex items-center justify-center transition"
+                title="ขนาดจิ๋ว (XS)"
+              >XS</button>
+              <button
+                type="button"
+                id="size-btn-sm"
+                onclick="setSeatSize('sm')"
+                class="w-7 h-6 rounded-md text-[10px] font-bold flex items-center justify-center transition"
+                title="ขนาดเล็ก (S)"
+              >S</button>
+              <button
+                type="button"
+                id="size-btn-md"
+                onclick="setSeatSize('md')"
+                class="w-7 h-6 rounded-md text-[10px] font-bold flex items-center justify-center transition"
+                title="ขนาดกลาง (M)"
+              >M</button>
             </div>
           </div>
 
-          <!-- Right Group: Desk Click Mode, Smart Rules & Desk Edit Mode -->
-          <div class="flex flex-wrap items-center gap-2">
-            <!-- Quick Desk Click Action Mode -->
-            <div class="inline-flex items-center rounded-xl border border-slate-300 bg-slate-100 p-0.5 text-[11px] font-semibold" title="เลือกสิ่งที่จะเกิดขึ้นเมื่อคลิกที่โต๊ะนักเรียนบนผัง">
-              <button type="button" id="click-mode-swap" onclick="setDeskClickMode('swap')" class="px-2 py-1 rounded-lg bg-white text-indigo-700 shadow-2xs transition">
-                <i class="fa-solid fa-arrows-left-right mr-0.5"></i> ย้ายโต๊ะ
+          <!-- Right Group: Desk Click Mode, Smart Rules & Desk Edit Mode (Icon-only) -->
+          <div class="flex flex-wrap items-center gap-1.5">
+            <!-- Quick Desk Click Action Mode (Icon-only) -->
+            <div class="inline-flex items-center rounded-xl border border-slate-300 bg-slate-100 p-0.5">
+              <button type="button" id="click-mode-swap" onclick="setDeskClickMode('swap')" class="ui-tb-btn rounded-lg bg-white text-indigo-700 shadow-2xs flex items-center justify-center transition" title="โหมดย้าย/สลับโต๊ะ">
+                <i class="fa-solid fa-arrows-left-right text-xs"></i>
               </button>
-              <button type="button" id="click-mode-attendance" onclick="setDeskClickMode('attendance')" class="px-2 py-1 rounded-lg text-slate-600 hover:text-emerald-700 transition">
-                <i class="fa-solid fa-user-check mr-0.5"></i> เช็คชื่อด่วน
+              <button type="button" id="click-mode-attendance" onclick="setDeskClickMode('attendance')" class="ui-tb-btn rounded-lg text-slate-600 hover:text-emerald-600 flex items-center justify-center transition" title="โหมดเช็คชื่อด่วนบนผัง">
+                <i class="fa-solid fa-user-check text-xs"></i>
               </button>
-              <button type="button" id="click-mode-task" onclick="setDeskClickMode('task')" class="px-2 py-1 rounded-lg text-slate-600 hover:text-amber-700 transition">
-                <i class="fa-solid fa-file-circle-check mr-0.5"></i> เช็คส่งงาน
+              <button type="button" id="click-mode-task" onclick="setDeskClickMode('task')" class="ui-tb-btn rounded-lg text-slate-600 hover:text-amber-600 flex items-center justify-center transition" title="โหมดเช็คส่งงานบนผัง">
+                <i class="fa-solid fa-file-circle-check text-xs"></i>
               </button>
-              <button type="button" id="click-mode-help" onclick="setDeskClickMode('help')" class="px-2 py-1 rounded-lg text-slate-600 hover:text-rose-700 transition">
-                <i class="fa-solid fa-hand mr-0.5"></i> ยกมือช่วย
+              <button type="button" id="click-mode-help" onclick="setDeskClickMode('help')" class="ui-tb-btn rounded-lg text-slate-600 hover:text-rose-600 flex items-center justify-center transition" title="โหมดยกมือขอความช่วยเหลือ">
+                <i class="fa-solid fa-hand text-xs"></i>
               </button>
             </div>
 
-            <!-- Smart Rules Checkboxes -->
-            <label class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 bg-sky-50/80 border border-sky-200 px-2.5 py-1.5 rounded-xl cursor-pointer select-none" title="จัดนักเรียนที่มีป้าย 👓 ไว้แถวที่ 1-2 หน้าห้องเสมอ">
+            <!-- Smart Rules Icon Toggles -->
+            <label class="inline-flex items-center gap-1 h-8 bg-sky-50/80 border border-sky-200 px-2 rounded-xl cursor-pointer select-none" title="ล็อกแถวหน้าสำหรับนักเรียนป้าย 👓">
               <input type="checkbox" id="rule-front-row" checked onchange="updateRules()" class="rounded text-indigo-600 focus:ring-indigo-500" />
-              <span>👓 ล็อกแถวหน้า</span>
+              <span class="ui-tb-emoji">👓</span>
             </label>
 
-            <label class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 bg-rose-50/80 border border-rose-200 px-2.5 py-1.5 rounded-xl cursor-pointer select-none" title="ป้องกันไม่ให้นักเรียนที่มีป้าย 💬 นั่งติดกัน">
+            <label class="inline-flex items-center gap-1 h-8 bg-rose-50/80 border border-rose-200 px-2 rounded-xl cursor-pointer select-none" title="แยกคนคุยเก่งป้าย 💬 ไม่ให้นั่งติดกัน">
               <input type="checkbox" id="rule-separate-talkative" checked onchange="updateRules()" class="rounded text-indigo-600 focus:ring-indigo-500" />
-              <span>💬 แยกคนคุยเก่ง</span>
+              <span class="ui-tb-emoji">💬</span>
             </label>
 
-            <label class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 bg-purple-50/80 border border-purple-200 px-2.5 py-1.5 rounded-xl cursor-pointer select-none" title="พยายามสลับที่นั่ง ชาย-หญิง เมื่อจัดอัตโนมัติ">
+            <label class="inline-flex items-center gap-1 h-8 bg-purple-50/80 border border-purple-200 px-2 rounded-xl cursor-pointer select-none" title="สลับที่นั่ง ชาย-หญิง เมื่อจัดอัตโนมัติ">
               <input type="checkbox" id="rule-alternate-gender" onchange="updateRules()" class="rounded text-indigo-600 focus:ring-indigo-500" />
-              <span>⚤ สลับชาย-หญิง</span>
+              <span class="ui-tb-emoji">⚤</span>
             </label>
 
-            <!-- Toggle Desk Space Edit Mode -->
+            <!-- Toggle Desk Space Edit Mode (Icon-only) -->
             <button
               id="btn-edit-desks"
               onclick="toggleEditDesksMode()"
-              class="px-3 py-1.5 rounded-xl text-xs font-medium border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 transition flex items-center gap-1.5"
-              title="เปิดโหมดซ่อน/แสดงโต๊ะเรียน เพื่อให้ตรงกับผังห้องจริง (เช่น เว้นเสา หรือทางเดิน)"
+              class="ui-tb-btn rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-600 transition flex items-center justify-center"
+              title="เปิด/ปิดช่องโต๊ะ (ซ่อนโต๊ะเป็นทางเดินหรือเสา)"
             >
-              <i class="fa-solid fa-eraser text-slate-500"></i>
-              <span>เปิด/ปิดช่องโต๊ะ</span>
+              <i class="fa-solid fa-eraser"></i>
             </button>
-          </div>
-        </div>
 
-        <!-- Helper Banner when in Swap Selection or Edit Desks Mode -->
-        <div id="interactive-helper-banner" class="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-[11px]">i</span>
-            <span id="helper-text">
-              <strong>วิธีใช้งาน:</strong> ลากวาง (Drag & Drop) หรือ <strong>คลิกที่โต๊ะแรก แล้วคลิกโต๊ะที่สอง</strong> เพื่อสลับที่นั่งได้ทันที (รองรับทั้งเมาส์และจอสัมผัส iPad)
-            </span>
-          </div>
-          <div id="conflict-summary" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 border border-rose-200 font-medium">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <span id="conflict-text">พบข้อควรระวังในการจัดที่นั่ง</span>
+            <!-- Compact Conflict Alert Icon (Shown only if conflict exists) -->
+            <div id="conflict-summary" class="hidden items-center justify-center w-9 h-9 rounded-xl bg-rose-50 text-rose-600 border border-rose-300" title="พบข้อควรระวังในการจัดที่นั่ง">
+              <i class="fa-solid fa-triangle-exclamation text-sm animate-pulse"></i>
+              <span id="conflict-text" class="hidden"></span>
+            </div>
           </div>
         </div>
+        <span id="helper-text" class="hidden"></span>
       </section>
 
       <!-- Projector Mode Floating Exit Bar (Hidden by default) -->
@@ -868,14 +930,14 @@
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="startRandomRoulette()" class="px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-500 font-medium text-sm flex items-center gap-2 transition">
-            <i class="fa-solid fa-dice"></i> สุ่มเรียกชื่อ
+          <button onclick="startRandomRoulette()" class="w-10 h-10 rounded-xl bg-pink-600 hover:bg-pink-500 flex items-center justify-center transition" title="สุ่มเรียกชื่อ">
+            <i class="fa-solid fa-dice text-base"></i>
           </button>
-          <button onclick="togglePerspective()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 font-medium text-sm flex items-center gap-2 transition">
-            <i class="fa-solid fa-rotate"></i> สลับมุมมอง
+          <button onclick="togglePerspective()" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition" title="สลับมุมมอง">
+            <i class="fa-solid fa-rotate text-base"></i>
           </button>
-          <button onclick="toggleProjectorMode()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm flex items-center gap-2 transition">
-            <i class="fa-solid fa-compress"></i> ออกจากโหมดเต็มจอ
+          <button onclick="toggleProjectorMode()" class="w-10 h-10 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center transition" title="ออกจากโหมดเต็มจอ">
+            <i class="fa-solid fa-compress text-base"></i>
           </button>
         </div>
       </div>
@@ -944,31 +1006,17 @@
           </div>
         </div>
 
-        <!-- Classroom Footer Legend -->
-        <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 no-print">
-          <div class="flex flex-wrap items-center gap-3 sm:gap-4">
-            <span class="flex items-center gap-1">
-              <span class="w-2.5 h-2.5 rounded-full bg-sky-500 inline-block"></span> ชาย
-            </span>
-            <span class="flex items-center gap-1">
-              <span class="w-2.5 h-2.5 rounded-full bg-pink-500 inline-block"></span> หญิง
-            </span>
-            <span class="flex items-center gap-1">
-              <span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold text-[10px]">👑 หัวหน้า / ⭐ รองฯ</span> ตำแหน่งในห้องเรียน
-            </span>
-            <span class="flex items-center gap-1">
-              <span class="px-1.5 py-0.5 rounded bg-sky-100 text-sky-800 font-semibold text-[10px]">👓 หน้าห้อง</span> ควรนั่ง 1-2 แถวแรก
-            </span>
-            <span class="flex items-center gap-1">
-              <span class="px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 font-semibold text-[10px]">💬 แยกคุย</span> ไม่ควรนั่งติดกัน
-            </span>
-            <span class="flex items-center gap-1">
-              <i class="fa-solid fa-lock text-amber-500"></i> ล็อกที่นั่ง (ไม่เปลี่ยนเมื่อสุ่มใหม่)
-            </span>
+        <!-- Classroom Footer Legend (Compact Icons Only) -->
+        <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between gap-2 text-xs text-slate-400 no-print">
+          <div class="flex items-center gap-3">
+            <span class="w-2.5 h-2.5 rounded-full bg-sky-500 inline-block" title="นักเรียนชาย"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-pink-500 inline-block" title="นักเรียนหญิง"></span>
+            <span title="ตำแหน่งในห้องเรียน">👑</span>
+            <span title="ควรนั่งแถวหน้า 1-2">👓</span>
+            <span title="แยกนั่งห่างกัน">💬</span>
+            <i class="fa-solid fa-lock text-amber-500 text-[11px]" title="ล็อกที่นั่ง"></i>
           </div>
-          <div class="text-slate-400">
-            บันทึกข้อมูลอัตโนมัติในเบราว์เซอร์ <i class="fa-solid fa-cloud-check text-emerald-500 ml-1"></i>
-          </div>
+          <i class="fa-solid fa-cloud-check text-emerald-500 text-xs" title="บันทึกอัตโนมัติ"></i>
         </div>
       </section>
     </main>
@@ -1728,6 +1776,34 @@
     </div>
   </div>
 
+  <!-- ================= MODAL 10: CONFIRMATION DIALOG (LOGOUT / DELETE) ================= -->
+  <div id="confirm-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-[120] hidden items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-slate-200 overflow-hidden text-center p-6 animate-shuffle">
+      <div id="confirm-modal-icon-box" class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-4 text-2xl">
+        <i id="confirm-modal-icon" class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <h3 id="confirm-modal-title" class="text-lg font-extrabold text-slate-900 mb-1.5">ยืนยันการดำเนินการ</h3>
+      <p id="confirm-modal-message" class="text-xs sm:text-sm text-slate-500 mb-6 leading-relaxed">คุณแน่ใจหรือไม่ว่าต้องการดำเนินการนี้?</p>
+      <div class="flex items-center justify-center gap-2.5">
+        <button
+          type="button"
+          onclick="closeConfirmDialog()"
+          class="flex-1 py-2.5 px-4 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition"
+        >
+          ยกเลิก
+        </button>
+        <button
+          type="button"
+          id="confirm-modal-ok-btn"
+          onclick="executeConfirmDialog()"
+          class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow-md shadow-rose-200 transition"
+        >
+          ยืนยัน
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= TOAST NOTIFICATION ================= -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
 
@@ -1918,8 +1994,16 @@
       renderClassroomSelector();
       renderAll();
 
-      // Apply saved White/Black theme preference
+      // Apply saved White/Black theme and UI Icon Size preference
       applySavedTheme();
+      applySavedUiIconSize();
+
+      // Instant zero-latency sync when student.html updates LocalStorage in another browser tab
+      window.addEventListener('storage', (ev) => {
+        if (ev.key === MULTI_CLASS_KEY) {
+          syncClassroomPortalFromCloud(false);
+        }
+      });
 
       // Auto-fit seating grid whenever screen size or orientation changes
       window.addEventListener('resize', () => {
@@ -1948,10 +2032,18 @@
           }
         }
 
-        // 2. Migrate single-classroom STORAGE_KEY into multiClassStore
+        // 2. Restore _multiClasses or migrate single-classroom STORAGE_KEY
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
+          if (parsed && parsed._multiClasses && parsed._multiClasses.classes && Object.keys(parsed._multiClasses.classes).length > 0) {
+            multiClassStore = parsed._multiClasses;
+            const activeId = multiClassStore.activeClassId || Object.keys(multiClassStore.classes)[0];
+            multiClassStore.activeClassId = activeId;
+            state = { ...createBlankClassroomState(), ...multiClassStore.classes[activeId] };
+            ensureDesksGridIntegrity();
+            return;
+          }
           state = { ...createBlankClassroomState(), ...parsed };
           ensureDesksGridIntegrity();
           multiClassStore = {
@@ -2087,12 +2179,14 @@
     /*************************************************************************
      * 5. RENDER FUNCTIONS (Sidebar + Classroom Grid + Stats)
      *************************************************************************/
-    function renderAll(animateGrid = false) {
+    function renderAll(animateGrid = false, skipSave = false) {
       ensureDesksGridIntegrity();
       renderSidebarStudents();
       renderClassroomGrid(animateGrid);
       updateStatsAndConflicts();
-      saveState();
+      if (!skipSave) {
+        saveState();
+      }
     }
 
     function getSeatedMap() {
@@ -2709,7 +2803,7 @@
       if (taskDoneEl) taskDoneEl.textContent = `${submittedCount}/${totalStudents}`;
 
       const headerTaskPill = document.getElementById('header-task-pill');
-      if (headerTaskPill) headerTaskPill.textContent = `${state.tasks.length} งาน`;
+      if (headerTaskPill) headerTaskPill.textContent = `${state.tasks.length}`;
 
       updateHelpHeaderBadge();
       renderClassroomSelector();
@@ -2727,9 +2821,10 @@
       const conflictText = document.getElementById('conflict-text');
       if (conflicts.size > 0) {
         conflictBanner.classList.remove('hidden');
-        conflictBanner.classList.add(' flex');
+        conflictBanner.classList.add('flex');
         const firstReason = conflicts.values().next().value;
-        conflictText.textContent = `ข้อควรระวัง (${conflicts.size} จุด): ${firstReason}`;
+        conflictBanner.title = `ข้อควรระวัง (${conflicts.size} จุด): ${firstReason}`;
+        conflictText.textContent = conflictBanner.title;
       } else {
         conflictBanner.classList.add('hidden');
         conflictBanner.classList.remove('flex');
@@ -3140,9 +3235,9 @@
         const btn = document.getElementById(`preset-btn-${p}`);
         if (!btn) return;
         if (state.preset === p) {
-          btn.className = 'preset-btn px-3 py-1.5 rounded-xl text-xs font-bold border border-indigo-600 bg-indigo-600 text-white shadow-xs transition flex items-center gap-1.5';
+          btn.className = 'preset-btn ui-tb-btn rounded-xl border border-indigo-600 bg-indigo-600 text-white shadow-xs transition flex items-center justify-center';
         } else {
-          btn.className = 'preset-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition flex items-center gap-1.5';
+          btn.className = 'preset-btn ui-tb-btn rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition flex items-center justify-center';
         }
       });
     }
@@ -3174,9 +3269,9 @@
         const btn = document.getElementById(`size-btn-${sz}`);
         if (!btn) return;
         if (sz === current) {
-          btn.className = 'px-2 py-0.5 rounded-md text-[11px] font-bold bg-indigo-600 text-white shadow-2xs transition';
+          btn.className = 'w-7 h-6 rounded-md text-[10px] font-bold bg-indigo-600 text-white shadow-2xs flex items-center justify-center transition';
         } else {
-          btn.className = 'px-2 py-0.5 rounded-md text-[11px] font-medium text-slate-600 hover:bg-slate-100 transition';
+          btn.className = 'w-7 h-6 rounded-md text-[10px] font-semibold text-slate-600 hover:bg-slate-100 flex items-center justify-center transition';
         }
       });
     }
@@ -3255,20 +3350,52 @@
       }
     }
 
+    // --- ADJUSTABLE UI ICON SIZE CONTROLLER (M / L / XL) ---
+    const ICON_SIZE_STORAGE_KEY = 'SMART_SEATING_ICON_SIZE';
+
+    function applySavedUiIconSize() {
+      const saved = localStorage.getItem(ICON_SIZE_STORAGE_KEY) || 'lg';
+      setUiIconSize(saved, false);
+    }
+
+    function cycleUiIconSize() {
+      const order = ['md', 'lg', 'xl'];
+      const current = localStorage.getItem(ICON_SIZE_STORAGE_KEY) || 'lg';
+      const next = order[(order.indexOf(current) + 1) % order.length];
+      setUiIconSize(next, true);
+    }
+
+    function setUiIconSize(size, notify = false) {
+      const resolved = ['md', 'lg', 'xl'].includes(size) ? size : 'lg';
+      document.body.classList.remove('icon-size-md', 'icon-size-lg', 'icon-size-xl');
+      document.body.classList.add(`icon-size-${resolved}`);
+      localStorage.setItem(ICON_SIZE_STORAGE_KEY, resolved);
+
+      const badge = document.getElementById('ui-icon-size-badge');
+      if (badge) {
+        badge.textContent = resolved === 'md' ? 'M' : resolved === 'xl' ? 'XL' : 'L';
+      }
+      if (notify) {
+        const labels = { md: 'ขนาดปกติ (M)', lg: 'ขนาดใหญ่ (L)', xl: 'ขนาดใหญ่พิเศษ (XL)' };
+        showToast(`ปรับขนาดไอคอนเป็น ${labels[resolved]}`, 'indigo');
+      }
+      requestAnimationFrame(() => applyResponsiveGridFit());
+    }
+
+
     function toggleEditDesksMode() {
       state.editDesksMode = !state.editDesksMode;
       selectedSource = null;
       const btn = document.getElementById('btn-edit-desks');
-      const helperText = document.getElementById('helper-text');
 
       if (state.editDesksMode) {
-        btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold border border-rose-600 bg-rose-600 text-white shadow-xs transition flex items-center gap-1.5';
-        btn.innerHTML = `<i class="fa-solid fa-check"></i> <span>เสร็จสิ้นการแก้ไขโต๊ะ</span>`;
-        helperText.innerHTML = `<span class="text-rose-600 font-bold">โหมดแก้ไขช่องวางโต๊ะ:</span> คลิกที่โต๊ะใดก็ได้เพื่อซ่อนเป็นทางเดิน/เสา หรือคลิกช่องว่างเพื่อเพิ่มโต๊ะกลับมา`;
+        btn.className = 'ui-tb-btn rounded-xl border border-rose-600 bg-rose-600 text-white shadow-xs transition flex items-center justify-center';
+        btn.innerHTML = `<i class="fa-solid fa-check"></i>`;
+        btn.title = 'เสร็จสิ้นการแก้ไขช่องโต๊ะ';
       } else {
-        btn.className = 'px-3 py-1.5 rounded-xl text-xs font-medium border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 transition flex items-center gap-1.5';
-        btn.innerHTML = `<i class="fa-solid fa-eraser text-slate-500"></i> <span>เปิด/ปิดช่องโต๊ะ</span>`;
-        updateHelperBannerForSelection();
+        btn.className = 'ui-tb-btn rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-600 transition flex items-center justify-center';
+        btn.innerHTML = `<i class="fa-solid fa-eraser"></i>`;
+        btn.title = 'เปิด/ปิดช่องโต๊ะ (ซ่อนโต๊ะเป็นทางเดินหรือเสา)';
       }
       renderAll(false);
     }
@@ -3313,15 +3440,18 @@
       const label = document.getElementById('perspective-label');
       const printNote = document.getElementById('print-perspective-note');
 
+      const flipBtn = document.getElementById('btn-flip-view');
       if (state.perspective === 'teacher') {
         boardTop.classList.add('hidden');
         boardBottom.classList.remove('hidden');
-        label.textContent = 'มุมมองครูหน้าห้อง';
+        if (label) label.textContent = 'มุมมองครูหน้าห้อง';
+        if (flipBtn) flipBtn.title = 'ปัจจุบัน: มุมมองครูหน้าห้อง (คลิกสลับเป็นมุมมองนักเรียน)';
         printNote.textContent = 'มุมมองครูผู้สอนยืนหน้าห้อง (กระดานอยู่ด้านล่าง)';
       } else {
         boardTop.classList.remove('hidden');
         boardBottom.classList.add('hidden');
-        label.textContent = 'มุมมองนักเรียน';
+        if (label) label.textContent = 'มุมมองนักเรียน';
+        if (flipBtn) flipBtn.title = 'ปัจจุบัน: มุมมองนักเรียน (คลิกสลับเป็นมุมมองครูหน้าห้อง)';
         printNote.textContent = 'มุมมองนักเรียน (กระดานอยู่ด้านบน)';
       }
     }
@@ -3711,38 +3841,65 @@
     }
 
     function deleteStudent(studentId) {
-      state.students = state.students.filter(s => s.id !== studentId);
-      Object.values(state.desks).forEach(d => {
-        if (d.studentId === studentId) {
-          d.studentId = null;
-          d.locked = false;
+      const st = state.students.find(s => s.id === studentId);
+      const label = st ? `${st.name}${st.nickname ? ` (${st.nickname})` : ''}` : 'นักเรียนคนนี้';
+      showConfirmDialog({
+        title: 'ยืนยันการลบรายชื่อนักเรียน?',
+        message: `ต้องการลบ "${label}" ออกจากห้องเรียนนี้ใช่หรือไม่?`,
+        confirmText: 'ลบรายชื่อ',
+        iconClass: 'fa-solid fa-user-xmark',
+        onConfirm: () => {
+          state.students = state.students.filter(s => s.id !== studentId);
+          Object.values(state.desks).forEach(d => {
+            if (d.studentId === studentId) {
+              d.studentId = null;
+              d.locked = false;
+            }
+          });
+          showToast(`ลบ "${label}" เรียบร้อยแล้ว`, 'slate');
+          renderAll(false);
         }
       });
-      renderAll(false);
     }
 
     function unassignAllStudents() {
-      Object.values(state.desks).forEach(d => {
-        if (!d.locked) {
-          d.studentId = null;
+      showConfirmDialog({
+        title: 'เก็บนักเรียนออกจากโต๊ะทั้งหมด?',
+        message: 'นักเรียนทุกคนที่ไม่ได้ล็อกที่นั่งจะถูกย้ายกลับเข้าคิวรอจัดโต๊ะ',
+        confirmText: 'ยืนยัน',
+        iconClass: 'fa-solid fa-arrow-rotate-left',
+        onConfirm: () => {
+          Object.values(state.desks).forEach(d => {
+            if (!d.locked) {
+              d.studentId = null;
+            }
+          });
+          selectedSource = null;
+          showToast('นำนักเรียนที่ไม่ได้ล็อกที่นั่งกลับเข้าคิวทั้งหมดแล้ว', 'slate');
+          renderAll(false);
         }
       });
-      selectedSource = null;
-      showToast('นำนักเรียนที่ไม่ได้ล็อกที่นั่งกลับเข้าคิวทั้งหมดแล้ว', 'slate');
-      renderAll(false);
     }
 
     function resetToSampleData() {
-      state.students = JSON.parse(JSON.stringify(DEFAULT_STUDENTS));
-      state.rows = 4;
-      state.cols = 6;
-      state.preset = 'pairs';
-      state.desks = {};
-      selectedSource = null;
-      ensureDesksGridIntegrity();
-      syncUIControlsFromState();
-      smartAssignSeating(true);
-      showToast('รีเซ็ตข้อมูลกลับเป็นรายชื่อตัวอย่าง 24 คนเรียบร้อยแล้ว', 'indigo');
+      showConfirmDialog({
+        title: 'ยืนยันการรีเซ็ตข้อมูลห้องเรียน?',
+        message: 'รายชื่อนักเรียนและผังที่นั่งปัจจุบันจะถูกลบและคืนค่าเป็นข้อมูลตัวอย่าง 24 คน',
+        confirmText: 'รีเซ็ตข้อมูล',
+        iconClass: 'fa-solid fa-trash-can',
+        onConfirm: () => {
+          state.students = JSON.parse(JSON.stringify(DEFAULT_STUDENTS));
+          state.rows = 4;
+          state.cols = 6;
+          state.preset = 'pairs';
+          state.desks = {};
+          selectedSource = null;
+          ensureDesksGridIntegrity();
+          syncUIControlsFromState();
+          smartAssignSeating(true);
+          showToast('รีเซ็ตข้อมูลกลับเป็นรายชื่อตัวอย่าง 24 คนเรียบร้อยแล้ว', 'indigo');
+        }
+      });
     }
 
     function openBulkImportModal() {
@@ -4177,10 +4334,18 @@
     function clearCurrentStudentPhoto() {
       const st = state.students.find(s => s.id === activePhotoStudentId);
       if (!st) return;
-      delete st.photo;
-      renderPhotoModalContent();
-      renderAll(false);
-      showToast('รีเซ็ตรูปเป็นค่าเริ่มต้นเรียบร้อยแล้ว', 'slate');
+      showConfirmDialog({
+        title: 'ยืนยันการลบรูปภาพ?',
+        message: `ต้องการลบรูปถ่ายของ "${st.nickname || st.name}" และกลับไปใช้รูปการ์ตูนเริ่มต้นใช่หรือไม่?`,
+        confirmText: 'ลบรูปภาพ',
+        iconClass: 'fa-solid fa-trash-can',
+        onConfirm: () => {
+          delete st.photo;
+          renderPhotoModalContent();
+          renderAll(false);
+          showToast('ลบรูปภาพและคืนค่าเริ่มต้นเรียบร้อยแล้ว', 'slate');
+        }
+      });
     }
 
     async function startWebcam() {
@@ -4291,23 +4456,11 @@
         const btn = document.getElementById(`click-mode-${m}`);
         if (!btn) return;
         if (m === mode) {
-          btn.className = 'px-2 py-1 rounded-lg bg-white text-indigo-700 shadow-2xs transition font-bold';
+          btn.className = 'ui-tb-btn rounded-lg bg-white text-indigo-600 shadow-2xs flex items-center justify-center transition';
         } else {
-          btn.className = 'px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition font-semibold';
+          btn.className = 'ui-tb-btn rounded-lg text-slate-500 hover:text-slate-800 flex items-center justify-center transition';
         }
       });
-
-      const helperText = document.getElementById('helper-text');
-      if (mode === 'attendance') {
-        helperText.innerHTML = `<span class="text-emerald-700 font-bold"><i class="fa-solid fa-user-check mr-1"></i> โหมดเช็คชื่อด่วนบนผัง:</span> คลิกที่โต๊ะนักเรียนคนใดก็ได้เพื่อเปลี่ยนสถานะ (มาเรียน → สาย → ลา → ขาด)`;
-      } else if (mode === 'task') {
-        const t = getActiveTask();
-        helperText.innerHTML = `<span class="text-amber-700 font-bold"><i class="fa-solid fa-file-circle-check mr-1"></i> โหมดเช็คส่งงานด่วน (${escapeHtml(t ? t.title : 'งานปัจจุบัน')}):</span> คลิกที่โต๊ะนักเรียนเพื่อเช็คสถานะส่งงานทันที`;
-      } else if (mode === 'help') {
-        helperText.innerHTML = `<span class="text-rose-700 font-bold"><i class="fa-solid fa-hand mr-1"></i> โหมดยกมือขอความช่วยเหลือ:</span> คลิกที่โต๊ะนักเรียนเพื่อเปิด/ปิดสถานะขอความช่วยเหลือบนผัง`;
-      } else {
-        updateHelperBannerForSelection();
-      }
       renderAll(false);
     }
 
@@ -4561,11 +4714,19 @@
     function deleteActiveTask() {
       const task = getActiveTask();
       if (!task) return;
-      state.tasks = state.tasks.filter(t => t.id !== task.id);
-      state.activeTaskId = state.tasks.length > 0 ? state.tasks[0].id : null;
-      renderAll(false);
-      renderTaskModalContent();
-      showToast('ลบรายการงานเรียบร้อยแล้ว', 'slate');
+      showConfirmDialog({
+        title: 'ยืนยันการลบรายการงาน?',
+        message: `ต้องการลบงาน "${task.title}" และประวัติการส่งงานทั้งหมดของงานนี้ใช่หรือไม่?`,
+        confirmText: 'ลบงานนี้',
+        iconClass: 'fa-solid fa-trash-can',
+        onConfirm: () => {
+          state.tasks = state.tasks.filter(t => t.id !== task.id);
+          state.activeTaskId = state.tasks.length > 0 ? state.tasks[0].id : null;
+          renderAll(false);
+          renderTaskModalContent();
+          showToast('ลบรายการงานเรียบร้อยแล้ว', 'slate');
+        }
+      });
     }
 
     function openTaskModal() {
@@ -4834,16 +4995,26 @@
     function deleteClassroom(classId) {
       const keys = Object.keys(multiClassStore.classes);
       if (keys.length <= 1) return;
-      delete multiClassStore.classes[classId];
-      if (multiClassStore.activeClassId === classId) {
-        const nextId = Object.keys(multiClassStore.classes)[0];
-        multiClassStore.activeClassId = nextId;
-        state = { ...createBlankClassroomState(), ...multiClassStore.classes[nextId] };
-      }
-      syncUIControlsFromState();
-      renderAll(false);
-      renderClassroomManagerList();
-      showToast('ลบชั้นเรียนเรียบร้อยแล้ว', 'slate');
+      const target = multiClassStore.classes[classId];
+      const title = target ? target.classroomTitle : 'ชั้นเรียนนี้';
+      showConfirmDialog({
+        title: 'ยืนยันการลบชั้นเรียน?',
+        message: `ต้องการลบ "${title}" พร้อมรายชื่อนักเรียนและผังที่นั่งทั้งหมดในห้องนี้ใช่หรือไม่?`,
+        confirmText: 'ลบชั้นเรียน',
+        iconClass: 'fa-solid fa-trash-can',
+        onConfirm: () => {
+          delete multiClassStore.classes[classId];
+          if (multiClassStore.activeClassId === classId) {
+            const nextId = Object.keys(multiClassStore.classes)[0];
+            multiClassStore.activeClassId = nextId;
+            state = { ...createBlankClassroomState(), ...multiClassStore.classes[nextId] };
+          }
+          syncUIControlsFromState();
+          renderAll(false);
+          renderClassroomManagerList();
+          showToast(`ลบชั้นเรียน "${title}" เรียบร้อยแล้ว`, 'slate');
+        }
+      });
     }
 
     // --- B. AUTO-CHECK TASK SYSTEM ---
@@ -4928,11 +5099,11 @@
 
       badge.textContent = count;
       if (count > 0) {
-        btn.className = 'flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-rose-600 text-white border border-rose-700 font-bold text-xs sm:text-sm shadow-md shadow-rose-200 animate-pulse transition';
-        badge.className = 'px-1.5 py-0.2 rounded-full bg-white text-rose-700 text-[10px] font-extrabold';
+        btn.className = 'ui-icon-btn rounded-xl bg-rose-600 text-white border border-rose-700 flex items-center justify-center shadow-md shadow-rose-200 animate-pulse transition relative shrink-0';
+        badge.className = 'absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-white text-rose-700 text-[9px] font-extrabold flex items-center justify-center leading-none border border-rose-400';
       } else {
-        btn.className = 'flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-700 border border-slate-200 font-bold text-xs sm:text-sm transition';
-        badge.className = 'px-1.5 py-0.2 rounded-full bg-slate-200 text-slate-700 text-[10px] font-extrabold';
+        btn.className = 'ui-icon-btn rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-700 border border-slate-200 flex items-center justify-center transition relative shrink-0';
+        badge.className = 'absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-slate-600 text-white text-[9px] font-extrabold flex items-center justify-center leading-none';
       }
     }
 
@@ -5001,10 +5172,18 @@
     }
 
     function clearAllHelpRequests() {
-      state.helpRequests = {};
-      renderAll(false);
-      renderHelpQueueList();
-      showToast('เคลียร์รายการขอความช่วยเหลือทั้งหมดแล้ว', 'slate');
+      showConfirmDialog({
+        title: 'เคลียร์รายการขอความช่วยเหลือทั้งหมด?',
+        message: 'ต้องการลบการแจ้งเตือนขอความช่วยเหลือทั้งหมดบนผังใช่หรือไม่?',
+        confirmText: 'เคลียร์ทั้งหมด',
+        iconClass: 'fa-solid fa-trash-can',
+        onConfirm: () => {
+          state.helpRequests = {};
+          renderAll(false);
+          renderHelpQueueList();
+          showToast('เคลียร์รายการขอความช่วยเหลือทั้งหมดแล้ว', 'slate');
+        }
+      });
     }
 
     // --- D. STUDENT JOIN QR CODE & LIVE STUDENT PORTAL ---
@@ -5176,31 +5355,167 @@
       showToast('ส่งสถานะ "ส่งงานแล้ว" ไปยังหน้าจอครูเรียบร้อย! 🎉', 'emerald');
     }
 
-    // Sync updates from LocalStorage / Cloud (so student submissions & help alerts appear automatically)
-    function syncClassroomPortalFromCloud(manualNotify = false) {
+    // Sync student submissions, attendance & help requests directly from Cloud AND LocalStorage
+    let isCloudSyncFetching = false;
+    async function syncClassroomPortalFromCloud(manualNotify = false) {
+      if (isCloudSyncFetching) return;
+      isCloudSyncFetching = true;
+
+      const prevHelpIds = new Set(
+        Object.keys(state.helpRequests || {}).filter(id => state.helpRequests[id] && state.helpRequests[id].active)
+      );
+
+      let latestClass = null;
+
       try {
-        const multiRaw = localStorage.getItem(MULTI_CLASS_KEY);
-        if (multiRaw) {
-          const latestMulti = JSON.parse(multiRaw);
-          const activeId = multiClassStore.activeClassId;
-          if (latestMulti && latestMulti.classes && latestMulti.classes[activeId]) {
-            const latestClass = latestMulti.classes[activeId];
-            // Merge tasks submissions, attendance, and helpRequests without overwriting teacher's active UI mode
-            state.attendance = latestClass.attendance || state.attendance;
-            state.tasks = latestClass.tasks || state.tasks;
-            state.helpRequests = latestClass.helpRequests || state.helpRequests;
-            renderAll(false);
-            if (!document.getElementById('task-modal').classList.contains('hidden')) {
-              renderTaskModalContent();
+        // 1. Fetch live student updates from Google Apps Script Cloud (cross-device sync)
+        const hasCloud = typeof APP_CONFIG !== 'undefined' && APP_CONFIG.API_URL && !APP_CONFIG.API_URL.includes('YOUR_SCRIPT_ID');
+        const teacherUser = (typeof CURRENT_USER !== 'undefined' && CURRENT_USER.username)
+          ? CURRENT_USER.username
+          : (JSON.parse(localStorage.getItem('SMART_SEATING_CURRENT_USER') || '{}').username || '');
+
+        if (hasCloud && teacherUser) {
+          try {
+            const res = await fetch(APP_CONFIG.API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({
+                action: 'getTeacherLiveUpdates',
+                teacher: teacherUser,
+                classId: multiClassStore.activeClassId || 'class_default_1'
+              })
+            });
+            const data = await res.json();
+            if (data.status === 'success' && data.classroom) {
+              latestClass = data.classroom;
+            }
+          } catch (cloudErr) {}
+        }
+
+        // 2. Also check LocalStorage (instant sync when student.html is open on the same device/browser)
+        if (!latestClass) {
+          const multiRaw = localStorage.getItem(MULTI_CLASS_KEY);
+          if (multiRaw) {
+            const latestMulti = JSON.parse(multiRaw);
+            const activeId = multiClassStore.activeClassId;
+            if (latestMulti && latestMulti.classes && latestMulti.classes[activeId]) {
+              latestClass = latestMulti.classes[activeId];
             }
           }
         }
+
+        if (latestClass) {
+          const oldSnap = JSON.stringify({
+            a: state.attendance,
+            t: state.tasks,
+            h: state.helpRequests
+          });
+
+          if (latestClass.attendance) state.attendance = latestClass.attendance;
+          if (Array.isArray(latestClass.tasks)) state.tasks = latestClass.tasks;
+          if (latestClass.helpRequests) state.helpRequests = latestClass.helpRequests;
+
+          const newSnap = JSON.stringify({
+            a: state.attendance,
+            t: state.tasks,
+            h: state.helpRequests
+          });
+
+          if (oldSnap !== newSnap) {
+            // Persist merged snapshot locally without triggering a cloud write loop
+            multiClassStore.classes[multiClassStore.activeClassId] = state;
+            localStorage.setItem(MULTI_CLASS_KEY, JSON.stringify(multiClassStore));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+            // Alert teacher if a NEW help request just came in from a student
+            const newHelpIds = Object.keys(state.helpRequests || {}).filter(
+              id => state.helpRequests[id] && state.helpRequests[id].active && !prevHelpIds.has(id)
+            );
+            if (newHelpIds.length > 0) {
+              const st = state.students.find(s => s.id === newHelpIds[0]);
+              playTone(880, 0.12, 'triangle', 0.12);
+              setTimeout(() => playTone(1046.5, 0.16, 'triangle', 0.12), 110);
+              showToast(`🙋 ${st ? (st.nickname || st.name) : 'นักเรียน'} ส่งคำขอความช่วยเหลือใหม่!`, 'amber');
+            }
+
+            renderAll(false, true);
+            if (!document.getElementById('task-modal').classList.contains('hidden')) {
+              renderTaskModalContent();
+            }
+            if (!document.getElementById('help-queue-modal').classList.contains('hidden')) {
+              renderHelpQueueList();
+            }
+            if (!document.getElementById('attendance-modal').classList.contains('hidden')) {
+              renderAttendanceModalContent();
+            }
+          }
+        }
+
         if (manualNotify) {
-          showToast('ซิงก์ข้อมูลสถานะส่งงานและคำขอความช่วยเหลือล่าสุดแล้ว 🔄', 'indigo');
+          showToast('ซิงก์ข้อมูลสถานะส่งงานและคำขอความช่วยเหลือล่าสุดแล้ว 🔄', 'emerald');
         }
       } catch (e) {
-        // Ignore storage parse error
+        // Ignore transient sync error
+      } finally {
+        isCloudSyncFetching = false;
       }
+    }
+
+    /*************************************************************************
+     * 12.11 CONFIRMATION DIALOG & LOGOUT HANDLER
+     *************************************************************************/
+    let pendingConfirmCallback = null;
+
+    function showConfirmDialog({
+      title = 'ยืนยันการดำเนินการ',
+      message = 'คุณแน่ใจหรือไม่ว่าต้องการทำรายการนี้?',
+      confirmText = 'ยืนยัน',
+      iconClass = 'fa-solid fa-triangle-exclamation',
+      onConfirm = null
+    }) {
+      pendingConfirmCallback = onConfirm;
+      document.getElementById('confirm-modal-title').textContent = title;
+      document.getElementById('confirm-modal-message').textContent = message;
+      document.getElementById('confirm-modal-ok-btn').textContent = confirmText;
+      document.getElementById('confirm-modal-icon').className = iconClass;
+
+      const modal = document.getElementById('confirm-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeConfirmDialog() {
+      pendingConfirmCallback = null;
+      const modal = document.getElementById('confirm-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function executeConfirmDialog() {
+      const cb = pendingConfirmCallback;
+      closeConfirmDialog();
+      if (typeof cb === 'function') cb();
+    }
+
+    function confirmLogout() {
+      showConfirmDialog({
+        title: 'ยืนยันการออกจากระบบ?',
+        message: 'คุณต้องการออกจากระบบบัญชีผู้สอนตอนนี้ใช่หรือไม่?',
+        confirmText: 'ออกจากระบบ',
+        iconClass: 'fa-solid fa-right-from-bracket',
+        onConfirm: () => {
+          if (typeof performLogout === 'function') {
+            performLogout();
+          } else {
+            if (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.SESSION_KEY) {
+              localStorage.removeItem(APP_CONFIG.SESSION_KEY);
+            }
+            localStorage.removeItem('SMART_SEATING_CURRENT_USER');
+            localStorage.removeItem('SMART_SEATING_CHART_STATE_V2');
+            window.location.href = 'login.html';
+          }
+        }
+      });
     }
 
     /*************************************************************************
