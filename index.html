@@ -931,8 +931,8 @@
         <!-- Rendered dynamically via JS -->
       </div>
 
-      <!-- Sidebar Footer Actions (Icon-Only) -->
-      <div class="p-2.5 border-t border-slate-200 bg-slate-50 flex items-center justify-center gap-2">
+      <!-- Sidebar Footer Actions (Icon-Only: Unassign All, Bulk Delete All Students, Reset Sample) -->
+      <div class="p-2.5 border-t border-slate-200 bg-slate-50 flex items-center justify-center gap-1.5">
         <button
           onclick="unassignAllStudents()"
           class="flex-1 h-9 rounded-xl border border-slate-300 hover:bg-slate-200 text-slate-700 text-sm transition flex items-center justify-center"
@@ -941,11 +941,19 @@
           <i class="fa-solid fa-arrow-rotate-left"></i>
         </button>
         <button
-          onclick="resetToSampleData()"
-          class="flex-1 h-9 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white text-sm transition flex items-center justify-center"
-          title="รีเซ็ตข้อมูลห้องเรียนกลับเป็นค่าเริ่มต้น"
+          id="btn-bulk-delete-students"
+          onclick="openBulkDeleteStudentsModal()"
+          class="flex-1 h-9 rounded-xl border border-rose-300 bg-rose-600 hover:bg-rose-700 text-white text-sm shadow-2xs transition flex items-center justify-center"
+          title="ลบนักเรียนทั้งหมดออกจากห้องเรียน (ยืนยัน 2 ขั้นตอน)"
         >
-          <i class="fa-solid fa-trash-can"></i>
+          <i class="fa-solid fa-users-slash"></i>
+        </button>
+        <button
+          onclick="resetToSampleData()"
+          class="flex-1 h-9 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-500 text-amber-700 hover:text-slate-950 text-sm transition flex items-center justify-center"
+          title="รีเซ็ตข้อมูลกลับเป็นรายชื่อตัวอย่าง 24 คน"
+        >
+          <i class="fa-solid fa-arrows-rotate"></i>
         </button>
       </div>
     </aside>
@@ -2297,6 +2305,111 @@
     </div>
   </div>
 
+  <!-- ================= MODAL 13: BULK DELETE ALL STUDENTS (2-STEP CONFIRMATION) ================= -->
+  <div id="bulk-delete-modal" class="fixed inset-0 bg-slate-900/75 backdrop-blur-xs z-[115] hidden items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-rose-200 overflow-hidden animate-shuffle">
+      <!-- Header -->
+      <div class="p-4 sm:p-5 bg-gradient-to-r from-rose-600 to-red-700 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-users-slash"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-extrabold text-base">ลบนักเรียนทั้งหมดในห้อง</h3>
+              <span id="bulk-delete-step-badge" class="px-2 py-0.5 rounded-full bg-white/20 text-[10px] font-extrabold">ขั้นตอน 1 / 2</span>
+            </div>
+            <p id="bulk-delete-room-sub" class="text-xs text-rose-100 truncate">ห้องเรียนปัจจุบัน</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeBulkDeleteStudentsModal()" class="w-8 h-8 rounded-lg bg-white/15 hover:bg-white/25 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4">
+        <!-- STEP 1: Initial Warning -->
+        <div id="bulk-delete-step-1" class="space-y-4">
+          <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900 space-y-2">
+            <div class="flex items-center gap-2 font-extrabold text-sm text-rose-700">
+              <i class="fa-solid fa-triangle-exclamation text-base"></i>
+              <span>คำเตือน: การลบนี้ไม่สามารถย้อนกลับได้</span>
+            </div>
+            <p class="text-xs leading-relaxed">
+              คุณกำลังจะลบรายชื่อนักเรียนทั้งหมด <strong id="bulk-delete-count-text" class="text-rose-700 text-sm">0 คน</strong> ออกจากห้องเรียนนี้ รวมถึง:
+            </p>
+            <ul class="text-xs space-y-1 pl-4 list-disc opacity-90">
+              <li>ล้างรายชื่อนักเรียนและที่นั่งบนผังทั้งหมดให้ว่าง</li>
+              <li>ตัดการเชื่อมต่อนักเรียนทุกคนออกจากห้องเรียนนี้ทันที</li>
+              <li>ล้างรายการขอความช่วยเหลือและสถานะส่งงานของนักเรียนที่ถูกลบ</li>
+            </ul>
+          </div>
+
+          <div class="flex items-center gap-2.5">
+            <button
+              type="button"
+              onclick="closeBulkDeleteStudentsModal()"
+              class="flex-1 py-2.5 px-4 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition"
+            >
+              ยกเลิก
+            </button>
+            <button
+              type="button"
+              onclick="advanceBulkDeleteToStep2()"
+              class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-sm shadow-md transition flex items-center justify-center gap-1.5"
+            >
+              <span>ดำเนินการต่อ</span>
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2: Explicit Keyword Confirmation -->
+        <form id="bulk-delete-step-2" onsubmit="executeBulkDeleteAllStudents(event)" class="space-y-4 hidden">
+          <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 text-xs space-y-1.5">
+            <div class="font-extrabold flex items-center gap-1.5 text-amber-800">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span>ยืนยันขั้นสุดท้าย (Final Confirmation)</span>
+            </div>
+            <p class="leading-relaxed">
+              กรุณาพิมพ์คำว่า <code class="px-1.5 py-0.5 rounded bg-white border border-amber-300 font-extrabold text-rose-700">DELETE</code> หรือ <code class="px-1.5 py-0.5 rounded bg-white border border-amber-300 font-extrabold text-rose-700">ลบทั้งหมด</code> ลงในช่องด้านล่างเพื่อยืนยันการลบนักเรียนทั้งหมด <strong id="bulk-delete-count-step2">0</strong> คน
+            </p>
+          </div>
+
+          <div>
+            <input
+              type="text"
+              id="bulk-delete-confirm-input"
+              autocomplete="off"
+              oninput="validateBulkDeleteKeyword(this.value)"
+              placeholder="พิมพ์ DELETE หรือ ลบทั้งหมด"
+              class="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-300 focus:border-rose-500 text-sm font-extrabold text-center outline-none transition"
+            />
+          </div>
+
+          <div class="flex items-center gap-2.5">
+            <button
+              type="button"
+              onclick="backBulkDeleteToStep1()"
+              class="px-4 py-2.5 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition"
+            >
+              ย้อนกลับ
+            </button>
+            <button
+              type="submit"
+              id="btn-bulk-delete-final"
+              disabled
+              class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-extrabold text-sm shadow-md transition flex items-center justify-center gap-1.5"
+            >
+              <i class="fa-solid fa-trash-can"></i>
+              <span>ยืนยันลบนักเรียนทั้งหมด</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= MODAL 10: CONFIRMATION DIALOG (LOGOUT / DELETE) ================= -->
   <div id="confirm-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-[120] hidden items-center justify-center p-4 no-print">
     <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-slate-200 overflow-hidden text-center p-6 animate-shuffle">
@@ -2448,7 +2561,10 @@
         attendance: {},
         tasks: [],
         activeTaskId: null,
-        helpRequests: {} // { [studentId]: { active: true, note: string, time: string } }
+        helpRequests: {}, // { [studentId]: { active: true, note: string, time: string } }
+        removedStudents: {}, // { [studentId or 'acc:username']: timestamp }
+        clearedAt: 0,
+        updatedAt: Date.now()
       };
     }
 
@@ -2532,10 +2648,10 @@
       // Initialize responsive 2D auto-scaling, ResizeObserver & landscape orientation listeners
       initResponsiveAutoScaling();
 
-      // Start background cloud polling every 12 seconds for live Student Portal updates (auto task check + help alerts)
+      // Start background cloud polling every 6 seconds for live Student joins, submissions & help alerts
       setInterval(() => {
         syncClassroomPortalFromCloud(false);
-      }, 12000);
+      }, 6000);
     };
 
     function loadState() {
@@ -2588,9 +2704,16 @@
       };
     }
 
-    function saveState() {
+    let lastLocalTeacherMutationAt = 0;
+
+    function saveState(immediateCloud = false) {
       try {
+        const nowMs = Date.now();
+        lastLocalTeacherMutationAt = nowMs;
+        state.updatedAt = nowMs;
+
         if (!multiClassStore.activeClassId) multiClassStore.activeClassId = 'class_default_1';
+        multiClassStore.updatedAt = nowMs;
         multiClassStore.classes[multiClassStore.activeClassId] = state;
         try {
           const savedLogoRaw = localStorage.getItem('SMART_SEATING_CUSTOM_LOGO_V1');
@@ -2605,7 +2728,7 @@
           syncStateToCloud({
             ...state,
             _multiClasses: multiClassStore
-          });
+          }, immediateCloud);
         }
       } catch (e) {
         console.error('Failed to save state:', e);
@@ -2663,6 +2786,15 @@
       if (!state.helpRequests || typeof state.helpRequests !== 'object') {
         state.helpRequests = {};
       }
+      if (!state.removedStudents || typeof state.removedStudents !== 'object') {
+        state.removedStudents = {};
+      }
+      if (typeof state.clearedAt !== 'number') {
+        state.clearedAt = 0;
+      }
+      if (typeof state.updatedAt !== 'number') {
+        state.updatedAt = Date.now();
+      }
     }
 
     function syncUIControlsFromState() {
@@ -2706,13 +2838,13 @@
     /*************************************************************************
      * 5. RENDER FUNCTIONS (Sidebar + Classroom Grid + Stats)
      *************************************************************************/
-    function renderAll(animateGrid = false, skipSave = false) {
+    function renderAll(animateGrid = false, skipSave = false, immediateCloud = false) {
       ensureDesksGridIntegrity();
       renderSidebarStudents();
       renderClassroomGrid(animateGrid);
       updateStatsAndConflicts();
       if (!skipSave) {
-        saveState();
+        saveState(immediateCloud);
       }
     }
 
@@ -4522,26 +4654,161 @@
       renderAll(false);
     }
 
+    function purgeStudentRecordsFromClass(studentObj, nowMs) {
+      if (!studentObj) return;
+      const sid = studentObj.id;
+      if (!state.removedStudents || typeof state.removedStudents !== 'object') {
+        state.removedStudents = {};
+      }
+      state.removedStudents[sid] = nowMs;
+      if (studentObj.accountUsername) {
+        const accLower = String(studentObj.accountUsername).trim().toLowerCase();
+        state.removedStudents['acc:' + accLower] = nowMs;
+        state.removedStudents[accLower] = nowMs;
+      }
+
+      // Clear desk
+      Object.values(state.desks).forEach(d => {
+        if (d.studentId === sid) {
+          d.studentId = null;
+          d.locked = false;
+        }
+      });
+
+      // Clear help requests
+      if (state.helpRequests && state.helpRequests[sid]) {
+        delete state.helpRequests[sid];
+      }
+
+      // Clear attendance entries
+      if (state.attendance) {
+        Object.keys(state.attendance).forEach(dateKey => {
+          if (state.attendance[dateKey] && state.attendance[dateKey][sid]) {
+            delete state.attendance[dateKey][sid];
+          }
+        });
+      }
+
+      // Clear assignment submission entries
+      if (Array.isArray(state.tasks)) {
+        state.tasks.forEach(t => {
+          if (t.submissions && t.submissions[sid]) {
+            delete t.submissions[sid];
+          }
+        });
+      }
+    }
+
     function deleteStudent(studentId) {
       const st = state.students.find(s => s.id === studentId);
       const label = st ? `${st.name}${st.nickname ? ` (${st.nickname})` : ''}` : 'นักเรียนคนนี้';
       showConfirmDialog({
         title: 'ยืนยันการลบรายชื่อนักเรียน?',
-        message: `ต้องการลบ "${label}" ออกจากห้องเรียนนี้ใช่หรือไม่?`,
-        confirmText: 'ลบรายชื่อ',
+        message: `ต้องการลบ "${label}" และตัดการเชื่อมต่อออกจากห้องเรียนนี้ใช่หรือไม่?`,
+        confirmText: 'ลบและนำออก',
         iconClass: 'fa-solid fa-user-xmark',
         onConfirm: () => {
+          const nowMs = Date.now();
+          if (st) purgeStudentRecordsFromClass(st, nowMs);
           state.students = state.students.filter(s => s.id !== studentId);
-          Object.values(state.desks).forEach(d => {
-            if (d.studentId === studentId) {
-              d.studentId = null;
-              d.locked = false;
-            }
-          });
-          showToast(`ลบ "${label}" เรียบร้อยแล้ว`, 'slate');
-          renderAll(false);
+          if (selectedSource && selectedSource.type === 'sidebar' && selectedSource.studentId === studentId) {
+            selectedSource = null;
+          }
+          showToast(`ลบ "${label}" และตัดการเชื่อมต่อจากห้องเรียนแล้ว`, 'slate');
+          // Flush immediately to Cloud so student.html disconnects right away
+          renderAll(false, false, true);
         }
       });
+    }
+
+    // --- BULK DELETE ALL STUDENTS (TWO-STEP CONFIRMATION) ---
+    function openBulkDeleteStudentsModal() {
+      const count = state.students.length;
+      if (count === 0) {
+        showToast('ไม่มีรายชื่อนักเรียนในห้องเรียนนี้ให้ลบแล้ว', 'slate');
+        return;
+      }
+
+      document.getElementById('bulk-delete-room-sub').textContent = state.classroomTitle || 'ห้องเรียนปัจจุบัน';
+      document.getElementById('bulk-delete-count-text').textContent = `${count} คน`;
+      document.getElementById('bulk-delete-count-step2').textContent = count;
+
+      // Reset to Step 1
+      backBulkDeleteToStep1();
+
+      const modal = document.getElementById('bulk-delete-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeBulkDeleteStudentsModal() {
+      const modal = document.getElementById('bulk-delete-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      const input = document.getElementById('bulk-delete-confirm-input');
+      if (input) input.value = '';
+    }
+
+    function backBulkDeleteToStep1() {
+      document.getElementById('bulk-delete-step-badge').textContent = 'ขั้นตอน 1 / 2';
+      document.getElementById('bulk-delete-step-1').classList.remove('hidden');
+      document.getElementById('bulk-delete-step-2').classList.add('hidden');
+      const input = document.getElementById('bulk-delete-confirm-input');
+      if (input) input.value = '';
+      const finalBtn = document.getElementById('btn-bulk-delete-final');
+      if (finalBtn) finalBtn.disabled = true;
+    }
+
+    function advanceBulkDeleteToStep2() {
+      playTone(540, 0.05, 'sine', 0.06);
+      document.getElementById('bulk-delete-step-badge').textContent = 'ขั้นตอน 2 / 2';
+      document.getElementById('bulk-delete-step-1').classList.add('hidden');
+      document.getElementById('bulk-delete-step-2').classList.remove('hidden');
+      const input = document.getElementById('bulk-delete-confirm-input');
+      const finalBtn = document.getElementById('btn-bulk-delete-final');
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      if (finalBtn) finalBtn.disabled = true;
+    }
+
+    function validateBulkDeleteKeyword(val) {
+      const cleaned = String(val || '').trim().toUpperCase();
+      const isValid = cleaned === 'DELETE' || cleaned === 'ลบทั้งหมด';
+      const finalBtn = document.getElementById('btn-bulk-delete-final');
+      if (finalBtn) finalBtn.disabled = !isValid;
+    }
+
+    function executeBulkDeleteAllStudents(event) {
+      if (event) event.preventDefault();
+      const input = document.getElementById('bulk-delete-confirm-input');
+      const cleaned = String((input && input.value) || '').trim().toUpperCase();
+      if (cleaned !== 'DELETE' && cleaned !== 'ลบทั้งหมด') {
+        showToast('กรุณาพิมพ์ DELETE หรือ ลบทั้งหมด เพื่อยืนยัน', 'amber');
+        return;
+      }
+
+      const deletedCount = state.students.length;
+      const nowMs = Date.now();
+
+      // Mark every removed student & account as disconnected
+      state.students.forEach(st => purgeStudentRecordsFromClass(st, nowMs));
+      state.students = [];
+      state.helpRequests = {};
+      state.clearedAt = nowMs;
+      selectedSource = null;
+
+      Object.values(state.desks).forEach(d => {
+        d.studentId = null;
+        d.locked = false;
+      });
+
+      closeBulkDeleteStudentsModal();
+      playTone(340, 0.09, 'triangle', 0.08);
+      // Immediately flush to Cloud so all connected students disconnect right away
+      renderAll(false, false, true);
+      showToast(`ลบรายชื่อนักเรียนทั้งหมด ${deletedCount} คน และตัดการเชื่อมต่อทุกคนออกจากห้องเรียนแล้ว`, 'slate');
     }
 
     function unassignAllStudents() {
@@ -4570,15 +4837,20 @@
         confirmText: 'รีเซ็ตข้อมูล',
         iconClass: 'fa-solid fa-trash-can',
         onConfirm: () => {
+          const nowMs = Date.now();
+          state.students.forEach(st => purgeStudentRecordsFromClass(st, nowMs));
           state.students = JSON.parse(JSON.stringify(DEFAULT_STUDENTS));
           state.rows = 4;
           state.cols = 6;
           state.preset = 'pairs';
           state.desks = {};
+          state.helpRequests = {};
+          state.clearedAt = nowMs;
           selectedSource = null;
           ensureDesksGridIntegrity();
           syncUIControlsFromState();
           smartAssignSeating(true);
+          saveState(true);
           showToast('รีเซ็ตข้อมูลกลับเป็นรายชื่อตัวอย่าง 24 คนเรียบร้อยแล้ว', 'indigo');
         }
       });
@@ -6037,20 +6309,28 @@
       showToast('ส่งสถานะ "ส่งงานแล้ว" ไปยังหน้าจอครูเรียบร้อย! 🎉', 'emerald');
     }
 
-    // Sync student submissions, attendance & help requests directly from Cloud AND LocalStorage
+    // Sync newly joined students, desks, attendance, submissions & help requests directly from Cloud AND LocalStorage
     let isCloudSyncFetching = false;
     async function syncClassroomPortalFromCloud(manualNotify = false) {
       if (isCloudSyncFetching) return;
+
+      // Avoid race condition while teacher's own Cloud save is still in flight
+      if (!manualNotify && (window.isSyncingToCloud || (Date.now() - lastLocalTeacherMutationAt < 3500))) {
+        return;
+      }
+
       isCloudSyncFetching = true;
 
       const prevHelpIds = new Set(
         Object.keys(state.helpRequests || {}).filter(id => state.helpRequests[id] && state.helpRequests[id].active)
       );
+      const prevStudentIds = new Set(state.students.map(s => s.id));
 
-      let latestClass = null;
+      let cloudClass = null;
+      let localClass = null;
 
       try {
-        // 1. Fetch live student updates from Google Apps Script Cloud (cross-device sync)
+        // 1. Fetch live student joins & updates from Google Apps Script Cloud (cross-device sync)
         const hasCloud = typeof APP_CONFIG !== 'undefined' && APP_CONFIG.API_URL && !APP_CONFIG.API_URL.includes('YOUR_SCRIPT_ID');
         const teacherUser = (typeof CURRENT_USER !== 'undefined' && CURRENT_USER.username)
           ? CURRENT_USER.username
@@ -6069,45 +6349,186 @@
             });
             const data = await res.json();
             if (data.status === 'success' && data.classroom) {
-              latestClass = data.classroom;
+              cloudClass = data.classroom;
             }
           } catch (cloudErr) {}
         }
 
-        // 2. Also check LocalStorage (instant sync when student.html is open on the same device/browser)
-        if (!latestClass) {
-          const multiRaw = localStorage.getItem(MULTI_CLASS_KEY);
-          if (multiRaw) {
+        // 2. Also read LocalStorage (instant sync when student.html is open in another tab of same browser)
+        const multiRaw = localStorage.getItem(MULTI_CLASS_KEY);
+        if (multiRaw) {
+          try {
             const latestMulti = JSON.parse(multiRaw);
             const activeId = multiClassStore.activeClassId;
             if (latestMulti && latestMulti.classes && latestMulti.classes[activeId]) {
-              latestClass = latestMulti.classes[activeId];
+              localClass = latestMulti.classes[activeId];
             }
-          }
+          } catch (ex) {}
+        }
+
+        // Pick whichever snapshot is newer
+        let latestClass = null;
+        if (cloudClass && localClass) {
+          latestClass = (Number(localClass.updatedAt) || 0) >= (Number(cloudClass.updatedAt) || 0)
+            ? localClass
+            : cloudClass;
+        } else {
+          latestClass = cloudClass || localClass;
         }
 
         if (latestClass) {
           const oldSnap = JSON.stringify({
+            s: state.students,
+            d: state.desks,
             a: state.attendance,
             t: state.tasks,
             h: state.helpRequests
           });
 
-          if (latestClass.attendance) state.attendance = latestClass.attendance;
-          if (Array.isArray(latestClass.tasks)) state.tasks = latestClass.tasks;
-          if (latestClass.helpRequests) state.helpRequests = latestClass.helpRequests;
+          const removedMap = state.removedStudents || {};
+          const clearedAt = Number(state.clearedAt) || 0;
+          const newlyJoinedNames = [];
+
+          // A. Merge newly joined students from latestClass (respecting teacher deletions & bulk clear!)
+          if (Array.isArray(latestClass.students)) {
+            const localById = new Map(state.students.map(s => [s.id, s]));
+            const localByAcc = new Map();
+            state.students.forEach(s => {
+              if (s.accountUsername) localByAcc.set(String(s.accountUsername).toLowerCase(), s);
+            });
+
+            latestClass.students.forEach(remoteSt => {
+              const joinedAt = Number(remoteSt.joinedAt) || 0;
+              if (!joinedAt) return; // Only merge students who explicitly joined
+
+              const accLower = remoteSt.accountUsername ? String(remoteSt.accountUsername).trim().toLowerCase() : '';
+
+              // If teacher deleted this student or cleared the room AFTER they joined, skip!
+              if (clearedAt >= joinedAt) return;
+              if (removedMap[remoteSt.id] && Number(removedMap[remoteSt.id]) >= joinedAt) return;
+              if (accLower && removedMap['acc:' + accLower] && Number(removedMap['acc:' + accLower]) >= joinedAt) return;
+
+              const existingLocal = localById.get(remoteSt.id) || (accLower ? localByAcc.get(accLower) : null);
+              if (existingLocal) {
+                // Update placeholder name / linked accountUsername if student claimed the slot
+                if (accLower) existingLocal.accountUsername = accLower;
+                if (joinedAt > (Number(existingLocal.joinedAt) || 0)) {
+                  existingLocal.joinedAt = joinedAt;
+                  if (/นักเรียนคนที่\s*\d+/.test(String(existingLocal.name || '')) && remoteSt.name) {
+                    existingLocal.name = remoteSt.name;
+                    if (remoteSt.nickname) existingLocal.nickname = remoteSt.nickname;
+                  }
+                }
+                return;
+              }
+
+              // Brand-new student joined! Add to roster and seat on available desk
+              const addedSt = { ...remoteSt };
+              state.students.push(addedSt);
+              localById.set(addedSt.id, addedSt);
+              if (accLower) localByAcc.set(accLower, addedSt);
+              newlyJoinedNames.push(addedSt.nickname || addedSt.name);
+
+              // Clear stale removal markers now that student validly re-joined
+              delete removedMap[addedSt.id];
+              if (accLower) delete removedMap['acc:' + accLower];
+
+              // Expand grid if needed from remote
+              if (latestClass.rows && latestClass.rows > state.rows) state.rows = Math.min(10, latestClass.rows);
+              if (latestClass.cols && latestClass.cols > state.cols) state.cols = Math.min(12, latestClass.cols);
+              ensureDesksGridIntegrity();
+
+              // Place on matching remote desk if empty, otherwise first empty active desk
+              let placed = false;
+              if (latestClass.desks) {
+                for (const [k, d] of Object.entries(latestClass.desks)) {
+                  if (d && !d.disabled && d.studentId === addedSt.id && state.desks[k] && !state.desks[k].disabled && !state.desks[k].studentId) {
+                    state.desks[k].studentId = addedSt.id;
+                    placed = true;
+                    break;
+                  }
+                }
+              }
+              if (!placed) {
+                for (let r = 0; r < state.rows && !placed; r++) {
+                  for (let c = 0; c < state.cols && !placed; c++) {
+                    const k = `${r}-${c}`;
+                    if (state.desks[k] && !state.desks[k].disabled && !state.desks[k].studentId) {
+                      state.desks[k].studentId = addedSt.id;
+                      placed = true;
+                    }
+                  }
+                }
+              }
+            });
+
+            if (newlyJoinedNames.length > 0) {
+              state.students.sort((a, b) => (Number(a.number) || 0) - (Number(b.number) || 0));
+            }
+          }
+
+          // B. Merge attendance, tasks & helpRequests ONLY for students who currently exist in state.students
+          const validIds = new Set(state.students.map(s => s.id));
+
+          if (latestClass.attendance) {
+            Object.keys(latestClass.attendance).forEach(dateKey => {
+              if (!state.attendance[dateKey]) state.attendance[dateKey] = {};
+              const remoteDay = latestClass.attendance[dateKey] || {};
+              Object.keys(remoteDay).forEach(sid => {
+                if (validIds.has(sid)) {
+                  state.attendance[dateKey][sid] = remoteDay[sid];
+                }
+              });
+            });
+          }
+
+          if (Array.isArray(latestClass.tasks)) {
+            const localTaskMap = new Map(state.tasks.map(t => [t.id, t]));
+            latestClass.tasks.forEach(remoteTask => {
+              const localTask = localTaskMap.get(remoteTask.id);
+              if (localTask && remoteTask.submissions) {
+                if (!localTask.submissions) localTask.submissions = {};
+                Object.keys(remoteTask.submissions).forEach(sid => {
+                  if (validIds.has(sid)) {
+                    localTask.submissions[sid] = remoteTask.submissions[sid];
+                  }
+                });
+              }
+            });
+          }
+
+          if (latestClass.helpRequests) {
+            const nextHelp = {};
+            Object.keys(latestClass.helpRequests).forEach(sid => {
+              if (validIds.has(sid) && latestClass.helpRequests[sid] && latestClass.helpRequests[sid].active) {
+                nextHelp[sid] = latestClass.helpRequests[sid];
+              }
+            });
+            state.helpRequests = nextHelp;
+          }
 
           const newSnap = JSON.stringify({
+            s: state.students,
+            d: state.desks,
             a: state.attendance,
             t: state.tasks,
             h: state.helpRequests
           });
 
           if (oldSnap !== newSnap) {
-            // Persist merged snapshot locally without triggering a cloud write loop
+            state.updatedAt = Math.max(Number(state.updatedAt) || 0, Number(latestClass.updatedAt) || Date.now());
             multiClassStore.classes[multiClassStore.activeClassId] = state;
             localStorage.setItem(MULTI_CLASS_KEY, JSON.stringify(multiClassStore));
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+            // Notify teacher when new students join!
+            if (newlyJoinedNames.length > 0) {
+              playSuccessChime();
+              const joinSummary = newlyJoinedNames.length === 1
+                ? `🎓 นักเรียน "${newlyJoinedNames[0]}" เข้าร่วมห้องเรียนแล้ว!`
+                : `🎓 มีนักเรียนเข้าร่วมห้องเรียนใหม่ ${newlyJoinedNames.length} คน!`;
+              showToast(joinSummary, 'emerald');
+            }
 
             // Alert teacher if a NEW help request just came in from a student
             const newHelpIds = Object.keys(state.helpRequests || {}).filter(
@@ -6120,6 +6541,7 @@
               showToast(`🙋 ${st ? (st.nickname || st.name) : 'นักเรียน'} ส่งคำขอความช่วยเหลือใหม่!`, 'amber');
             }
 
+            syncUIControlsFromState();
             renderAll(false, true);
             if (!document.getElementById('task-modal').classList.contains('hidden')) {
               renderTaskModalContent();
@@ -6134,7 +6556,7 @@
         }
 
         if (manualNotify) {
-          showToast('ซิงก์ข้อมูลสถานะส่งงานและคำขอความช่วยเหลือล่าสุดแล้ว 🔄', 'emerald');
+          showToast('ซิงก์ข้อมูลนักเรียน การส่งงาน และคำขอความช่วยเหลือล่าสุดแล้ว 🔄', 'emerald');
         }
       } catch (e) {
         // Ignore transient sync error

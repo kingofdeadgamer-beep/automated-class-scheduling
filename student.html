@@ -208,9 +208,15 @@
           </div>
           <div>
             <h2 class="text-sm sm:text-base font-extrabold text-slate-900">เชื่อมต่อห้องเรียน / สแกน QR</h2>
-            <p class="text-[11px] text-slate-500">สแกน QR หน้าจอครู หรือกรอกชื่อผู้ใช้ครูเพื่อเข้าห้อง</p>
+            <p class="text-[11px] text-slate-500">สแกน QR หน้าจอครู หรือกรอกชื่อผู้ใช้ครูเพื่อเข้าร่วมห้อง</p>
           </div>
         </div>
+      </div>
+
+      <!-- Disconnected / Removed Alert Banner -->
+      <div id="st-disconnected-banner" class="hidden p-3 rounded-2xl border text-xs font-bold flex items-start gap-2.5">
+        <i id="st-disconnected-icon" class="fa-solid fa-circle-info text-base mt-0.5 shrink-0"></i>
+        <div id="st-disconnected-msg" class="leading-relaxed"></div>
       </div>
 
       <!-- Camera Scanner Container -->
@@ -245,36 +251,53 @@
           placeholder="วางลิงก์เข้าห้อง หรือพิมพ์ Username ของครู..."
           class="flex-1 px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs outline-none focus:border-indigo-500"
         />
-        <button type="submit" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold shrink-0">
-          <i class="fa-solid fa-plug mr-1"></i> เชื่อมต่อ
+        <button type="submit" id="btn-manual-join" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold shrink-0">
+          <i class="fa-solid fa-plug mr-1"></i> เข้าร่วม
         </button>
       </form>
 
       <!-- Teacher Classrooms Picker (Shown if teacher has multiple classes) -->
-      <div id="teacher-classes-picker-wrap" class="hidden pt-1">
+      <div id="teacher-classes-picker-wrap" class="hidden pt-1 flex items-center gap-1.5">
         <select
           id="teacher-classes-picker"
           onchange="selectTeacherClassId(this.value)"
-          class="w-full px-3 py-2 rounded-xl border border-indigo-300 bg-indigo-50/50 text-xs font-bold text-indigo-950 outline-none"
+          class="flex-1 px-3 py-2 rounded-xl border border-indigo-300 bg-indigo-50/50 text-xs font-bold text-indigo-950 outline-none"
         ></select>
+        <button
+          type="button"
+          id="btn-join-selected-class"
+          onclick="joinSelectedPickerClass()"
+          class="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shrink-0 transition"
+          title="เข้าร่วมห้องเรียนที่เลือก"
+        >
+          เข้าร่วมห้องนี้
+        </button>
       </div>
     </section>
 
-    <!-- 2. CONNECTED CLASSROOM, ROSTER IDENTITY & CHECK-IN -->
-    <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-indigo-200 space-y-3">
+    <!-- 2. CONNECTED CLASSROOM, ROSTER IDENTITY & CHECK-IN (Hidden when not joined / removed by teacher) -->
+    <section id="section-connected-classroom" class="hidden bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-indigo-200 space-y-3">
       <div class="flex items-center justify-between gap-2">
         <div class="min-w-0">
           <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[10px] font-extrabold">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> เชื่อมต่อกับระบบครูแล้ว
           </span>
           <h3 id="dash-room-title" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1 truncate">
-            กำลังค้นหาห้องเรียน...
+            ห้องเรียนออนไลน์
           </h3>
         </div>
+        <button
+          type="button"
+          onclick="leaveClassroomManually()"
+          class="px-2.5 py-1.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white text-[11px] font-bold shrink-0 transition"
+          title="ออกจากห้องเรียนนี้"
+        >
+          <i class="fa-solid fa-door-open mr-1"></i>ออกห้อง
+        </button>
       </div>
 
       <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 space-y-2">
-        <label class="block text-[11px] font-bold text-slate-600">เลือกชื่อของคุณในผังที่นั่งห้องเรียนนี้:</label>
+        <label class="block text-[11px] font-bold text-slate-600">ชื่อของคุณในผังที่นั่งห้องเรียนนี้:</label>
         <select
           id="dash-roster-match-select"
           onchange="linkStudentToRosterId(this.value)"
@@ -303,8 +326,8 @@
       </button>
     </section>
 
-    <!-- 3. LIVE HELP REQUEST (SYNCS DIRECTLY TO TEACHER'S DESK & QUEUE) -->
-    <section id="help-request-card" class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border-2 border-rose-200 space-y-3">
+    <!-- 3. LIVE HELP REQUEST (Hidden when not joined / removed by teacher) -->
+    <section id="help-request-card" class="hidden bg-white rounded-3xl p-4 sm:p-5 shadow-sm border-2 border-rose-200 space-y-3">
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5">
           <div class="ui-icon-btn rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
@@ -335,8 +358,8 @@
       </button>
     </section>
 
-    <!-- 4. ASSIGNMENTS & DIRECT SUBMISSION SYNC -->
-    <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-amber-200 space-y-3">
+    <!-- 4. ASSIGNMENTS & DIRECT SUBMISSION SYNC (Hidden when not joined / removed by teacher) -->
+    <section id="section-student-tasks" class="hidden bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-amber-200 space-y-3">
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5">
           <div class="ui-icon-btn rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
@@ -384,26 +407,37 @@
 
   <script>
     const STUDENT_SESSION_KEY = 'SMART_SEATING_STUDENT_SESSION_V1';
+    const STUDENT_JOINED_STATE_KEY = 'SMART_SEATING_STUDENT_JOINED_ROOM_V1';
     const MULTI_CLASS_KEY = 'SMART_SEATING_MULTI_CLASSES_V1';
     const THEME_STORAGE_KEY = 'SMART_SEATING_THEME_MODE';
     const ICON_SIZE_STORAGE_KEY = 'SMART_SEATING_ICON_SIZE';
 
     let studentUser = null;
-    let activeClassId = 'class_default_1';
+    let activeClassId = '';
     let teacherUsername = '';
     let matchedRosterStudentId = null;
+    let joinedAtTimestamp = 0;
     let classroomData = null;
+    let isJoinedToClassroom = false;
     let html5QrCodeInstance = null;
+    let isJoiningNow = false;
 
     function isCloudConfigured() {
       return typeof APP_CONFIG !== 'undefined' && APP_CONFIG.API_URL && !APP_CONFIG.API_URL.includes('YOUR_SCRIPT_ID');
     }
 
+    function detectStudentGender(name, number) {
+      const txt = String(name || '').trim();
+      if (/^(ด\.ญ\.|เด็กหญิง|น\.ส\.|นางสาว|ญ\.)/.test(txt)) return 'F';
+      if (/^(ด\.ช\.|เด็กชาย|นาย|ช\.)/.test(txt)) return 'M';
+      return (Number(number) || 1) % 2 === 1 ? 'M' : 'F';
+    }
+
     // Immediate auth gate -> route to unified login.html with role=student if not signed in
     (function checkStudentAuth() {
       const params = new URLSearchParams(window.location.search);
-      if (params.get('classId')) localStorage.setItem('LAST_SCANNED_CLASS_ID', params.get('classId'));
-      if (params.get('teacher')) localStorage.setItem('LAST_SCANNED_TEACHER', params.get('teacher'));
+      if (params.get('classId')) localStorage.setItem('PENDING_JOIN_CLASS_ID', params.get('classId'));
+      if (params.get('teacher')) localStorage.setItem('PENDING_JOIN_TEACHER', params.get('teacher'));
 
       const rawSession = localStorage.getItem(STUDENT_SESSION_KEY);
       if (!rawSession) {
@@ -415,22 +449,35 @@
       }
     })();
 
-    window.onload = function () {
+    function saveJoinedRoomState() {
+      if (!studentUser) return;
+      const key = `${STUDENT_JOINED_STATE_KEY}_${studentUser.username}`;
+      if (isJoinedToClassroom && activeClassId && matchedRosterStudentId) {
+        localStorage.setItem(key, JSON.stringify({
+          teacher: teacherUsername,
+          classId: activeClassId,
+          studentId: matchedRosterStudentId,
+          joinedAt: joinedAtTimestamp || Date.now()
+        }));
+      } else {
+        localStorage.removeItem(key);
+      }
+    }
+
+    function loadSavedJoinedRoomState() {
+      if (!studentUser) return null;
+      try {
+        const raw = localStorage.getItem(`${STUDENT_JOINED_STATE_KEY}_${studentUser.username}`);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    window.onload = async function () {
       const rawSession = localStorage.getItem(STUDENT_SESSION_KEY);
       if (!rawSession) return;
       studentUser = JSON.parse(rawSession);
-
-      const params = new URLSearchParams(window.location.search);
-      activeClassId = params.get('classId') || localStorage.getItem('LAST_SCANNED_CLASS_ID') || 'class_default_1';
-      teacherUsername = params.get('teacher') || localStorage.getItem('LAST_SCANNED_TEACHER') || '';
-
-      // If teacher is logged in on same device, auto-detect teacher username as convenience
-      if (!teacherUsername) {
-        try {
-          const tSession = JSON.parse(localStorage.getItem('SMART_SEATING_CURRENT_USER') || '{}');
-          if (tSession.username) teacherUsername = tSession.username;
-        } catch (e) {}
-      }
 
       applyStudentTheme(localStorage.getItem(THEME_STORAGE_KEY) || 'light');
       applyStudentIconSize(localStorage.getItem(ICON_SIZE_STORAGE_KEY) || 'lg');
@@ -438,27 +485,57 @@
 
       document.getElementById('nav-st-number').textContent = studentUser.number || '-';
       document.getElementById('nav-st-name').textContent = `${studentUser.fullname}${studentUser.nickname ? ` (${studentUser.nickname})` : ''}`;
-      document.getElementById('nav-st-room').textContent = `ห้อง ${studentUser.classroom || '-'}`;
+      document.getElementById('nav-st-room').textContent = 'ยังไม่ได้เข้าร่วมห้องเรียน';
 
-      loadTeacherClassroomData(false);
+      const params = new URLSearchParams(window.location.search);
+      const urlClassId = params.get('classId') || localStorage.getItem('PENDING_JOIN_CLASS_ID') || '';
+      const urlTeacher = params.get('teacher') || localStorage.getItem('PENDING_JOIN_TEACHER') || '';
 
-      // Instant cross-tab sync when teacher and student are tested in the same browser
+      // Clear pending join params & clean URL bar so later page reloads verify membership instead of silently re-joining
+      localStorage.removeItem('PENDING_JOIN_CLASS_ID');
+      localStorage.removeItem('PENDING_JOIN_TEACHER');
+      if (window.location.search) {
+        try {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        } catch (e) {}
+      }
+
+      if (urlClassId || urlTeacher) {
+        // Explicit arrival from scanning Classroom QR Code -> join immediately!
+        await joinTeacherClassroom(urlTeacher, urlClassId, true);
+      } else {
+        // Restore previous joined session ONLY if student is still in the teacher's classroom roster
+        const savedJoin = loadSavedJoinedRoomState();
+        if (savedJoin && savedJoin.classId && savedJoin.studentId) {
+          teacherUsername = savedJoin.teacher || '';
+          activeClassId = savedJoin.classId;
+          matchedRosterStudentId = savedJoin.studentId;
+          joinedAtTimestamp = savedJoin.joinedAt || 0;
+          isJoinedToClassroom = true;
+          await loadTeacherClassroomData(false);
+        } else {
+          showDisconnectedState('idle', 'ยังไม่ได้เข้าร่วมห้องเรียน กรุณาสแกน QR Code จากหน้าจอครู หรือพิมพ์ Username ของครูด้านล่างเพื่อเข้าร่วม');
+        }
+      }
+
+      // Instant cross-tab sync when teacher deletes or updates students in the same browser
       window.addEventListener('storage', (ev) => {
-        if (ev.key === MULTI_CLASS_KEY) {
+        if (ev.key === MULTI_CLASS_KEY && isJoinedToClassroom) {
           loadTeacherClassroomData(false);
         }
       });
 
-      // Periodic Cloud sync every 8 seconds so teacher's new tasks or resolved help alerts reflect live
+      // Periodic Cloud sync every 5 seconds so removals, desk moves, new tasks & resolved help alerts reflect live
       setInterval(() => {
-        loadTeacherClassroomData(false);
-      }, 8000);
+        if (isJoinedToClassroom && !isJoiningNow) {
+          loadTeacherClassroomData(false);
+        }
+      }, 5000);
     };
 
     /*************************************************************************
-     * 1. THEME, ICON SIZE & LOGOUT CONFIRMATION
+     * 1. THEME, ICON SIZE, LOGO & LOGOUT CONFIRMATION
      *************************************************************************/
-
     function applyStudentBrandLogo() {
       const slot = document.getElementById('st-brand-logo-slot');
       if (!slot) return;
@@ -528,15 +605,319 @@
     }
 
     /*************************************************************************
-     * 2. CONNECT & SYNC WITH TEACHER'S CLASSROOM (CLOUD + LOCALSTORAGE)
+     * 2. EXPLICIT JOIN, LIVE MEMBERSHIP VERIFICATION & AUTO-DISCONNECT
      *************************************************************************/
+    function setConnectedCardsVisible(visible) {
+      ['section-connected-classroom', 'help-request-card', 'section-student-tasks'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (visible) el.classList.remove('hidden');
+        else el.classList.add('hidden');
+      });
+    }
+
+    function showDisconnectedState(reasonType, message) {
+      const banner = document.getElementById('st-disconnected-banner');
+      const icon = document.getElementById('st-disconnected-icon');
+      const msgEl = document.getElementById('st-disconnected-msg');
+
+      setConnectedCardsVisible(false);
+      document.getElementById('nav-st-room').textContent = 'ยังไม่ได้เชื่อมต่อห้องเรียน';
+
+      if (banner && msgEl) {
+        banner.classList.remove('hidden');
+        msgEl.textContent = message;
+        if (reasonType === 'removed') {
+          banner.className = 'p-3.5 rounded-2xl border-2 border-rose-400 bg-rose-50 text-rose-800 text-xs font-bold flex items-start gap-2.5';
+          if (icon) icon.className = 'fa-solid fa-user-slash text-rose-600 text-base mt-0.5 shrink-0';
+        } else {
+          banner.className = 'p-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-600 text-xs font-semibold flex items-start gap-2.5';
+          if (icon) icon.className = 'fa-solid fa-circle-info text-indigo-500 text-base mt-0.5 shrink-0';
+        }
+      }
+    }
+
+    function hideDisconnectedBanner() {
+      const banner = document.getElementById('st-disconnected-banner');
+      if (banner) banner.classList.add('hidden');
+    }
+
+    function disconnectFromClassroom(reasonType, message) {
+      isJoinedToClassroom = false;
+      classroomData = null;
+      matchedRosterStudentId = null;
+      joinedAtTimestamp = 0;
+
+      if (studentUser && activeClassId) {
+        localStorage.removeItem(`MATCHED_ROSTER_${activeClassId}_${studentUser.username}`);
+      }
+      activeClassId = '';
+      localStorage.removeItem('LAST_SCANNED_CLASS_ID');
+      localStorage.removeItem('LAST_SCANNED_TEACHER');
+      saveJoinedRoomState();
+
+      showDisconnectedState(reasonType, message);
+      if (reasonType === 'removed') {
+        showToast(message, 'amber');
+      }
+    }
+
+    function leaveClassroomManually() {
+      disconnectFromClassroom('idle', 'คุณออกจากห้องเรียนแล้ว สแกน QR Code หรือเลือกห้องเรียนใหม่เพื่อเข้าร่วมอีกครั้ง');
+      showToast('ออกจากห้องเรียนเรียบร้อยแล้ว', 'slate');
+    }
+
+    // Helper: Apply student join directly into LocalStorage (for same-browser / offline instant sync)
+    function applyLocalStudentJoin(targetClassId, nowMs) {
+      const multiRaw = localStorage.getItem(MULTI_CLASS_KEY);
+      if (!multiRaw) return null;
+      try {
+        const multiObj = JSON.parse(multiRaw);
+        if (!multiObj || !multiObj.classes) return null;
+
+        const keys = Object.keys(multiObj.classes);
+        if (keys.length === 0) return null;
+
+        const resolvedId = (targetClassId && multiObj.classes[targetClassId])
+          ? targetClassId
+          : (multiObj.activeClassId && multiObj.classes[multiObj.activeClassId] ? multiObj.activeClassId : keys[0]);
+
+        const cls = multiObj.classes[resolvedId];
+        if (!Array.isArray(cls.students)) cls.students = [];
+        if (!cls.desks) cls.desks = {};
+        if (!cls.removedStudents) cls.removedStudents = {};
+
+        const accUser = String(studentUser.username || '').trim().toLowerCase();
+        const fullname = String(studentUser.fullname || '').trim();
+        const nickname = String(studentUser.nickname || '').trim();
+        const number = parseInt(studentUser.number, 10) || (cls.students.length + 1);
+        const gender = detectStudentGender(fullname, number);
+
+        delete cls.removedStudents['acc:' + accUser];
+        delete cls.removedStudents[accUser];
+
+        let matched = cls.students.find(s => String(s.accountUsername || '').toLowerCase() === accUser);
+        if (!matched) {
+          matched = cls.students.find(s =>
+            String(s.name || '').trim() === fullname ||
+            (Number(s.number) === number && !s.accountUsername && /นักเรียนคนที่\s*\d+/.test(String(s.name || '')))
+          );
+        }
+
+        let studentId = '';
+        if (matched) {
+          matched.accountUsername = accUser;
+          if (/นักเรียนคนที่\s*\d+/.test(String(matched.name || ''))) {
+            matched.name = fullname;
+            if (nickname) matched.nickname = nickname;
+            matched.gender = gender;
+          }
+          matched.joinedAt = nowMs;
+          delete cls.removedStudents[matched.id];
+          studentId = matched.id;
+        } else {
+          studentId = `st_acc_${accUser.replace(/[^a-z0-9_]/g, '')}_${nowMs}`;
+          cls.students.push({
+            id: studentId,
+            accountUsername: accUser,
+            number,
+            name: fullname,
+            nickname,
+            gender,
+            frontRow: false,
+            talkative: false,
+            role: '',
+            score: null,
+            joinedAt: nowMs
+          });
+          cls.students.sort((a, b) => (Number(a.number) || 0) - (Number(b.number) || 0));
+        }
+
+        // Seat student on first empty desk if not already seated
+        const rows = Number(cls.rows) || 4;
+        const cols = Number(cls.cols) || 6;
+        let alreadySeated = false;
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const k = `${r}-${c}`;
+            if (cls.desks[k] && !cls.desks[k].disabled && cls.desks[k].studentId === studentId) {
+              alreadySeated = true;
+            }
+          }
+        }
+        if (!alreadySeated) {
+          let placed = false;
+          for (let r = 0; r < rows && !placed; r++) {
+            for (let c = 0; c < cols && !placed; c++) {
+              const k = `${r}-${c}`;
+              if (!cls.desks[k]) cls.desks[k] = { studentId: null, locked: false, disabled: false };
+              if (!cls.desks[k].disabled && !cls.desks[k].studentId) {
+                cls.desks[k].studentId = studentId;
+                cls.desks[k].locked = false;
+                placed = true;
+              }
+            }
+          }
+          if (!placed && rows < 10) {
+            cls.rows = rows + 1;
+            for (let c = 0; c < cols; c++) {
+              cls.desks[`${rows}-${c}`] = { studentId: c === 0 ? studentId : null, locked: false, disabled: false };
+            }
+          }
+        }
+
+        cls.updatedAt = nowMs;
+        multiObj.updatedAt = nowMs;
+        localStorage.setItem(MULTI_CLASS_KEY, JSON.stringify(multiObj));
+
+        return {
+          classId: resolvedId,
+          studentId,
+          joinedAt: nowMs,
+          classroom: cls,
+          classList: keys.map(k => ({ id: k, title: multiObj.classes[k].classroomTitle || k }))
+        };
+      } catch (e) {
+        return null;
+      }
+    }
+
+    // Explicit Join Flow: Registers student in Teacher's classroom (Cloud + LocalStorage)
+    async function joinTeacherClassroom(targetTeacher, targetClassId, notify = true) {
+      if (!studentUser) return;
+      isJoiningNow = true;
+      const syncIcon = document.getElementById('st-sync-icon');
+      if (syncIcon) syncIcon.classList.add('fa-spin');
+
+      const resolvedTeacher = String(targetTeacher || teacherUsername || '').trim().toLowerCase();
+      if (resolvedTeacher) teacherUsername = resolvedTeacher;
+      const nowMs = Date.now();
+
+      const studentProfile = {
+        username: studentUser.username,
+        fullname: studentUser.fullname,
+        nickname: studentUser.nickname || '',
+        number: studentUser.number || 1,
+        gender: detectStudentGender(studentUser.fullname, studentUser.number)
+      };
+
+      let joinedResult = null;
+
+      try {
+        // 1. Join via Google Apps Script Cloud (Cross-device sync to Teacher's PC)
+        if (teacherUsername && isCloudConfigured()) {
+          try {
+            const res = await fetch(APP_CONFIG.API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({
+                action: 'joinClassroom',
+                teacher: teacherUsername,
+                classId: targetClassId || '',
+                student: studentProfile
+              })
+            });
+            const data = await res.json();
+            if (data.status === 'success' && data.classroom) {
+              joinedResult = {
+                classId: data.classId,
+                studentId: data.studentId,
+                joinedAt: data.joinedAt || nowMs,
+                classroom: data.classroom,
+                classList: data.classList || []
+              };
+            } else if (data.status === 'error' && data.message && data.message !== 'Invalid action') {
+              showToast(data.message, 'amber');
+            }
+          } catch (cloudErr) {}
+        }
+
+        // 2. Also mirror join to LocalStorage (for instant same-browser sync & offline fallback)
+        const localJoin = applyLocalStudentJoin(joinedResult ? joinedResult.classId : targetClassId, joinedResult ? joinedResult.joinedAt : nowMs);
+        if (!joinedResult && localJoin) {
+          joinedResult = localJoin;
+        }
+
+        if (joinedResult && joinedResult.classroom) {
+          activeClassId = joinedResult.classId;
+          matchedRosterStudentId = joinedResult.studentId;
+          joinedAtTimestamp = joinedResult.joinedAt || nowMs;
+          classroomData = joinedResult.classroom;
+          isJoinedToClassroom = true;
+
+          if (Array.isArray(joinedResult.classList) && joinedResult.classList.length > 0) {
+            renderTeacherClassPicker(joinedResult.classList);
+          }
+
+          localStorage.setItem(`MATCHED_ROSTER_${activeClassId}_${studentUser.username}`, matchedRosterStudentId);
+          saveJoinedRoomState();
+          hideDisconnectedBanner();
+          setConnectedCardsVisible(true);
+          renderConnectedClassroomUI();
+
+          if (notify) {
+            showToast(`เข้าร่วมห้อง "${classroomData.classroomTitle}" สำเร็จ! รายชื่อของคุณปรากฏบนผังครูแล้ว 🎉`, 'emerald');
+          }
+        } else {
+          showDisconnectedState('idle', 'ไม่พบห้องเรียนของครูท่านนี้ กรุณาตรวจสอบ Username ของครู หรือสแกน QR Code จากหน้าจอครูอีกครั้ง');
+          if (notify) showToast('ไม่สามารถเชื่อมต่อห้องเรียนได้ กรุณาตรวจสอบข้อมูลอีกครั้ง', 'amber');
+        }
+      } finally {
+        if (syncIcon) syncIcon.classList.remove('fa-spin');
+        isJoiningNow = false;
+      }
+    }
+
+    // Check if the current student was removed by the teacher
+    function checkIsStudentStillInClassroom(cls) {
+      if (!cls || !Array.isArray(cls.students)) return { present: false, studentId: null };
+
+      const accUser = String((studentUser && studentUser.username) || '').trim().toLowerCase();
+      const clearedAt = Number(cls.clearedAt) || 0;
+      if (joinedAtTimestamp > 0 && clearedAt >= joinedAtTimestamp) {
+        return { present: false, studentId: null };
+      }
+
+      const removedMap = cls.removedStudents || {};
+      if (matchedRosterStudentId && removedMap[matchedRosterStudentId] && Number(removedMap[matchedRosterStudentId]) >= joinedAtTimestamp) {
+        return { present: false, studentId: null };
+      }
+      if (accUser && removedMap['acc:' + accUser] && Number(removedMap['acc:' + accUser]) >= joinedAtTimestamp) {
+        return { present: false, studentId: null };
+      }
+
+      // Check by matchedRosterStudentId first
+      if (matchedRosterStudentId) {
+        const byId = cls.students.find(s => s.id === matchedRosterStudentId);
+        if (byId) return { present: true, studentId: byId.id };
+      }
+
+      // Fallback check by accountUsername (only if not marked removed)
+      if (accUser) {
+        const byAcc = cls.students.find(s => String(s.accountUsername || '').toLowerCase() === accUser);
+        if (byAcc) return { present: true, studentId: byAcc.id };
+      }
+
+      return { present: false, studentId: null };
+    }
+
     async function loadTeacherClassroomData(showNotify = false) {
+      if (!isJoinedToClassroom || !activeClassId) {
+        if (showNotify) showToast('ยังไม่ได้เข้าร่วมห้องเรียน กรุณาสแกน QR หรือกรอก Username ครู', 'amber');
+        return;
+      }
+
       const syncIcon = document.getElementById('st-sync-icon');
       if (showNotify && syncIcon) syncIcon.classList.add('fa-spin');
 
-      let loadedFromCloud = false;
+      let cloudClass = null;
+      let cloudRemoved = false;
+      let cloudClassList = [];
+      let localClass = null;
+      let localClassExistsInMulti = false;
+      let localClassList = [];
 
-      // 1. Prefer Google Apps Script Cloud when teacherUsername & API_URL are configured (true cross-device sync)
+      // 1. Fetch from Google Apps Script Cloud (cross-device)
       if (teacherUsername && isCloudConfigured()) {
         try {
           const res = await fetch(APP_CONFIG.API_URL, {
@@ -545,69 +926,101 @@
             body: JSON.stringify({
               action: 'getPublicClassroom',
               teacher: teacherUsername,
-              classId: activeClassId
+              classId: activeClassId,
+              strictClassId: true
             })
           });
           const data = await res.json();
-          if (data.status === 'success' && data.classroom) {
-            classroomData = data.classroom;
-            if (data.classId) activeClassId = data.classId;
-            if (Array.isArray(data.classList) && data.classList.length > 1) {
-              renderTeacherClassPicker(data.classList);
-            }
-            loadedFromCloud = true;
+          if (data.status === 'removed') {
+            cloudRemoved = true;
+          } else if (data.status === 'success' && data.classroom) {
+            cloudClass = data.classroom;
+            if (Array.isArray(data.classList)) cloudClassList = data.classList;
           }
         } catch (e) {}
       }
 
-      // 2. Fallback / Same-device LocalStorage sync
-      if (!loadedFromCloud) {
-        const multiRaw = localStorage.getItem(MULTI_CLASS_KEY);
-        if (multiRaw) {
-          try {
-            const multiObj = JSON.parse(multiRaw);
-            if (multiObj && multiObj.classes) {
-              const classEntries = Object.entries(multiObj.classes);
-              if (classEntries.length > 1) {
-                renderTeacherClassPicker(classEntries.map(([id, c]) => ({ id, title: c.classroomTitle })));
-              }
-              const targetClass = multiObj.classes[activeClassId] || Object.values(multiObj.classes)[0];
-              if (targetClass) {
-                if (!multiObj.classes[activeClassId]) {
-                  activeClassId = Object.keys(multiObj.classes)[0];
-                }
-                classroomData = targetClass;
-              }
+      // 2. Also check LocalStorage (same-browser instant sync)
+      const multiRaw = localStorage.getItem(MULTI_CLASS_KEY);
+      if (multiRaw) {
+        try {
+          const multiObj = JSON.parse(multiRaw);
+          if (multiObj && multiObj.classes) {
+            const keys = Object.keys(multiObj.classes);
+            localClassList = keys.map(k => ({ id: k, title: multiObj.classes[k].classroomTitle || k }));
+            if (multiObj.classes[activeClassId]) {
+              localClass = multiObj.classes[activeClassId];
+              localClassExistsInMulti = true;
             }
-          } catch (e) {}
-        }
+          }
+        } catch (e) {}
       }
 
       if (showNotify && syncIcon) syncIcon.classList.remove('fa-spin');
 
-      if (classroomData) {
-        renderConnectedClassroomUI();
-        if (showNotify) showToast('ซิงก์ข้อมูลล่าสุดจากระบบครูแล้ว 🔄', 'emerald');
-      } else {
-        document.getElementById('dash-room-title').textContent = 'ยังไม่ได้เชื่อมต่อห้องเรียน (สแกน QR หรือกรอกชื่อครู)';
+      // Choose the freshest snapshot between Cloud and LocalStorage
+      let latestClass = null;
+      if (cloudRemoved && !localClassExistsInMulti) {
+        disconnectFromClassroom('removed', 'ห้องเรียนนี้ถูกลบโดยครูผู้สอนแล้ว กรุณาเชื่อมต่อห้องเรียนใหม่');
+        return;
       }
+
+      if (cloudClass && localClass) {
+        const cloudTs = Number(cloudClass.updatedAt) || 0;
+        const localTs = Number(localClass.updatedAt) || 0;
+        latestClass = localTs >= cloudTs ? localClass : cloudClass;
+      } else {
+        latestClass = cloudClass || localClass;
+      }
+
+      const bestClassList = cloudClassList.length > 0 ? cloudClassList : localClassList;
+      if (bestClassList.length > 0) {
+        renderTeacherClassPicker(bestClassList);
+      }
+
+      if (!latestClass) {
+        if (multiRaw && !localClassExistsInMulti) {
+          disconnectFromClassroom('removed', 'ห้องเรียนนี้ถูกลบหรือเปลี่ยนโดยครูผู้สอนแล้ว');
+        }
+        return;
+      }
+
+      // CRITICAL BUG FIX #2: Verify student is STILL in the classroom roster!
+      const membership = checkIsStudentStillInClassroom(latestClass);
+      if (!membership.present) {
+        disconnectFromClassroom('removed', 'คุณถูกนำออกจากห้องเรียนโดยครูผู้สอนแล้ว กรุณาสแกน QR Code หรือกดเชื่อมต่อใหม่หากต้องการเข้าห้องอีกครั้ง');
+        return;
+      }
+
+      matchedRosterStudentId = membership.studentId;
+      classroomData = latestClass;
+      saveJoinedRoomState();
+      hideDisconnectedBanner();
+      setConnectedCardsVisible(true);
+      renderConnectedClassroomUI();
+
+      if (showNotify) showToast('ซิงก์ข้อมูลล่าสุดจากระบบครูแล้ว 🔄', 'emerald');
     }
 
     function renderTeacherClassPicker(classList) {
       const wrap = document.getElementById('teacher-classes-picker-wrap');
       const sel = document.getElementById('teacher-classes-picker');
-      if (!wrap || !sel) return;
+      if (!wrap || !sel || !Array.isArray(classList) || classList.length === 0) return;
       wrap.classList.remove('hidden');
       sel.innerHTML = classList.map(c =>
-        `<option value="${c.id}" ${c.id === activeClassId ? 'selected' : ''}>เลือกห้องเรียน: ${escapeHtml(c.title)}</option>`
+        `<option value="${c.id}" ${c.id === activeClassId ? 'selected' : ''}>ห้องเรียน: ${escapeHtml(c.title)}</option>`
       ).join('');
     }
 
     function selectTeacherClassId(cid) {
-      activeClassId = cid;
-      localStorage.setItem('LAST_SCANNED_CLASS_ID', cid);
-      matchedRosterStudentId = null;
-      loadTeacherClassroomData(true);
+      if (!cid) return;
+      joinTeacherClassroom(teacherUsername, cid, true);
+    }
+
+    function joinSelectedPickerClass() {
+      const sel = document.getElementById('teacher-classes-picker');
+      if (!sel || !sel.value) return;
+      joinTeacherClassroom(teacherUsername, sel.value, true);
     }
 
     function refreshClassroomConnection(notify = true) {
@@ -615,7 +1028,7 @@
     }
 
     function renderConnectedClassroomUI() {
-      if (!classroomData) return;
+      if (!classroomData || !isJoinedToClassroom) return;
 
       document.getElementById('dash-room-title').textContent = classroomData.classroomTitle || 'ห้องเรียนออนไลน์';
       document.getElementById('nav-st-room').textContent = classroomData.classroomTitle || `ห้อง ${studentUser.classroom}`;
@@ -623,17 +1036,7 @@
       const roster = classroomData.students || [];
       const selectEl = document.getElementById('dash-roster-match-select');
 
-      if (!matchedRosterStudentId || !roster.some(s => s.id === matchedRosterStudentId)) {
-        const savedMatch = localStorage.getItem(`MATCHED_ROSTER_${activeClassId}_${studentUser.username}`);
-        if (savedMatch && roster.some(s => s.id === savedMatch)) {
-          matchedRosterStudentId = savedMatch;
-        } else {
-          const autoMatch = roster.find(s => Number(s.number) === Number(studentUser.number) || s.name.includes(studentUser.fullname));
-          if (autoMatch) matchedRosterStudentId = autoMatch.id;
-        }
-      }
-
-      selectEl.innerHTML = `<option value="">-- แตะเพื่อเลือกชื่อของคุณ (${roster.length} คน) --</option>` +
+      selectEl.innerHTML = `<option value="">-- รายชื่อในห้อง (${roster.length} คน) --</option>` +
         roster.map(st =>
           `<option value="${st.id}" ${st.id === matchedRosterStudentId ? 'selected' : ''}>เลขที่ ${st.number} • ${escapeHtml(st.name)} ${st.nickname ? `(${escapeHtml(st.nickname)})` : ''}</option>`
         ).join('');
@@ -642,10 +1045,10 @@
     }
 
     function linkStudentToRosterId(rosterId) {
+      if (!rosterId) return;
       matchedRosterStudentId = rosterId;
-      if (rosterId) {
-        localStorage.setItem(`MATCHED_ROSTER_${activeClassId}_${studentUser.username}`, rosterId);
-      }
+      localStorage.setItem(`MATCHED_ROSTER_${activeClassId}_${studentUser.username}`, rosterId);
+      saveJoinedRoomState();
       updateStudentSeatAndActionStatus();
     }
 
@@ -658,7 +1061,7 @@
       }
 
       // 1. Seat Coordinate
-      let foundCoord = 'ยังไม่ได้จัดโต๊ะบนผัง';
+      let foundCoord = 'รอครูจัดโต๊ะบนผัง';
       const desks = classroomData.desks || {};
       for (const [key, d] of Object.entries(desks)) {
         if (d && !d.disabled && d.studentId === matchedRosterStudentId) {
@@ -767,12 +1170,77 @@
      * 3. REAL-TIME ACTIONS SYNCED DIRECTLY TO TEACHER'S SYSTEM
      *************************************************************************/
     async function pushStudentActionToTeacher(actionType, payloadObj) {
-      if (!matchedRosterStudentId) {
-        showToast('กรุณาเลือกชื่อของคุณในรายชื่อห้องเรียนก่อนครับ', 'amber');
+      if (!isJoinedToClassroom || !matchedRosterStudentId) {
+        showToast('กรุณาเข้าร่วมห้องเรียนก่อนทำรายการนี้ครับ', 'amber');
         return false;
       }
 
-      // 1. Optimistically update local classroomData
+      const nowMs = Date.now();
+
+      // 1. Push live event to Google Apps Script Cloud first if configured so we detect server-side removal immediately
+      if (teacherUsername && isCloudConfigured()) {
+        try {
+          const res = await fetch(APP_CONFIG.API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              action: 'studentLiveEvent',
+              teacher: teacherUsername,
+              classId: activeClassId,
+              studentId: matchedRosterStudentId,
+              eventType: actionType,
+              payload: payloadObj
+            })
+          });
+          const data = await res.json();
+          if (data.status === 'removed') {
+            disconnectFromClassroom('removed', data.message || 'คุณถูกนำออกจากห้องเรียนโดยครูผู้สอนแล้ว');
+            return false;
+          }
+        } catch (e) {}
+      }
+
+      // 2. Write to shared LocalStorage (checking membership first!)
+      const multiRaw = localStorage.getItem(MULTI_CLASS_KEY);
+      if (multiRaw) {
+        try {
+          const multiObj = JSON.parse(multiRaw);
+          if (multiObj && multiObj.classes && multiObj.classes[activeClassId]) {
+            const cls = multiObj.classes[activeClassId];
+            if (!checkIsStudentStillInClassroom(cls).present) {
+              disconnectFromClassroom('removed', 'คุณถูกนำออกจากห้องเรียนโดยครูผู้สอนแล้ว');
+              return false;
+            }
+            if (actionType === 'checkin') {
+              const today = new Date().toISOString().split('T')[0];
+              if (!cls.attendance) cls.attendance = {};
+              if (!cls.attendance[today]) cls.attendance[today] = {};
+              cls.attendance[today][matchedRosterStudentId] = 'present';
+            } else if (actionType === 'help') {
+              if (!cls.helpRequests) cls.helpRequests = {};
+              if (payloadObj.active) {
+                cls.helpRequests[matchedRosterStudentId] = {
+                  active: true,
+                  note: payloadObj.note || 'ต้องการความช่วยเหลือ',
+                  time: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })
+                };
+              } else {
+                delete cls.helpRequests[matchedRosterStudentId];
+              }
+            } else if (actionType === 'submitTask') {
+              const task = (cls.tasks || []).find(t => t.id === payloadObj.taskId);
+              if (task) {
+                if (!task.submissions) task.submissions = {};
+                task.submissions[matchedRosterStudentId] = payloadObj.status || 'submitted';
+              }
+            }
+            cls.updatedAt = nowMs;
+            localStorage.setItem(MULTI_CLASS_KEY, JSON.stringify(multiObj));
+          }
+        } catch (e) {}
+      }
+
+      // 3. Update local classroomData
       if (classroomData) {
         if (actionType === 'checkin') {
           const today = new Date().toISOString().split('T')[0];
@@ -797,63 +1265,10 @@
             task.submissions[matchedRosterStudentId] = payloadObj.status || 'submitted';
           }
         }
-      }
-
-      // 2. Write to shared LocalStorage for instant same-browser / same-device sync
-      const multiRaw = localStorage.getItem(MULTI_CLASS_KEY);
-      if (multiRaw) {
-        try {
-          const multiObj = JSON.parse(multiRaw);
-          if (multiObj && multiObj.classes && multiObj.classes[activeClassId]) {
-            const cls = multiObj.classes[activeClassId];
-            if (actionType === 'checkin') {
-              const today = new Date().toISOString().split('T')[0];
-              if (!cls.attendance) cls.attendance = {};
-              if (!cls.attendance[today]) cls.attendance[today] = {};
-              cls.attendance[today][matchedRosterStudentId] = 'present';
-            } else if (actionType === 'help') {
-              if (!cls.helpRequests) cls.helpRequests = {};
-              if (payloadObj.active) {
-                cls.helpRequests[matchedRosterStudentId] = {
-                  active: true,
-                  note: payloadObj.note || 'ต้องการความช่วยเหลือ',
-                  time: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })
-                };
-              } else {
-                delete cls.helpRequests[matchedRosterStudentId];
-              }
-            } else if (actionType === 'submitTask') {
-              const task = (cls.tasks || []).find(t => t.id === payloadObj.taskId);
-              if (task) {
-                if (!task.submissions) task.submissions = {};
-                task.submissions[matchedRosterStudentId] = payloadObj.status || 'submitted';
-              }
-            }
-            localStorage.setItem(MULTI_CLASS_KEY, JSON.stringify(multiObj));
-          }
-        } catch (e) {}
+        classroomData.updatedAt = nowMs;
       }
 
       updateStudentSeatAndActionStatus();
-
-      // 3. Push live event to Google Apps Script Cloud (Cross-device sync to Teacher's PC)
-      if (teacherUsername && isCloudConfigured()) {
-        try {
-          await fetch(APP_CONFIG.API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-              action: 'studentLiveEvent',
-              teacher: teacherUsername,
-              classId: activeClassId,
-              studentId: matchedRosterStudentId,
-              eventType: actionType,
-              payload: payloadObj
-            })
-          });
-        } catch (e) {}
-      }
-
       return true;
     }
 
@@ -864,7 +1279,7 @@
 
     async function toggleLiveHelpToTeacher() {
       if (!matchedRosterStudentId) {
-        showToast('กรุณาเลือกชื่อของคุณในรายชื่อห้องเรียนด้านบนก่อนครับ', 'amber');
+        showToast('กรุณาเข้าร่วมห้องเรียนก่อนครับ', 'amber');
         return;
       }
       const currentlyHelping = Boolean(
@@ -888,7 +1303,7 @@
 
     async function toggleTaskSubmission(taskId) {
       if (!matchedRosterStudentId) {
-        showToast('กรุณาเลือกชื่อของคุณในรายชื่อห้องเรียนก่อนครับ', 'amber');
+        showToast('กรุณาเข้าร่วมห้องเรียนก่อนครับ', 'amber');
         return;
       }
       const task = (classroomData && classroomData.tasks || []).find(t => t.id === taskId);
@@ -958,10 +1373,7 @@
 
       // If user typed a plain teacher username (not a URL)
       if (!/^https?:\/\//i.test(val) && !val.includes('?')) {
-        teacherUsername = val.toLowerCase();
-        localStorage.setItem('LAST_SCANNED_TEACHER', teacherUsername);
-        matchedRosterStudentId = null;
-        loadTeacherClassroomData(true);
+        joinTeacherClassroom(val.toLowerCase(), '', true);
         return;
       }
       processScannedQrText(val);
@@ -974,16 +1386,7 @@
         const teacher = url.searchParams.get('teacher');
 
         if (classId || teacher) {
-          if (classId) {
-            activeClassId = classId;
-            localStorage.setItem('LAST_SCANNED_CLASS_ID', classId);
-          }
-          if (teacher) {
-            teacherUsername = teacher;
-            localStorage.setItem('LAST_SCANNED_TEACHER', teacher);
-          }
-          matchedRosterStudentId = null;
-          loadTeacherClassroomData(true);
+          joinTeacherClassroom(teacher || '', classId || '', true);
           return;
         }
 
@@ -1021,7 +1424,7 @@
       toast.className = `px-4 py-3 rounded-2xl border shadow-lg text-xs font-bold flex items-center gap-2 ${colors[color] || colors.indigo}`;
       toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> <span>${escapeHtml(message)}</span>`;
       container.appendChild(toast);
-      setTimeout(() => toast.remove(), 3200);
+      setTimeout(() => toast.remove(), 3500);
     }
   </script>
 </body>
