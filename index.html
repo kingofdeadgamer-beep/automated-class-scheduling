@@ -128,6 +128,20 @@
       background-color: #1e293b !important;
       color: #f1f5f9 !important;
     }
+    /* QR Code boxes MUST remain pure white with crisp quiet zone even in Dark Mode */
+    .qr-pure-white,
+    body.dark-theme .qr-pure-white {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+    .qr-rendered-img {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
     body.dark-theme .bg-slate-50,
     body.dark-theme .bg-slate-50\/70,
     body.dark-theme .bg-slate-50\/60,
@@ -1632,7 +1646,7 @@
           <div id="active-qr-card" class="bg-white border-2 border-amber-300 rounded-2xl p-4 text-center shadow-sm">
             <div class="text-[11px] font-bold uppercase tracking-wider text-amber-700 mb-1">สแกน QR Code เพื่อเข้าทำ/ส่งงาน</div>
             <h4 id="qr-display-title" class="text-sm sm:text-base font-extrabold text-slate-900 mb-2">ยังไม่มีรายการงาน</h4>
-            <div id="qrcode-canvas-box" class="w-44 h-44 mx-auto bg-white p-2 rounded-2xl border border-slate-200 flex items-center justify-center shadow-inner mb-2.5">
+            <div id="qrcode-canvas-box" class="w-48 h-48 mx-auto qr-pure-white p-2 rounded-2xl border-2 border-slate-200 flex items-center justify-center shadow-inner mb-2.5 overflow-hidden">
               <span class="text-xs text-slate-400">เพิ่มงานด้านบนเพื่อสร้าง QR</span>
             </div>
             <div id="qr-display-url" class="text-[11px] text-indigo-600 truncate max-w-full px-2 mb-3"></div>
@@ -1765,11 +1779,16 @@
         <i class="fa-solid fa-qrcode"></i> สแกนเพื่อเข้าทำ / ส่งงาน
       </div>
       <h2 id="fullscreen-qr-title" class="text-xl sm:text-2xl font-extrabold text-slate-900 mb-4">ชื่องาน</h2>
-      <div id="fullscreen-qr-box" class="w-64 h-64 sm:w-72 sm:h-72 mx-auto p-3 bg-white rounded-3xl border-4 border-indigo-600 shadow-lg flex items-center justify-center mb-4"></div>
+      <div id="fullscreen-qr-box" class="w-64 h-64 sm:w-80 sm:h-80 mx-auto p-2 qr-pure-white rounded-3xl border-4 border-indigo-600 shadow-lg flex items-center justify-center mb-4 overflow-hidden"></div>
       <p id="fullscreen-qr-url" class="text-xs text-slate-500 break-all mb-4"></p>
-      <button onclick="closeFullScreenQrModal()" class="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold">
-        ปิดหน้าต่างขยาย
-      </button>
+      <div class="flex items-center justify-center gap-2">
+        <button type="button" onclick="downloadQrFromBox('fullscreen-qr-box', 'task-qr')" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold flex items-center gap-1.5">
+          <i class="fa-solid fa-download"></i> บันทึกภาพ QR
+        </button>
+        <button onclick="closeFullScreenQrModal()" class="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold">
+          ปิดหน้าต่างขยาย
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1848,9 +1867,12 @@
       <h3 id="join-qr-room-title" class="text-lg sm:text-xl font-extrabold text-slate-900 mb-1">ชั้น ม.2/1</h3>
       <p class="text-xs text-slate-500 mb-4">สแกน QR Code นี้เพื่อเช็คชื่อเข้าเรียน ดูผังที่นั่ง ส่งงาน และกดขอความช่วยเหลือจากครู</p>
 
-      <div id="student-join-qr-box" class="w-56 h-56 mx-auto p-3 bg-white rounded-3xl border-4 border-sky-500 shadow-lg flex items-center justify-center mb-4"></div>
+      <div id="student-join-qr-box" class="w-60 h-60 mx-auto p-2 qr-pure-white rounded-3xl border-4 border-sky-500 shadow-lg flex items-center justify-center mb-3 overflow-hidden"></div>
 
-      <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 mb-4 flex items-center justify-between gap-2">
+      <!-- QR Status / Localhost Diagnostic Notice -->
+      <div id="join-qr-diagnostic" class="hidden mb-3 p-2.5 rounded-xl text-[11px] font-semibold text-left flex items-start gap-2"></div>
+
+      <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 mb-3 flex items-center justify-between gap-2">
         <input id="student-join-url-input" type="text" readonly class="bg-transparent text-[11px] text-slate-600 flex-1 outline-none truncate" />
         <button type="button" onclick="copyStudentJoinUrl()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-900 text-white text-[11px] font-bold shrink-0">
           คัดลอกลิงก์
@@ -1860,15 +1882,23 @@
       <div class="flex items-center justify-center gap-2">
         <button
           type="button"
+          onclick="downloadQrFromBox('student-join-qr-box', 'classroom-join-qr')"
+          class="py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition"
+          title="ดาวน์โหลดไฟล์รูป QR Code สีขาวคมชัด (PNG)"
+        >
+          <i class="fa-solid fa-download"></i> โหลด QR
+        </button>
+        <button
+          type="button"
           onclick="previewStudentPortal()"
           class="flex-1 py-2.5 px-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition"
         >
-          <i class="fa-solid fa-eye"></i> ทดลองเปิดหน้าจอนักเรียน
+          <i class="fa-solid fa-eye"></i> ทดลองหน้าจอนักเรียน
         </button>
         <button
           type="button"
           onclick="closeStudentJoinQrModal()"
-          class="py-2.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs transition"
+          class="py-2.5 px-3.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs transition"
         >
           ปิด
         </button>
@@ -5698,24 +5728,89 @@
       modal.classList.remove('flex');
     }
 
-    function renderQrCodeIntoElement(elementId, urlText, size = 156) {
+    function renderQrCodeIntoElement(elementId, urlText, size = 220) {
       const box = document.getElementById(elementId);
       if (!box) return;
       box.innerHTML = '';
-      if (!urlText) {
+      delete box.dataset.qrDataUrl;
+
+      const cleanText = String(urlText || '').trim();
+      if (!cleanText) {
         box.innerHTML = '<span class="text-xs text-slate-400">ยังไม่มีลิงก์งาน</span>';
         return;
       }
+
+      // Render QR with baked-in pure white Quiet Zone so dark mode or borders NEVER break scanning
       if (typeof QRCode !== 'undefined') {
-        new QRCode(box, {
-          text: urlText,
-          width: size,
-          height: size,
-          colorDark: '#0f172a',
-          colorLight: '#ffffff',
-          correctLevel: QRCode.CorrectLevel.M
-        });
+        const tempHost = document.createElement('div');
+        tempHost.style.position = 'fixed';
+        tempHost.style.left = '-9999px';
+        tempHost.style.top = '-9999px';
+        document.body.appendChild(tempHost);
+
+        const qrSize = Math.max(200, size);
+        let generated = false;
+
+        // Try CorrectLevel.M first, then automatically fall back to CorrectLevel.L to avoid qrcodejs codeLengthOverflow bug
+        const levels = [QRCode.CorrectLevel.M, QRCode.CorrectLevel.L];
+        for (let i = 0; i < levels.length && !generated; i++) {
+          tempHost.innerHTML = '';
+          try {
+            new QRCode(tempHost, {
+              text: cleanText,
+              width: qrSize,
+              height: qrSize,
+              colorDark: '#000000',
+              colorLight: '#ffffff',
+              correctLevel: levels[i]
+            });
+            generated = true;
+          } catch (err) {
+            generated = false;
+          }
+        }
+
+        const rawCanvas = tempHost.querySelector('canvas');
+        if (generated && rawCanvas) {
+          const quietZone = Math.max(20, Math.round(qrSize * 0.1));
+          const paddedCanvas = document.createElement('canvas');
+          paddedCanvas.width = rawCanvas.width + quietZone * 2;
+          paddedCanvas.height = rawCanvas.height + quietZone * 2;
+          const ctx = paddedCanvas.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, paddedCanvas.width, paddedCanvas.height);
+          ctx.imageSmoothingEnabled = false;
+          ctx.drawImage(rawCanvas, quietZone, quietZone);
+
+          const dataUrl = paddedCanvas.toDataURL('image/png');
+          box.dataset.qrDataUrl = dataUrl;
+          box.innerHTML = `<img src="${dataUrl}" alt="QR Code" class="qr-rendered-img" />`;
+          tempHost.remove();
+          return;
+        }
+        tempHost.remove();
       }
+
+      // Fallback to high-contrast QR image API if local qrcodejs CDN failed to load
+      const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=16&ecc=M&data=${encodeURIComponent(cleanText)}`;
+      box.dataset.qrDataUrl = fallbackUrl;
+      box.innerHTML = `<img src="${fallbackUrl}" alt="QR Code" class="qr-rendered-img" />`;
+    }
+
+    function downloadQrFromBox(elementId, filenamePrefix = 'smart-classroom-qr') {
+      const box = document.getElementById(elementId);
+      const dataUrl = box && box.dataset ? box.dataset.qrDataUrl : '';
+      if (!dataUrl) {
+        showToast('ยังไม่มีภาพ QR Code ให้ดาวน์โหลด', 'amber');
+        return;
+      }
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = `${filenamePrefix}_${(state.classroomTitle || 'room').replace(/[^a-zA-Z0-9ก-๙_-]/g, '_')}.png`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      showToast('ดาวน์โหลดภาพ QR Code (PNG) เรียบร้อยแล้ว 📥', 'emerald');
     }
 
     function renderTaskModalContent() {
@@ -6141,22 +6236,63 @@
     }
 
     // --- D. STUDENT JOIN QR CODE & LIVE STUDENT PORTAL ---
+    function getCurrentTeacherUsername() {
+      if (typeof CURRENT_USER !== 'undefined' && CURRENT_USER && CURRENT_USER.username) {
+        return String(CURRENT_USER.username).trim().toLowerCase();
+      }
+      const sessionKey = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.SESSION_KEY)
+        ? APP_CONFIG.SESSION_KEY
+        : 'SMART_SEATING_CURRENT_USER';
+      try {
+        const u1 = JSON.parse(localStorage.getItem(sessionKey) || '{}');
+        if (u1.username) return String(u1.username).trim().toLowerCase();
+        const u2 = JSON.parse(localStorage.getItem('SMART_SEATING_CURRENT_USER') || '{}');
+        if (u2.username) return String(u2.username).trim().toLowerCase();
+      } catch (e) {}
+      return '';
+    }
+
     function getStudentJoinUrl() {
-      const currentUrl = window.location.href.split('?')[0];
-      const studentPageUrl = currentUrl.replace(/[^/]*$/, 'student.html');
-      const userObj = JSON.parse(localStorage.getItem('SMART_SEATING_CURRENT_USER') || '{}');
+      // Strip query & hash safely and handle GitHub Pages directory paths (with or without trailing slash)
+      let baseClean = window.location.href.split('#')[0].split('?')[0];
+      if (!baseClean.endsWith('/') && !/\.html?$/i.test(baseClean)) {
+        baseClean += '/';
+      }
+      const studentPageUrl = new URL('student.html', baseClean).toString();
+      const teacherUser = getCurrentTeacherUsername();
       const params = new URLSearchParams();
       params.set('portal', '1');
       params.set('classId', multiClassStore.activeClassId || 'class_default_1');
-      if (userObj.username) params.set('teacher', userObj.username);
+      if (teacherUser) params.set('teacher', teacherUser);
       return `${studentPageUrl}?${params.toString()}`;
     }
 
     function openStudentJoinQrModal() {
+      // Immediately flush current classroom to Cloud so students scanning right away always find this room
+      saveState(true);
+
       const joinUrl = getStudentJoinUrl();
+      const teacherUser = getCurrentTeacherUsername();
       document.getElementById('join-qr-room-title').textContent = state.classroomTitle;
       document.getElementById('student-join-url-input').value = joinUrl;
-      renderQrCodeIntoElement('student-join-qr-box', joinUrl, 200);
+      renderQrCodeIntoElement('student-join-qr-box', joinUrl, 240);
+
+      // Show clear diagnostic indicator for teacher
+      const diagEl = document.getElementById('join-qr-diagnostic');
+      if (diagEl) {
+        const isLocalHost = /^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/i.test(window.location.hostname) || window.location.protocol === 'file:';
+        if (!teacherUser) {
+          diagEl.className = 'mb-3 p-2.5 rounded-xl text-[11px] font-semibold text-left flex items-start gap-2 bg-rose-50 border border-rose-300 text-rose-800';
+          diagEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-600 mt-0.5 shrink-0"></i><span>ไม่พบ Username ของครูในระบบ กรุณาออกจากระบบแล้วเข้าสู่ระบบครูใหม่ก่อนสร้าง QR</span>';
+        } else if (isLocalHost) {
+          diagEl.className = 'mb-3 p-2.5 rounded-xl text-[11px] font-semibold text-left flex items-start gap-2 bg-amber-50 border border-amber-300 text-amber-900';
+          diagEl.innerHTML = `<i class="fa-solid fa-circle-info text-amber-600 mt-0.5 shrink-0"></i><span>กำลังเปิดจากเครื่องนี้ (<code>${escapeHtml(window.location.hostname || 'file://')}</code>) — หากให้นักเรียนสแกนจากมือถือด้วยกล้องปกติ กรุณาเปิดเว็บผ่านลิงก์ <strong>GitHub Pages (https://)</strong> หรือให้นักเรียนสแกนผ่านปุ่มกล้องในหน้า <code>student.html</code> (ครู: <strong>${escapeHtml(teacherUser)}</strong>)</span>`;
+        } else {
+          diagEl.className = 'mb-3 p-2.5 rounded-xl text-[11px] font-semibold text-left flex items-start gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800';
+          diagEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mt-0.5 shrink-0"></i><span>QR Code พร้อมใช้งาน! (ครู: <strong>${escapeHtml(teacherUser)}</strong> • ห้อง: <strong>${escapeHtml(state.classroomTitle)}</strong>)</span>`;
+        }
+        diagEl.classList.remove('hidden');
+      }
 
       const modal = document.getElementById('student-join-qr-modal');
       modal.classList.remove('hidden');

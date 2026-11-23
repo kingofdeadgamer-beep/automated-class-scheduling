@@ -440,8 +440,10 @@
 
     function buildStudentRedirectUrl() {
       const params = new URLSearchParams();
-      if (urlParams.get('classId')) params.set('classId', urlParams.get('classId'));
-      if (urlParams.get('teacher')) params.set('teacher', urlParams.get('teacher'));
+      const cid = urlParams.get('classId') || localStorage.getItem('PENDING_JOIN_CLASS_ID') || '';
+      const tch = urlParams.get('teacher') || localStorage.getItem('PENDING_JOIN_TEACHER') || '';
+      if (cid) params.set('classId', cid);
+      if (tch) params.set('teacher', tch);
       const qs = params.toString();
       return qs ? `student.html?${qs}` : 'student.html';
     }
@@ -454,9 +456,11 @@
 
       // Preserve scanned QR params in localStorage for student flow
       if (urlParams.get('classId')) {
+        localStorage.setItem('PENDING_JOIN_CLASS_ID', urlParams.get('classId'));
         localStorage.setItem('LAST_SCANNED_CLASS_ID', urlParams.get('classId'));
       }
       if (urlParams.get('teacher')) {
+        localStorage.setItem('PENDING_JOIN_TEACHER', urlParams.get('teacher'));
         localStorage.setItem('LAST_SCANNED_TEACHER', urlParams.get('teacher'));
       }
 

@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <!-- HTML5-QRCode (Camera QR Scanner + Image QR Decoder) -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <!-- jsQR Fallback for Reliable Screenshot / Photo QR Decoding -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 
   <style>
     :root {
@@ -217,6 +219,23 @@
       <div id="st-disconnected-banner" class="hidden p-3 rounded-2xl border text-xs font-bold flex items-start gap-2.5">
         <i id="st-disconnected-icon" class="fa-solid fa-circle-info text-base mt-0.5 shrink-0"></i>
         <div id="st-disconnected-msg" class="leading-relaxed"></div>
+      </div>
+
+      <!-- Scanned Assignment / External Link Banner (Fallback if mobile blocks popups) -->
+      <div id="st-scanned-link-banner" class="hidden p-3 rounded-2xl border-2 border-indigo-300 bg-indigo-50 text-indigo-950 text-xs font-bold flex items-center justify-between gap-2">
+        <div class="min-w-0">
+          <div class="text-[10px] uppercase tracking-wider text-indigo-600">สแกนลิงก์จาก QR Code สำเร็จ</div>
+          <div id="st-scanned-link-text" class="truncate text-xs font-bold"></div>
+        </div>
+        <a
+          id="st-scanned-link-anchor"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold shrink-0 transition"
+        >
+          เปิดลิงก์ <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+        </a>
       </div>
 
       <!-- Camera Scanner Container -->
@@ -1322,47 +1341,173 @@
     }
 
     /*************************************************************************
-     * 4. QR CODE SCANNER & MANUAL TEACHER CONNECTION
+     * 4. QR CODE SCANNER (MULTI-CAMERA + JSQR IMAGE FALLBACK) & MANUAL CONNECT
      *************************************************************************/
-    function startQrScanner() {
+    let isScannerStarting = false;
+
+    async function startQrScanner() {
+      if (isScannerStarting) return;
+
+      if (!window.isSecureContext && !/^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname)) {
+        showToast('กล้องต้องเปิดผ่านเว็บ HTTPS (เช่น GitHub Pages) กรุณาใช้ปุ่ม "เลือกรูป QR" หรือกล้องมือถือแทนครับ', 'amber');
+        return;
+      }
+
+      if (typeof Html5Qrcode === 'undefined') {
+        showToast('กำลังโหลดตัวสแกน QR กรุณารอสักครู่หรือใช้ปุ่ม "เลือกรูป QR"', 'amber');
+        return;
+      }
+
       const wrapper = document.getElementById('qr-reader-wrapper');
       wrapper.classList.remove('hidden');
 
-      if (!html5QrCodeInstance) {
-        html5QrCodeInstance = new Html5Qrcode('qr-reader');
+      if (html5QrCodeInstance && html5QrCodeInstance.isScanning) {
+        return;
       }
 
-      html5QrCodeInstance.start(
-        { facingMode: 'environment' },
-        { fps: 10, qrbox: { width: 220, height: 220 } },
-        (decodedText) => {
+      isScannerStarting = true;
+      try {
+        if (!html5QrCodeInstance) {
+          html5QrCodeInstance = new Html5Qrcode('qr-reader');
+        }
+
+        const scanConfig = {
+          fps: 12,
+          qrbox: (viewfinderWidth, viewfinderHeight) => {
+            const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+            const boxSize = Math.max(120, Math.min(260, Math.floor(minEdge * 0.75)));
+            return { width: boxSize, height: boxSize };
+          },
+          aspectRatio: 1.0
+        };
+
+        const onSuccess = (decodedText) => {
           stopQrScanner();
           processScannedQrText(decodedText);
-        },
-        () => {}
-      ).catch(() => {
+        };
+
+        // Attempt 1: Prefer rear camera (mobile phones / tablets)
+        try {
+          await html5QrCodeInstance.start({ facingMode: 'environment' }, scanConfig, onSuccess, () => {});
+          return;
+        } catch (envErr) {
+          // Attempt 2: Fallback to enumerating cameras (laptops / desktops / iOS front camera)
+          const cameras = await Html5Qrcode.getCameras();
+          if (!cameras || cameras.length === 0) {
+            throw envErr;
+          }
+          const preferred = cameras.find(c => /back|rear|environment/i.test(c.label || '')) || cameras[0];
+          await html5QrCodeInstance.start(preferred.id, scanConfig, onSuccess, () => {});
+        }
+      } catch (err) {
         wrapper.classList.add('hidden');
-        showToast('ไม่สามารถเปิดกล้องได้ กรุณาอนุญาตสิทธิ์กล้อง หรือใช้ปุ่ม "เลือกรูป QR"', 'amber');
+        const errName = String((err && err.name) || err || '');
+        if (/NotAllowedError|Permission/i.test(errName)) {
+          showToast('ยังไม่ได้อนุญาตสิทธิ์กล้อง กรุณากดอนุญาตกล้องที่แถบเบราว์เซอร์ หรือใช้ปุ่ม "เลือกรูป QR"', 'amber');
+        } else if (/NotFoundError|OverconstrainedError/i.test(errName)) {
+          showToast('ไม่พบกล้องบนอุปกรณ์นี้ กรุณาใช้ปุ่ม "เลือกรูป QR" หรือวางลิงก์แทนครับ', 'amber');
+        } else if (/NotReadableError/i.test(errName)) {
+          showToast('กล้องกำลังถูกใช้งานโดยแอปอื่น กรุณาปิดแอปอื่นแล้วลองใหม่', 'amber');
+        } else {
+          showToast('ไม่สามารถเปิดกล้องได้ กรุณาใช้ปุ่ม "เลือกรูป QR" หรือพิมพ์ Username ครูแทนครับ', 'amber');
+        }
+      } finally {
+        isScannerStarting = false;
+      }
+    }
+
+    async function stopQrScanner() {
+      const wrapper = document.getElementById('qr-reader-wrapper');
+      if (wrapper) wrapper.classList.add('hidden');
+      if (html5QrCodeInstance) {
+        try {
+          if (html5QrCodeInstance.isScanning) {
+            await html5QrCodeInstance.stop();
+          }
+        } catch (e) {}
+      }
+    }
+
+    // Multi-scale & inverted-safe QR image decoder using jsQR (handles screenshots, dark-mode crops, and high-res photos)
+    function decodeQrFileWithJsQr(file) {
+      return new Promise((resolve) => {
+        if (typeof jsQR !== 'function') {
+          resolve(null);
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const trySizes = [Math.max(img.width, img.height), 1200, 800, 500];
+            const seen = new Set();
+            for (const targetMax of trySizes) {
+              const clamped = Math.min(Math.max(img.width, img.height), targetMax);
+              if (seen.has(clamped) || clamped < 80) continue;
+              seen.add(clamped);
+
+              const scale = clamped / Math.max(img.width, img.height);
+              const w = Math.max(1, Math.round(img.width * scale));
+              const h = Math.max(1, Math.round(img.height * scale));
+              const pad = 24;
+
+              const canvas = document.createElement('canvas');
+              canvas.width = w + pad * 2;
+              canvas.height = h + pad * 2;
+              const ctx = canvas.getContext('2d', { willReadFrequently: true });
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.drawImage(img, pad, pad, w, h);
+
+              try {
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imgData.data, canvas.width, canvas.height, { inversionAttempts: 'attemptBoth' });
+                if (code && code.data) {
+                  resolve(code.data);
+                  return;
+                }
+              } catch (err) {}
+            }
+            resolve(null);
+          };
+          img.onerror = () => resolve(null);
+          img.src = e.target.result;
+        };
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(file);
       });
     }
 
-    function stopQrScanner() {
-      const wrapper = document.getElementById('qr-reader-wrapper');
-      wrapper.classList.add('hidden');
-      if (html5QrCodeInstance && html5QrCodeInstance.isScanning) {
-        html5QrCodeInstance.stop().catch(() => {});
-      }
-    }
-
-    function scanQrFromImageFile(event) {
+    async function scanQrFromImageFile(event) {
       const file = event.target.files && event.target.files[0];
       event.target.value = '';
       if (!file) return;
 
-      const fileScanner = new Html5Qrcode('qr-file-temp');
-      fileScanner.scanFile(file, true)
-        .then(decodedText => processScannedQrText(decodedText))
-        .catch(() => showToast('ไม่พบ QR Code ในรูปภาพนี้ กรุณาลองใหม่อีกครั้ง', 'amber'));
+      showToast('กำลังอ่าน QR Code จากรูปภาพ...', 'indigo');
+
+      // 1. Try jsQR multi-scale padded decoder first (fast & works on dark-mode/high-res screenshots)
+      const jsQrDecoded = await decodeQrFileWithJsQr(file);
+      if (jsQrDecoded) {
+        processScannedQrText(jsQrDecoded);
+        return;
+      }
+
+      // 2. Fallback to html5-qrcode headless scanFile(file, false)
+      if (typeof Html5Qrcode !== 'undefined') {
+        const fileScanner = new Html5Qrcode('qr-file-temp');
+        try {
+          const decodedText = await fileScanner.scanFile(file, false);
+          try { fileScanner.clear(); } catch (e) {}
+          if (decodedText) {
+            processScannedQrText(decodedText);
+            return;
+          }
+        } catch (e) {
+          try { fileScanner.clear(); } catch (ex) {}
+        }
+      }
+
+      showToast('ไม่พบ QR Code ในรูปภาพนี้ กรุณาครอปให้เห็นกรอบ QR ชัดเจน หรือใช้ปุ่ม "โหลด QR" จากหน้าจอครู', 'amber');
     }
 
     function handleManualJoinInput(e) {
@@ -1371,32 +1516,75 @@
       if (!val) return;
       document.getElementById('manual-room-link').value = '';
 
-      // If user typed a plain teacher username (not a URL)
-      if (!/^https?:\/\//i.test(val) && !val.includes('?')) {
+      // If user typed a plain teacher username (not a URL or query string)
+      if (!/^https?:\/\//i.test(val) && !val.includes('?') && !val.includes('=')) {
         joinTeacherClassroom(val.toLowerCase(), '', true);
         return;
       }
       processScannedQrText(val);
     }
 
-    function processScannedQrText(text) {
-      try {
-        const url = new URL(text);
-        const classId = url.searchParams.get('classId');
-        const teacher = url.searchParams.get('teacher');
+    function showScannedExternalLinkBanner(urlStr) {
+      const banner = document.getElementById('st-scanned-link-banner');
+      const textEl = document.getElementById('st-scanned-link-text');
+      const anchor = document.getElementById('st-scanned-link-anchor');
+      if (!banner || !textEl || !anchor) return;
+      textEl.textContent = urlStr;
+      anchor.href = urlStr;
+      banner.classList.remove('hidden');
+    }
 
-        if (classId || teacher) {
-          joinTeacherClassroom(teacher || '', classId || '', true);
+    function processScannedQrText(rawText) {
+      const text = String(rawText || '').trim();
+      if (!text) return;
+
+      try {
+        // Support full URLs, protocol-less URLs, and relative query strings (?classId=...&teacher=...)
+        let parsedUrl = null;
+        if (/^https?:\/\//i.test(text) || /^file:\/\//i.test(text)) {
+          parsedUrl = new URL(text);
+        } else if (text.includes('classId=') || text.includes('teacher=')) {
+          const queryPart = text.includes('?') ? text.slice(text.indexOf('?')) : ('?' + text);
+          parsedUrl = new URL('https://smart-classroom.local/' + queryPart);
+        } else if (/^[a-z0-9.-]+\.[a-z]{2,}(\/|$)/i.test(text)) {
+          parsedUrl = new URL('https://' + text);
+        }
+
+        if (parsedUrl) {
+          const classId = parsedUrl.searchParams.get('classId');
+          const teacher = parsedUrl.searchParams.get('teacher');
+
+          if (classId || teacher) {
+            joinTeacherClassroom(teacher || '', classId || '', true);
+            return;
+          }
+
+          // Scanned an assignment QR link -> mark submitted if matched + open safely (with popup-blocker banner fallback)
+          const finalUrl = parsedUrl.toString();
+          const activeTask = classroomData && classroomData.tasks && classroomData.tasks.find(t =>
+            t.url && (t.url.trim() === text || t.url.trim() === finalUrl)
+          );
+          if (activeTask && matchedRosterStudentId) {
+            pushStudentActionToTeacher('submitTask', { taskId: activeTask.id, status: 'submitted' });
+          }
+
+          showScannedExternalLinkBanner(finalUrl);
+          const opened = window.open(finalUrl, '_blank', 'noopener,noreferrer');
+          if (opened) {
+            showToast('เปิดลิงก์จาก QR Code แล้ว!', 'emerald');
+          } else {
+            showToast('สแกน QR สำเร็จ! แตะปุ่ม "เปิดลิงก์" ด้านบนเพื่อเข้าทำใบงาน', 'indigo');
+          }
           return;
         }
 
-        // Scanned an assignment QR link -> open & mark submitted if matched
-        const activeTask = classroomData && classroomData.tasks && classroomData.tasks.find(t => t.url === text);
-        if (activeTask && matchedRosterStudentId) {
-          pushStudentActionToTeacher('submitTask', { taskId: activeTask.id, status: 'submitted' });
+        // Plain text fallback (e.g. teacher username QR)
+        if (/^[a-zA-Z0-9_]{3,30}$/.test(text)) {
+          joinTeacherClassroom(text.toLowerCase(), '', true);
+          return;
         }
-        showToast('กำลังเปิดลิงก์จาก QR Code...', 'indigo');
-        window.open(text, '_blank');
+
+        showToast(`อ่านค่า QR Code ได้: ${text}`, 'indigo');
       } catch (e) {
         showToast(`อ่านค่า QR Code ได้: ${text}`, 'indigo');
       }
