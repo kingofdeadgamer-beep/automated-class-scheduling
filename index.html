@@ -970,6 +970,7 @@
       body {
         background: #ffffff !important;
         color: #000000 !important;
+        zoom: 1 !important;
       }
       .no-print {
         display: none !important;
@@ -993,6 +994,34 @@
         box-shadow: none !important;
         border-width: 1.5px !important;
       }
+    }
+
+    /* ================= GLOBAL OVERALL SCALE SYSTEM (25% - 150%) ================= */
+    :root {
+      --app-ui-scale: 1;
+    }
+    body.has-ui-scale {
+      min-height: calc(100vh / var(--app-ui-scale, 1)) !important;
+    }
+    /* Keep Global Scale Popover & Floating Dock always 100% readable & clickable at any scale (even 25% or 150%) */
+    #ui-scale-popover,
+    #ui-scale-floating-dock {
+      zoom: calc(1 / var(--app-ui-scale, 1));
+    }
+    body.dark-theme #ui-scale-popover,
+    body.dark-theme #ui-scale-floating-dock {
+      background-color: #0f172a !important;
+      border-color: #334155 !important;
+      color: #f8fafc !important;
+    }
+    body.dark-theme .ui-scale-step-btn:not(.is-active-scale) {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+      color: #e2e8f0 !important;
+    }
+    body.dark-theme .ui-scale-step-btn:not(.is-active-scale):hover {
+      border-color: #818cf8 !important;
+      background-color: #312e81 !important;
     }
   </style>
 </head>
@@ -1185,6 +1214,18 @@
           <span id="theme-toggle-label" class="hidden">พื้นหลังดำ</span>
         </button>
 
+        <!-- Global Overall Scale Button (25% / 50% / 75% / 100% / 125% / 150%) -->
+        <button
+          type="button"
+          id="btn-global-scale-toggle"
+          onclick="toggleGlobalScalePopover(event)"
+          class="ui-icon-btn rounded-xl bg-slate-100 hover:bg-indigo-100 text-indigo-600 border border-slate-200 flex items-center justify-center transition relative active:scale-95 shrink-0"
+          title="ปรับเพิ่ม/ลดขนาดหน้าจอทั้งหมด (25% - 150%)"
+        >
+          <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+          <span id="global-scale-header-badge" class="absolute -bottom-1 -right-1 px-1 h-4 rounded-full bg-indigo-600 text-white text-[8px] font-extrabold flex items-center justify-center leading-none">100%</span>
+        </button>
+
         <!-- Settings Page Button (Fonts, Font Size, Color Theme, Custom Background) -->
         <button
           type="button"
@@ -1227,7 +1268,7 @@
     <aside
       id="student-sidebar"
       class="w-[88vw] max-w-[400px] lg:max-w-none bg-white border-r border-slate-200 flex flex-col shrink-0 z-20 fixed lg:static inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out no-print shadow-xl lg:shadow-none"
-      style="top: 56px; height: calc(100vh - 56px);"
+      style="top: 56px; height: calc((100vh / var(--app-ui-scale, 1)) - 56px);"
     >
       <!-- Sidebar Compact Icon-Only Header Controls -->
       <div class="p-3 border-b border-slate-100 bg-slate-50/70 space-y-2.5">
@@ -3048,6 +3089,45 @@
 
       <!-- Scrollable Settings Content -->
       <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-5">
+
+        <!-- SECTION 0: GLOBAL OVERALL UI SCALE (25% - 150%) -->
+        <section class="bg-indigo-50/60 p-3.5 rounded-2xl border-2 border-indigo-200 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <h4 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-up-right-and-down-left-from-center text-indigo-600"></i>
+              <span>ปรับขนาดหน้าจอทั้งหมด (Overall Scale)</span>
+            </h4>
+            <div class="flex items-center gap-1.5">
+              <button
+                type="button"
+                onclick="stepAppearanceUiScale(-1)"
+                class="w-7 h-7 rounded-lg border border-slate-300 bg-white hover:bg-indigo-100 text-slate-700 font-extrabold text-xs flex items-center justify-center transition active:scale-95"
+                title="ลดขนาดทั้งหมดลง 1 ระดับ"
+              >
+                <i class="fa-solid fa-minus"></i>
+              </button>
+              <span id="settings-ui-scale-value" class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-indigo-600 text-white min-w-[50px] text-center">100%</span>
+              <button
+                type="button"
+                onclick="stepAppearanceUiScale(1)"
+                class="w-7 h-7 rounded-lg border border-slate-300 bg-white hover:bg-indigo-100 text-slate-700 font-extrabold text-xs flex items-center justify-center transition active:scale-95"
+                title="เพิ่มขนาดทั้งหมดขึ้น 1 ระดับ"
+              >
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
+            <button type="button" onclick="setAppearanceUiScale(25)" data-uiscale="25" class="ui-scale-step-btn py-2 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">25%</button>
+            <button type="button" onclick="setAppearanceUiScale(50)" data-uiscale="50" class="ui-scale-step-btn py-2 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">50%</button>
+            <button type="button" onclick="setAppearanceUiScale(75)" data-uiscale="75" class="ui-scale-step-btn py-2 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">75%</button>
+            <button type="button" onclick="setAppearanceUiScale(100)" data-uiscale="100" class="ui-scale-step-btn py-2 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">100%</button>
+            <button type="button" onclick="setAppearanceUiScale(125)" data-uiscale="125" class="ui-scale-step-btn py-2 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">125%</button>
+            <button type="button" onclick="setAppearanceUiScale(150)" data-uiscale="150" class="ui-scale-step-btn py-2 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">150%</button>
+          </div>
+          <p class="text-[11px] text-slate-500">ปรับย่อ-ขยายทุกองค์ประกอบทั้งหน้าเว็บพร้อมกัน (ปุ่ม การ์ด ตัวอักษร ผังที่นั่ง และหน้าต่างทั้งหมด) • คีย์ลัด Alt + / Alt - / Alt 0</p>
+        </section>
 
         <!-- SECTION 1: FONT FAMILY SELECTOR -->
         <section class="space-y-2.5">
@@ -4941,6 +5021,12 @@
       wrapper.style.height = 'auto';
       wrapper.style.width = 'auto';
       viewport.classList.remove('auto-scaled-fit');
+
+      const currentUiScalePct = typeof getSavedAppearance === 'function' ? normalizeGlobalScale(getSavedAppearance().uiScalePct) : 100;
+      if (currentUiScalePct !== 100) {
+        if (scaleBadge) scaleBadge.textContent = `${currentUiScalePct}%`;
+        return;
+      }
 
       if ((state.seatSize || 'auto') !== 'auto') {
         if (scaleBadge) scaleBadge.textContent = (state.seatSize || 'S').toUpperCase();
@@ -9247,6 +9333,7 @@
     const DEFAULT_APPEARANCE = {
       fontFamily: 'TH Niramit AS',
       fontSizePct: 100,
+      uiScalePct: 100,
       accentId: 'indigo',
       customAccentHex: '#4f46e5',
       bgImage: '',
@@ -9314,9 +9401,21 @@
       const fontObj = AVAILABLE_FONTS.find(f => f.id === cfg.fontFamily) || AVAILABLE_FONTS[0];
       root.style.setProperty('--app-font-family', fontObj.stack);
 
-      // 2. Root Font Size Scaling (larger 18px base so ALL text is crisp & easy to read everywhere)
+      // 2. Root Font Size Scaling
       const pct = Math.min(140, Math.max(85, Number(cfg.fontSizePct) || 100));
       root.style.fontSize = `${(16.5 * pct / 100).toFixed(2)}px`;
+
+      // 2.5 Global Overall UI Scale (25%, 50%, 75%, 100%, 125%, 150%)
+      const uiScalePct = normalizeGlobalScale(cfg.uiScalePct);
+      const uiScaleFactor = uiScalePct / 100;
+      root.style.setProperty('--app-ui-scale', String(uiScaleFactor));
+      document.body.style.zoom = String(uiScaleFactor);
+      if (uiScalePct !== 100) {
+        document.body.classList.add('has-ui-scale');
+      } else {
+        document.body.classList.remove('has-ui-scale');
+      }
+      updateGlobalScaleUI(uiScalePct);
 
       // 3. Accent Color Theme
       let c1 = '#4f46e5', c2 = '#7c3aed', soft = '#eef2ff', border = '#a5b4fc';
@@ -9399,6 +9498,7 @@
     function renderSettingsModalContent() {
       const cfg = getSavedAppearance();
       const isDark = document.body.classList.contains('dark-theme');
+      updateGlobalScaleUI(cfg.uiScalePct);
 
       // 1. Font Cards
       const fontGrid = document.getElementById('settings-font-grid');
@@ -9512,6 +9612,125 @@
       if (blurVal) blurVal.textContent = `${cfg.bgBlur ?? 0} px`;
       if (glassToggle) glassToggle.checked = cfg.bgGlass !== false;
     }
+
+
+    const GLOBAL_SCALE_STEPS = [25, 50, 75, 100, 125, 150];
+
+    function normalizeGlobalScale(val) {
+      const num = Number(val);
+      if (!Number.isFinite(num)) return 100;
+      let best = 100;
+      let minDiff = Infinity;
+      for (const step of GLOBAL_SCALE_STEPS) {
+        const diff = Math.abs(step - num);
+        if (diff < minDiff) {
+          minDiff = diff;
+          best = step;
+        }
+      }
+      return best;
+    }
+
+    function updateGlobalScaleUI(scalePct) {
+      const pct = normalizeGlobalScale(scalePct);
+      const label = `${pct}%`;
+
+      const headerBadge = document.getElementById('global-scale-header-badge');
+      if (headerBadge) headerBadge.textContent = label;
+
+      const settingsVal = document.getElementById('settings-ui-scale-value');
+      if (settingsVal) settingsVal.textContent = label;
+
+      const popVal = document.getElementById('popover-ui-scale-value');
+      if (popVal) popVal.textContent = label;
+
+      const dockVal = document.getElementById('dock-ui-scale-value');
+      if (dockVal) dockVal.textContent = label;
+
+      const dock = document.getElementById('ui-scale-floating-dock');
+      if (dock) {
+        if (pct !== 100) {
+          dock.classList.remove('hidden');
+          dock.classList.add('flex');
+        } else {
+          dock.classList.add('hidden');
+          dock.classList.remove('flex');
+        }
+      }
+
+      document.querySelectorAll('.ui-scale-step-btn').forEach(btn => {
+        const v = Number(btn.getAttribute('data-uiscale'));
+        if (v === pct) {
+          btn.className = 'ui-scale-step-btn is-active-scale py-1.5 rounded-xl border-2 border-indigo-600 bg-indigo-600 text-white text-xs font-extrabold shadow-xs transition';
+        } else {
+          btn.className = 'ui-scale-step-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition';
+        }
+      });
+    }
+
+    function setAppearanceUiScale(val, silent = false) {
+      const pct = normalizeGlobalScale(val);
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, uiScalePct: pct }, silent ? '' : `ปรับขนาดหน้าจอทั้งหมดเป็น ${pct}%`);
+    }
+
+    function stepAppearanceUiScale(delta) {
+      const curr = getSavedAppearance();
+      const currentPct = normalizeGlobalScale(curr.uiScalePct);
+      const idx = GLOBAL_SCALE_STEPS.indexOf(currentPct);
+      const nextIdx = Math.min(GLOBAL_SCALE_STEPS.length - 1, Math.max(0, idx + delta));
+      const nextPct = GLOBAL_SCALE_STEPS[nextIdx];
+      if (nextPct === currentPct) {
+        if (typeof showToast === 'function') {
+          showToast(delta > 0 ? 'ขยายถึงขนาดสูงสุด 150% แล้ว' : 'ย่อถึงขนาดต่ำสุด 25% แล้ว', 'slate');
+        }
+        return;
+      }
+      setAppearanceUiScale(nextPct, false);
+    }
+
+    function toggleGlobalScalePopover(ev) {
+      if (ev) ev.stopPropagation();
+      const pop = document.getElementById('ui-scale-popover');
+      if (!pop) return;
+      const isHidden = pop.classList.contains('hidden');
+      if (isHidden) {
+        updateGlobalScaleUI(getSavedAppearance().uiScalePct);
+        pop.classList.remove('hidden');
+      } else {
+        pop.classList.add('hidden');
+      }
+    }
+
+    function closeGlobalScalePopover() {
+      const pop = document.getElementById('ui-scale-popover');
+      if (pop) pop.classList.add('hidden');
+    }
+
+    // Close scale popover when clicking outside + keyboard shortcuts (Alt + / Alt - / Alt 0)
+    document.addEventListener('click', (ev) => {
+      const pop = document.getElementById('ui-scale-popover');
+      if (!pop || pop.classList.contains('hidden')) return;
+      const toggleBtn = document.getElementById('btn-global-scale-toggle');
+      const dockBtn = document.getElementById('dock-ui-scale-value');
+      if (!pop.contains(ev.target) && (!toggleBtn || !toggleBtn.contains(ev.target)) && (!dockBtn || !dockBtn.contains(ev.target))) {
+        pop.classList.add('hidden');
+      }
+    });
+
+    document.addEventListener('keydown', (ev) => {
+      if (!ev.altKey) return;
+      if (ev.key === '+' || ev.key === '=') {
+        ev.preventDefault();
+        stepAppearanceUiScale(1);
+      } else if (ev.key === '-' || ev.key === '_') {
+        ev.preventDefault();
+        stepAppearanceUiScale(-1);
+      } else if (ev.key === '0') {
+        ev.preventDefault();
+        setAppearanceUiScale(100);
+      }
+    });
 
     function setAppearanceFont(fontId) {
       const curr = getSavedAppearance();
@@ -9658,5 +9877,94 @@
       }, 2800);
     }
   </script>
+
+  <!-- ================= GLOBAL SCALE QUICK POPOVER & FLOATING RECOVERY DOCK ================= -->
+  <div id="ui-scale-popover" class="fixed top-16 right-3 sm:right-5 z-[130] hidden w-72 bg-white rounded-2xl shadow-2xl border-2 border-indigo-200 p-3.5 space-y-3 no-print">
+    <div class="flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="w-7 h-7 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xs">
+          <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+        </span>
+        <div>
+          <div class="text-xs font-extrabold text-slate-900 leading-tight">ปรับขนาดทั้งหมด (Zoom)</div>
+          <div class="text-[10px] text-slate-500">เลือกได้ตั้งแต่ 25% ถึง 150%</div>
+        </div>
+      </div>
+      <button type="button" onclick="closeGlobalScalePopover()" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="flex items-center justify-between gap-2 bg-slate-50 p-1.5 rounded-xl border border-slate-200">
+      <button
+        type="button"
+        id="popover-scale-minus"
+        onclick="stepAppearanceUiScale(-1)"
+        class="w-9 h-8 rounded-lg bg-white hover:bg-indigo-600 hover:text-white border border-slate-300 text-slate-700 font-extrabold text-sm flex items-center justify-center transition active:scale-95"
+        title="ลดขนาดลง"
+      >
+        <i class="fa-solid fa-minus"></i>
+      </button>
+      <div class="text-center">
+        <span id="popover-ui-scale-value" class="text-sm font-extrabold text-indigo-700">100%</span>
+      </div>
+      <button
+        type="button"
+        id="popover-scale-plus"
+        onclick="stepAppearanceUiScale(1)"
+        class="w-9 h-8 rounded-lg bg-white hover:bg-indigo-600 hover:text-white border border-slate-300 text-slate-700 font-extrabold text-sm flex items-center justify-center transition active:scale-95"
+        title="เพิ่มขนาดขึ้น"
+      >
+        <i class="fa-solid fa-plus"></i>
+      </button>
+    </div>
+
+    <div class="grid grid-cols-3 gap-1.5">
+      <button type="button" onclick="setAppearanceUiScale(25)" data-uiscale="25" class="ui-scale-step-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">25%</button>
+      <button type="button" onclick="setAppearanceUiScale(50)" data-uiscale="50" class="ui-scale-step-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">50%</button>
+      <button type="button" onclick="setAppearanceUiScale(75)" data-uiscale="75" class="ui-scale-step-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">75%</button>
+      <button type="button" onclick="setAppearanceUiScale(100)" data-uiscale="100" class="ui-scale-step-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">100%</button>
+      <button type="button" onclick="setAppearanceUiScale(125)" data-uiscale="125" class="ui-scale-step-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">125%</button>
+      <button type="button" onclick="setAppearanceUiScale(150)" data-uiscale="150" class="ui-scale-step-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">150%</button>
+    </div>
+  </div>
+
+  <!-- Always-Readable Floating Scale Dock (Shown when global scale != 100%) -->
+  <div id="ui-scale-floating-dock" class="fixed bottom-4 left-4 z-[125] hidden items-center gap-1 bg-white/95 backdrop-blur-md border-2 border-indigo-300 shadow-xl rounded-2xl p-1.5 no-print">
+    <button
+      type="button"
+      onclick="stepAppearanceUiScale(-1)"
+      class="w-7 h-7 rounded-xl bg-slate-100 hover:bg-indigo-600 hover:text-white text-slate-700 font-extrabold text-xs flex items-center justify-center transition"
+      title="ลดขนาดลง"
+    >
+      <i class="fa-solid fa-minus"></i>
+    </button>
+    <button
+      type="button"
+      onclick="toggleGlobalScalePopover(event)"
+      id="dock-ui-scale-value"
+      class="px-2 h-7 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 font-extrabold text-xs flex items-center justify-center transition"
+      title="คลิกเพื่อเลือกขนาด 25% - 150%"
+    >
+      100%
+    </button>
+    <button
+      type="button"
+      onclick="stepAppearanceUiScale(1)"
+      class="w-7 h-7 rounded-xl bg-slate-100 hover:bg-indigo-600 hover:text-white text-slate-700 font-extrabold text-xs flex items-center justify-center transition"
+      title="เพิ่มขนาดขึ้น"
+    >
+      <i class="fa-solid fa-plus"></i>
+    </button>
+    <button
+      type="button"
+      onclick="setAppearanceUiScale(100)"
+      class="px-2 h-7 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[11px] flex items-center justify-center transition"
+      title="รีเซ็ตกลับเป็นขนาดปกติ 100%"
+    >
+      100%
+    </button>
+  </div>
+
 </body>
 </html>
