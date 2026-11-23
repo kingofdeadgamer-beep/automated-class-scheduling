@@ -35,6 +35,15 @@
     body.dark-theme .text-slate-500 {
       color: #94a3b8 !important;
     }
+    body.dark-theme .bg-slate-50 {
+      background-color: #162032 !important;
+      border-color: #334155 !important;
+    }
+    body.dark-theme .bg-emerald-50 {
+      background-color: #064e3b !important;
+      border-color: #10b981 !important;
+      color: #d1fae5 !important;
+    }
   </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 via-slate-100 to-sky-100 flex items-center justify-center p-4 transition-colors duration-300">
@@ -53,7 +62,7 @@
   <div class="auth-card max-w-md w-full bg-white rounded-3xl shadow-2xl border border-slate-200/80 overflow-hidden">
     <!-- Dynamic Header Banner -->
     <div id="auth-banner" class="bg-gradient-to-r from-indigo-600 to-violet-600 p-6 text-center text-white transition-all duration-300">
-      <div class="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-xs flex items-center justify-center mx-auto mb-3 shadow-inner">
+      <div id="auth-banner-logo-box" class="w-16 h-16 aspect-square rounded-2xl bg-white/15 backdrop-blur-xs flex items-center justify-center mx-auto mb-3 shadow-inner overflow-hidden">
         <i id="auth-banner-icon" class="fa-solid fa-chalkboard-user text-3xl"></i>
       </div>
       <h1 class="text-xl font-extrabold">Smart Classroom Cloud</h1>
@@ -89,7 +98,7 @@
     </div>
 
     <!-- Mode Switcher Tabs (Login vs Register) -->
-    <div class="grid grid-cols-2 border-b border-slate-200 auth-surface bg-slate-50/50">
+    <div id="auth-mode-tabs" class="grid grid-cols-2 border-b border-slate-200 auth-surface bg-slate-50/50">
       <button id="tab-login" onclick="switchMode('login')" class="py-3 text-sm font-bold text-indigo-600 border-b-2 border-indigo-600 bg-white transition">
         <i class="fa-solid fa-right-to-bracket mr-1.5"></i> เข้าสู่ระบบ
       </button>
@@ -114,11 +123,29 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">รหัสผ่าน (Password)</label>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-bold text-slate-700">รหัสผ่าน (Password)</label>
+            <button
+              type="button"
+              onclick="openForgotPasswordMode()"
+              class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 hover:underline transition"
+            >
+              ลืมรหัสผ่าน?
+            </button>
+          </div>
           <div class="relative">
             <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
             <input type="password" id="login-password" required placeholder="กรอกรหัสผ่าน"
-              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-sm outline-none" />
+              class="w-full pl-10 pr-11 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-sm outline-none" />
+            <button
+              type="button"
+              onclick="togglePasswordVisibility('login-password', 'eye-login-password')"
+              class="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg text-slate-400 hover:text-indigo-600 flex items-center justify-center transition"
+              title="แสดง/ซ่อนรหัสผ่าน"
+              aria-label="แสดงหรือซ่อนรหัสผ่าน"
+            >
+              <i id="eye-login-password" class="fa-solid fa-eye text-sm"></i>
+            </button>
           </div>
         </div>
 
@@ -127,6 +154,123 @@
           <i class="fa-solid fa-right-to-bracket mr-1.5"></i> เข้าสู่ระบบครูผู้สอน
         </button>
       </form>
+
+      <!-- FORM: PASSWORD RECOVERY & RESET (2-Step Flow for Teacher & Student) -->
+      <div id="form-forgot-password" class="space-y-4 hidden">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-2.5">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
+              <i class="fa-solid fa-key text-sm"></i>
+            </span>
+            <div>
+              <h2 class="text-sm font-extrabold text-slate-800">กู้คืนและรีเซ็ตรหัสผ่าน</h2>
+              <p id="forgot-role-subtitle" class="text-[11px] text-slate-500">สำหรับบัญชีครูผู้สอน</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onclick="switchMode('login')"
+            class="text-xs font-bold text-slate-500 hover:text-indigo-600 flex items-center gap-1 transition"
+          >
+            <i class="fa-solid fa-arrow-left"></i> กลับ
+          </button>
+        </div>
+
+        <!-- Step 1: Verify Identity -->
+        <form id="forgot-step-verify" onsubmit="handleVerifyRecovery(event)" class="space-y-3.5">
+          <div>
+            <label id="forgot-user-label" class="block text-xs font-bold text-slate-700 mb-1">ชื่อผู้ใช้งานครู (Username)</label>
+            <div class="relative">
+              <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+              <input type="text" id="forgot-username" required placeholder="กรอกชื่อผู้ใช้งานที่ลืมรหัสผ่าน"
+                class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-amber-500 text-sm outline-none" />
+            </div>
+          </div>
+
+          <!-- Extra field for Student role: Student Number -->
+          <div id="forgot-student-number-wrap" class="hidden">
+            <label class="block text-xs font-bold text-slate-700 mb-1">เลขที่ (Student Number)</label>
+            <div class="relative">
+              <i class="fa-solid fa-hashtag absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+              <input type="number" id="forgot-student-number" min="1" max="80" placeholder="กรอกเลขที่ที่ลงทะเบียนไว้"
+                class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-amber-500 text-sm outline-none" />
+            </div>
+          </div>
+
+          <div>
+            <label id="forgot-verify-label" class="block text-xs font-bold text-slate-700 mb-1">ยืนยันด้วย ชื่อ-นามสกุล หรือ ชื่อโรงเรียน ที่ลงทะเบียนไว้</label>
+            <div class="relative">
+              <i class="fa-solid fa-shield-halved absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+              <input type="text" id="forgot-verify-text" required placeholder="เช่น นายนวชล ประตา หรือชื่อโรงเรียน"
+                class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-amber-500 text-sm outline-none" />
+            </div>
+          </div>
+
+          <button type="submit" id="btn-verify-recovery"
+            class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-extrabold text-sm shadow-md transition active:scale-[0.99]">
+            <i class="fa-solid fa-magnifying-glass mr-1.5"></i> ตรวจสอบบัญชีเพื่อรีเซ็ตรหัสผ่าน
+          </button>
+        </form>
+
+        <!-- Step 2: Set New Password (Shown after verification succeeds) -->
+        <form id="forgot-step-reset" onsubmit="handleResetPassword(event)" class="space-y-3.5 hidden">
+          <div id="forgot-verified-card" class="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2.5">
+            <i class="fa-solid fa-circle-check text-emerald-600 text-base shrink-0"></i>
+            <div class="min-w-0">
+              <div class="font-extrabold">ยืนยันตัวตนสำเร็จ!</div>
+              <div id="forgot-verified-account-name" class="truncate opacity-90">บัญชี: -</div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">ตั้งรหัสผ่านใหม่ (New Password)</label>
+            <div class="relative">
+              <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+              <input type="password" id="reset-new-password" required minlength="4" placeholder="อย่างน้อย 4 ตัวอักษร"
+                class="w-full pl-10 pr-11 py-2.5 rounded-xl border border-slate-300 focus:border-emerald-500 text-sm outline-none" />
+              <button
+                type="button"
+                onclick="togglePasswordVisibility('reset-new-password', 'eye-reset-new')"
+                class="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg text-slate-400 hover:text-indigo-600 flex items-center justify-center transition"
+                title="แสดง/ซ่อนรหัสผ่าน"
+              >
+                <i id="eye-reset-new" class="fa-solid fa-eye text-sm"></i>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">ยืนยันรหัสผ่านใหม่ (Confirm Password)</label>
+            <div class="relative">
+              <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+              <input type="password" id="reset-confirm-password" required minlength="4" placeholder="กรอกรหัสผ่านใหม่อีกครั้ง"
+                class="w-full pl-10 pr-11 py-2.5 rounded-xl border border-slate-300 focus:border-emerald-500 text-sm outline-none" />
+              <button
+                type="button"
+                onclick="togglePasswordVisibility('reset-confirm-password', 'eye-reset-confirm')"
+                class="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg text-slate-400 hover:text-indigo-600 flex items-center justify-center transition"
+                title="แสดง/ซ่อนรหัสผ่าน"
+              >
+                <i id="eye-reset-confirm" class="fa-solid fa-eye text-sm"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              onclick="resetForgotFlow()"
+              class="px-4 py-3 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition"
+            >
+              ย้อนกลับ
+            </button>
+            <button type="submit" id="btn-save-new-password"
+              class="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-md transition active:scale-[0.99]">
+              <i class="fa-solid fa-floppy-disk mr-1.5"></i> บันทึกรหัสผ่านใหม่
+            </button>
+          </div>
+        </form>
+      </div>
 
       <!-- FORM: TEACHER REGISTER -->
       <form id="form-register-teacher" onsubmit="handleTeacherRegister(event)" class="space-y-3.5 hidden">
@@ -150,8 +294,18 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">ตั้งรหัสผ่าน (Password)</label>
-          <input type="password" id="reg-password" required minlength="4" placeholder="อย่างน้อย 4 ตัวอักษร"
-            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 text-sm outline-none" />
+          <div class="relative">
+            <input type="password" id="reg-password" required minlength="4" placeholder="อย่างน้อย 4 ตัวอักษร"
+              class="w-full pl-3.5 pr-11 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 text-sm outline-none" />
+            <button
+              type="button"
+              onclick="togglePasswordVisibility('reg-password', 'eye-reg-password')"
+              class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg text-slate-400 hover:text-indigo-600 flex items-center justify-center transition"
+              title="แสดง/ซ่อนรหัสผ่าน"
+            >
+              <i id="eye-reg-password" class="fa-solid fa-eye text-sm"></i>
+            </button>
+          </div>
         </div>
 
         <button type="submit" id="btn-register-teacher"
@@ -195,8 +349,18 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">ตั้งรหัสผ่าน (Password)</label>
-          <input type="password" id="st-reg-password" required minlength="4" placeholder="อย่างน้อย 4 ตัวอักษร"
-            class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-sky-500 text-sm outline-none" />
+          <div class="relative">
+            <input type="password" id="st-reg-password" required minlength="4" placeholder="อย่างน้อย 4 ตัวอักษร"
+              class="w-full pl-3.5 pr-11 py-2 rounded-xl border border-slate-300 focus:border-sky-500 text-sm outline-none" />
+            <button
+              type="button"
+              onclick="togglePasswordVisibility('st-reg-password', 'eye-st-reg-password')"
+              class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg text-slate-400 hover:text-sky-600 flex items-center justify-center transition"
+              title="แสดง/ซ่อนรหัสผ่าน"
+            >
+              <i id="eye-st-reg-password" class="fa-solid fa-eye text-sm"></i>
+            </button>
+          </div>
         </div>
 
         <button type="submit" id="btn-register-student"
@@ -216,11 +380,45 @@
     const LOCAL_STUDENTS_DB_KEY = 'SMART_SEATING_LOCAL_STUDENT_ACCOUNTS_V1';
     const MULTI_CLASS_KEY = 'SMART_SEATING_MULTI_CLASSES_V1';
     const THEME_STORAGE_KEY = 'SMART_SEATING_THEME_MODE';
+    const CUSTOM_LOGO_STORAGE_KEY = 'SMART_SEATING_CUSTOM_LOGO_V1';
 
     let selectedRole = 'teacher'; // 'teacher' | 'student'
-    let currentMode = 'login';    // 'login' | 'register'
+    let currentMode = 'login';    // 'login' | 'register' | 'forgot'
+    let verifiedRecoveryPayload = null;
 
     const urlParams = new URLSearchParams(window.location.search);
+
+    // Password Show/Hide Toggle
+    function togglePasswordVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (!input) return;
+      const isHidden = input.type === 'password';
+      input.type = isHidden ? 'text' : 'password';
+      if (icon) {
+        icon.className = isHidden ? 'fa-solid fa-eye-slash text-sm text-indigo-600' : 'fa-solid fa-eye text-sm';
+      }
+      input.focus();
+    }
+
+    // Apply saved custom brand logo to login banner if user uploaded one
+    function applyCustomLogoToLoginBanner() {
+      try {
+        const raw = localStorage.getItem(CUSTOM_LOGO_STORAGE_KEY);
+        if (!raw) return false;
+        const logo = JSON.parse(raw);
+        const box = document.getElementById('auth-banner-logo-box');
+        if (!box) return false;
+        if (logo.type === 'image' && logo.dataUrl) {
+          box.innerHTML = `<img src="${logo.dataUrl}" alt="Logo 1:1" class="w-full h-full aspect-square object-cover bg-white/95 rounded-2xl" />`;
+          return true;
+        } else if (logo.type === 'icon' && logo.icon) {
+          box.innerHTML = `<i id="auth-banner-icon" class="${logo.icon} text-3xl"></i>`;
+          return true;
+        }
+      } catch (e) {}
+      return false;
+    }
 
     // Apply saved theme
     function applyLoginTheme() {
@@ -283,6 +481,7 @@
       } else {
         selectRole('teacher');
       }
+      applyCustomLogoToLoginBanner();
     };
 
     function selectRole(role) {
@@ -299,7 +498,7 @@
 
       if (role === 'teacher') {
         banner.className = 'bg-gradient-to-r from-indigo-600 to-violet-600 p-6 text-center text-white transition-all duration-300';
-        bannerIcon.className = 'fa-solid fa-chalkboard-user text-3xl';
+        if (bannerIcon) bannerIcon.className = 'fa-solid fa-chalkboard-user text-3xl';
         bannerSub.textContent = 'เข้าสู่ระบบสำหรับครูผู้สอน • จัดผังที่นั่ง เช็คชื่อ และมอบหมายงาน';
         btnT.className = 'py-3 px-3 rounded-2xl border-2 border-indigo-600 bg-indigo-50 text-indigo-800 font-extrabold text-sm flex flex-col items-center gap-1 shadow-xs transition';
         btnS.className = 'py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-sky-300 text-slate-600 font-bold text-sm flex flex-col items-center gap-1 transition';
@@ -308,7 +507,7 @@
         btnLogin.innerHTML = '<i class="fa-solid fa-right-to-bracket mr-1.5"></i> เข้าสู่ระบบครูผู้สอน';
       } else {
         banner.className = 'bg-gradient-to-r from-sky-600 via-cyan-600 to-teal-600 p-6 text-center text-white transition-all duration-300';
-        bannerIcon.className = 'fa-solid fa-graduation-cap text-3xl';
+        if (bannerIcon) bannerIcon.className = 'fa-solid fa-graduation-cap text-3xl';
         bannerSub.textContent = 'เข้าสู่ระบบสำหรับนักเรียน • สแกน QR ส่งงาน และขอความช่วยเหลือ';
         btnS.className = 'py-3 px-3 rounded-2xl border-2 border-sky-600 bg-sky-50 text-sky-900 font-extrabold text-sm flex flex-col items-center gap-1 shadow-xs transition';
         btnT.className = 'py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-indigo-300 text-slate-600 font-bold text-sm flex flex-col items-center gap-1 transition';
@@ -317,7 +516,51 @@
         btnLogin.innerHTML = '<i class="fa-solid fa-right-to-bracket mr-1.5"></i> เข้าสู่ระบบนักเรียน';
       }
 
+      updateForgotFormRoleFields();
       switchMode(currentMode);
+    }
+
+    function updateForgotFormRoleFields() {
+      const sub = document.getElementById('forgot-role-subtitle');
+      const uLabel = document.getElementById('forgot-user-label');
+      const vLabel = document.getElementById('forgot-verify-label');
+      const vInput = document.getElementById('forgot-verify-text');
+      const stNumWrap = document.getElementById('forgot-student-number-wrap');
+      const stNumInput = document.getElementById('forgot-student-number');
+
+      if (selectedRole === 'teacher') {
+        sub.textContent = 'สำหรับบัญชีครูผู้สอน (Teacher Account)';
+        uLabel.textContent = 'ชื่อผู้ใช้งานครู (Username)';
+        vLabel.textContent = 'ยืนยันด้วย ชื่อ-นามสกุล หรือ ชื่อโรงเรียน ที่เคยลงทะเบียน';
+        vInput.placeholder = 'เช่น นายนวชล ประตา หรือชื่อโรงเรียน';
+        stNumWrap.classList.add('hidden');
+        stNumInput.required = false;
+      } else {
+        sub.textContent = 'สำหรับบัญชีนักเรียน (Student Account)';
+        uLabel.textContent = 'รหัสนักเรียน / Username';
+        vLabel.textContent = 'ยืนยันด้วย ชื่อ-นามสกุล หรือ ชื่อเล่น ที่เคยลงทะเบียน';
+        vInput.placeholder = 'เช่น ด.ช. กิตติพงศ์ ทองดี หรือ น้องกิต';
+        stNumWrap.classList.remove('hidden');
+        stNumInput.required = true;
+      }
+      resetForgotFlow();
+    }
+
+    function openForgotPasswordMode() {
+      const existingUser = (document.getElementById('login-username').value || '').trim();
+      if (existingUser) {
+        document.getElementById('forgot-username').value = existingUser;
+      }
+      resetForgotFlow();
+      switchMode('forgot');
+    }
+
+    function resetForgotFlow() {
+      verifiedRecoveryPayload = null;
+      document.getElementById('forgot-step-verify').classList.remove('hidden');
+      document.getElementById('forgot-step-reset').classList.add('hidden');
+      document.getElementById('reset-new-password').value = '';
+      document.getElementById('reset-confirm-password').value = '';
     }
 
     function switchMode(mode) {
@@ -327,28 +570,33 @@
       const formLogin = document.getElementById('form-login');
       const formRegTeacher = document.getElementById('form-register-teacher');
       const formRegStudent = document.getElementById('form-register-student');
+      const formForgot = document.getElementById('form-forgot-password');
       const tabLogin = document.getElementById('tab-login');
       const tabReg = document.getElementById('tab-register');
 
       const accentText = selectedRole === 'teacher' ? 'text-indigo-600 border-indigo-600' : 'text-sky-600 border-sky-600';
 
+      formLogin.classList.add('hidden');
+      formRegTeacher.classList.add('hidden');
+      formRegStudent.classList.add('hidden');
+      formForgot.classList.add('hidden');
+
       if (mode === 'login') {
         formLogin.classList.remove('hidden');
-        formRegTeacher.classList.add('hidden');
-        formRegStudent.classList.add('hidden');
         tabLogin.className = `py-3 text-sm font-bold ${accentText} border-b-2 bg-white transition`;
         tabReg.className = 'py-3 text-sm font-medium text-slate-500 hover:text-slate-700 transition';
-      } else {
-        formLogin.classList.add('hidden');
+      } else if (mode === 'register') {
         if (selectedRole === 'teacher') {
           formRegTeacher.classList.remove('hidden');
-          formRegStudent.classList.add('hidden');
         } else {
-          formRegTeacher.classList.add('hidden');
           formRegStudent.classList.remove('hidden');
         }
         tabReg.className = 'py-3 text-sm font-bold text-emerald-600 border-b-2 border-emerald-600 bg-white transition';
         tabLogin.className = 'py-3 text-sm font-medium text-slate-500 hover:text-slate-700 transition';
+      } else if (mode === 'forgot') {
+        formForgot.classList.remove('hidden');
+        tabLogin.className = 'py-3 text-sm font-medium text-slate-500 hover:text-slate-700 transition';
+        tabReg.className = 'py-3 text-sm font-medium text-slate-500 hover:text-slate-700 transition';
       }
     }
 
@@ -363,6 +611,180 @@
 
     function isCloudConfigured() {
       return typeof APP_CONFIG !== 'undefined' && APP_CONFIG.API_URL && !APP_CONFIG.API_URL.includes('YOUR_SCRIPT_ID');
+    }
+
+    /*************************************************************************
+     * PASSWORD RECOVERY & RESET HANDLERS (CLOUD + LOCAL FALLBACK)
+     *************************************************************************/
+    function verifyRecoveryLocally(role, username, verifyText, number) {
+      const vLower = verifyText.toLowerCase();
+      if (role === 'teacher') {
+        const db = JSON.parse(localStorage.getItem(LOCAL_TEACHERS_DB_KEY) || '{}');
+        const acc = db[username];
+        if (!acc) return { ok: false, message: 'ไม่พบชื่อผู้ใช้งานครูนี้ในระบบ' };
+        const fn = String(acc.fullname || '').trim().toLowerCase();
+        const sc = String(acc.school || '').trim().toLowerCase();
+        if (vLower === fn || vLower === sc) {
+          return { ok: true, label: `${acc.fullname} (${acc.school || 'ครูผู้สอน'})` };
+        }
+        return { ok: false, message: 'ชื่อ-นามสกุล หรือชื่อโรงเรียนไม่ตรงกับข้อมูลที่ลงทะเบียนไว้' };
+      } else {
+        const db = JSON.parse(localStorage.getItem(LOCAL_STUDENTS_DB_KEY) || '{}');
+        const acc = db[username];
+        if (!acc) return { ok: false, message: 'ไม่พบรหัสนักเรียน/ชื่อผู้ใช้งานนี้ในระบบ' };
+        const fn = String(acc.fullname || '').trim().toLowerCase();
+        const nk = String(acc.nickname || '').trim().toLowerCase();
+        const numMatch = String(acc.number || '').trim() === String(number || '').trim();
+        if (numMatch && (vLower === fn || vLower === nk)) {
+          return { ok: true, label: `เลขที่ ${acc.number} • ${acc.fullname} (${acc.nickname || '-'})` };
+        }
+        return { ok: false, message: 'เลขที่ หรือชื่อ-นามสกุล/ชื่อเล่น ไม่ตรงกับข้อมูลที่ลงทะเบียนไว้' };
+      }
+    }
+
+    async function handleVerifyRecovery(e) {
+      e.preventDefault();
+      document.getElementById('alert-box').classList.add('hidden');
+
+      const btn = document.getElementById('btn-verify-recovery');
+      const username = document.getElementById('forgot-username').value.trim().toLowerCase();
+      const verifyText = document.getElementById('forgot-verify-text').value.trim();
+      const number = selectedRole === 'student' ? document.getElementById('forgot-student-number').value.trim() : '';
+
+      const origHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> กำลังตรวจสอบบัญชี...';
+
+      try {
+        let verifiedLabel = null;
+        let cloudErrorMsg = null;
+
+        if (isCloudConfigured()) {
+          try {
+            const res = await fetch(APP_CONFIG.API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({
+                action: 'verifyRecovery',
+                role: selectedRole,
+                username,
+                verifyText,
+                number
+              })
+            });
+            const data = await res.json();
+            if (data.status === 'success' && data.account) {
+              verifiedLabel = selectedRole === 'teacher'
+                ? `${data.account.fullname} (${data.account.school || 'ครูผู้สอน'})`
+                : `เลขที่ ${number} • ${data.account.fullname}${data.account.nickname ? ` (${data.account.nickname})` : ''}`;
+            } else if (data.message && data.message !== 'Invalid action') {
+              cloudErrorMsg = data.message;
+            }
+          } catch (cloudErr) {}
+        }
+
+        // Local fallback if cloud didn't verify or is offline
+        if (!verifiedLabel) {
+          const localRes = verifyRecoveryLocally(selectedRole, username, verifyText, number);
+          if (localRes.ok) {
+            verifiedLabel = localRes.label;
+          } else {
+            showAlert(cloudErrorMsg || localRes.message);
+            return;
+          }
+        }
+
+        // Move to Step 2: Set new password
+        verifiedRecoveryPayload = { role: selectedRole, username, verifyText, number };
+        document.getElementById('forgot-verified-account-name').textContent = `บัญชี: ${verifiedLabel}`;
+        document.getElementById('forgot-step-verify').classList.add('hidden');
+        document.getElementById('forgot-step-reset').classList.remove('hidden');
+        document.getElementById('reset-new-password').focus();
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = origHtml;
+      }
+    }
+
+    async function handleResetPassword(e) {
+      e.preventDefault();
+      if (!verifiedRecoveryPayload) {
+        resetForgotFlow();
+        return;
+      }
+
+      const newPassword = document.getElementById('reset-new-password').value;
+      const confirmPassword = document.getElementById('reset-confirm-password').value;
+
+      if (newPassword.length < 4) {
+        showAlert('รหัสผ่านใหม่ต้องมีอย่างน้อย 4 ตัวอักษร');
+        return;
+      }
+      if (newPassword !== confirmPassword) {
+        showAlert('รหัสผ่านใหม่และการยืนยันรหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง');
+        return;
+      }
+
+      const btn = document.getElementById('btn-save-new-password');
+      const origHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> กำลังบันทึกรหัสผ่านใหม่...';
+
+      try {
+        const { role, username, verifyText, number } = verifiedRecoveryPayload;
+        let cloudSuccess = false;
+
+        if (isCloudConfigured()) {
+          try {
+            const res = await fetch(APP_CONFIG.API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({
+                action: 'resetPassword',
+                role,
+                username,
+                verifyText,
+                number,
+                newPassword
+              })
+            });
+            const data = await res.json();
+            if (data.status === 'success') {
+              cloudSuccess = true;
+            } else if (data.message && data.message !== 'Invalid action') {
+              // Still check if local exists, else show server error
+              const dbKey = role === 'teacher' ? LOCAL_TEACHERS_DB_KEY : LOCAL_STUDENTS_DB_KEY;
+              const localDb = JSON.parse(localStorage.getItem(dbKey) || '{}');
+              if (!localDb[username]) {
+                showAlert(data.message);
+                return;
+              }
+            }
+          } catch (cloudErr) {}
+        }
+
+        // Always update local fallback DB if record exists
+        const dbKey = role === 'teacher' ? LOCAL_TEACHERS_DB_KEY : LOCAL_STUDENTS_DB_KEY;
+        const localDb = JSON.parse(localStorage.getItem(dbKey) || '{}');
+        if (localDb[username]) {
+          localDb[username].password = newPassword;
+          localStorage.setItem(dbKey, JSON.stringify(localDb));
+        } else if (!cloudSuccess) {
+          showAlert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์เพื่อรีเซ็ตรหัสผ่านได้ กรุณาตรวจสอบการอัปเดต Apps Script');
+          return;
+        }
+
+        const recoveredUsername = username;
+        resetForgotFlow();
+        switchMode('login');
+        document.getElementById('login-username').value = recoveredUsername;
+        document.getElementById('login-password').value = '';
+        showAlert('เปลี่ยนรหัสผ่านใหม่สำเร็จแล้ว! กรุณาเข้าสู่ระบบด้วยรหัสผ่านใหม่', false);
+        document.getElementById('login-password').focus();
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = origHtml;
+      }
     }
 
     async function handleLogin(e) {
@@ -395,6 +817,9 @@
                     const parsedSaved = JSON.parse(data.savedState);
                     if (parsedSaved && parsedSaved._multiClasses && parsedSaved._multiClasses.classes) {
                       localStorage.setItem(MULTI_CLASS_KEY, JSON.stringify(parsedSaved._multiClasses));
+                      if (parsedSaved._multiClasses.customLogo) {
+                        localStorage.setItem(CUSTOM_LOGO_STORAGE_KEY, JSON.stringify(parsedSaved._multiClasses.customLogo));
+                      }
                     }
                   } catch (ex) {}
                 }
@@ -427,15 +852,7 @@
           showAlert('ชื่อผู้ใช้งานหรือรหัสผ่านครูไม่ถูกต้อง หรือไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
         } else {
           // STUDENT LOGIN
-          // 1. Check local student accounts first for fast response
-          const localStudents = JSON.parse(localStorage.getItem(LOCAL_STUDENTS_DB_KEY) || '{}');
-          if (localStudents[username] && localStudents[username].password === password) {
-            localStorage.setItem(STUDENT_SESSION_KEY, JSON.stringify({ ...localStudents[username], role: 'student' }));
-            window.location.href = buildStudentRedirectUrl();
-            return;
-          }
-
-          // 2. Check Cloud Apps Script
+          // 1. Check Cloud Apps Script first so cloud password resets take precedence
           if (isCloudConfigured()) {
             try {
               const res = await fetch(APP_CONFIG.API_URL, {
@@ -450,10 +867,24 @@
                 return;
               }
               if (data.status === 'error' && data.message) {
+                const localS = JSON.parse(localStorage.getItem(LOCAL_STUDENTS_DB_KEY) || '{}');
+                if (localS[username] && localS[username].password === password) {
+                  localStorage.setItem(STUDENT_SESSION_KEY, JSON.stringify({ ...localS[username], role: 'student' }));
+                  window.location.href = buildStudentRedirectUrl();
+                  return;
+                }
                 showAlert(data.message);
                 return;
               }
             } catch (err) {}
+          }
+
+          // 2. Local fallback for Student
+          const localStudents = JSON.parse(localStorage.getItem(LOCAL_STUDENTS_DB_KEY) || '{}');
+          if (localStudents[username] && localStudents[username].password === password) {
+            localStorage.setItem(STUDENT_SESSION_KEY, JSON.stringify({ ...localStudents[username], role: 'student' }));
+            window.location.href = buildStudentRedirectUrl();
+            return;
           }
 
           showAlert('รหัสนักเรียนหรือรหัสผ่านไม่ถูกต้อง (หากยังไม่มีบัญชี กดแท็บสมัครสมาชิกใหม่)');
@@ -481,7 +912,6 @@
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> กำลังสร้างบัญชีครู...';
 
       try {
-        // Save locally as backup
         const localTeachers = JSON.parse(localStorage.getItem(LOCAL_TEACHERS_DB_KEY) || '{}');
         localTeachers[payload.username] = payload;
         localStorage.setItem(LOCAL_TEACHERS_DB_KEY, JSON.stringify(localTeachers));
@@ -551,9 +981,7 @@
               showAlert(data.message);
               return;
             }
-          } catch (cloudErr) {
-            // Continue with local account fallback
-          }
+          } catch (cloudErr) {}
         }
 
         showAlert('สมัครสมาชิกนักเรียนสำเร็จ! กรุณาเข้าสู่ระบบ', false);

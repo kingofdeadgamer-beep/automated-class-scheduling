@@ -287,11 +287,102 @@
       margin: 0;
     }
 
-    /* Smooth Auto-Fit Scaling Wrapper for Any Device Screen */
+    /* ================= RESPONSIVE AUTO-SCALING & LANDSCAPE OPTIMIZATION ================= */
+    #brand-logo-btn,
+    #logo-modal-preview {
+      aspect-ratio: 1 / 1 !important;
+    }
+
+    #seating-viewport {
+      overflow-x: auto;
+      overflow-y: visible;
+    }
+    #seating-viewport.auto-scaled-fit {
+      overflow: hidden !important;
+    }
     #seating-scale-wrapper {
       transform-origin: top center;
-      transition: transform 0.25s ease, width 0.25s ease;
+      transition: transform 0.22s ease, height 0.22s ease;
+      will-change: transform;
     }
+
+    /* Compact Landscape Optimization for Phones & Tablets in Landscape Orientation */
+    @media (orientation: landscape) and (max-height: 620px) {
+      header > div {
+        min-height: 44px !important;
+        padding-top: 0.25rem !important;
+        padding-bottom: 0.25rem !important;
+      }
+      header .ui-icon-btn {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+      }
+      header .ui-icon-btn i {
+        font-size: 0.92rem !important;
+      }
+      #classroom-selector {
+        height: 34px !important;
+        font-size: 12px !important;
+      }
+      #student-sidebar {
+        top: 44px !important;
+        height: calc(100vh - 44px) !important;
+      }
+      #main-workspace {
+        padding: 0.35rem 0.55rem !important;
+      }
+      #config-toolbar {
+        padding: 0.35rem 0.5rem !important;
+        margin-bottom: 0.35rem !important;
+      }
+      #config-toolbar .ui-tb-btn {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+      }
+      #chart-container {
+        padding: 0.45rem 0.65rem !important;
+        border-radius: 1rem !important;
+      }
+      #board-top,
+      #board-bottom {
+        margin-top: 0.25rem !important;
+        margin-bottom: 0.35rem !important;
+      }
+      #board-top > div,
+      #board-bottom > div {
+        padding-top: 0.3rem !important;
+        padding-bottom: 0.3rem !important;
+      }
+    }
+
+    /* Manual Landscape-Optimized View Mode (can be toggled on any device) */
+    body.landscape-optimized #student-sidebar,
+    body.landscape-optimized #sidebar-resizer {
+      display: none !important;
+    }
+    body.landscape-optimized #main-workspace {
+      padding: 0.4rem 0.75rem !important;
+    }
+    body.landscape-optimized #config-toolbar {
+      padding: 0.35rem 0.6rem !important;
+      margin-bottom: 0.4rem !important;
+    }
+    body.landscape-optimized #chart-container {
+      padding: 0.55rem 0.85rem !important;
+    }
+    body.landscape-optimized #board-top,
+    body.landscape-optimized #board-bottom {
+      margin-bottom: 0.4rem !important;
+      margin-top: 0.35rem !important;
+    }
+    body.landscape-optimized.toolbar-collapsed #config-toolbar {
+      display: none !important;
+    }
+
 
     /* Custom Scrollbars */
     ::-webkit-scrollbar {
@@ -476,12 +567,20 @@
           <i class="fa-solid fa-bars"></i>
         </button>
 
-        <div
-          class="ui-icon-btn rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-sm shrink-0"
-          title="ระบบจัดผังที่นั่งนักเรียนอัจฉริยะ"
+        <button
+          type="button"
+          id="brand-logo-btn"
+          onclick="openLogoModal()"
+          class="ui-icon-btn aspect-square rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-sm shrink-0 relative overflow-hidden group cursor-pointer transition hover:ring-2 hover:ring-indigo-400 active:scale-95"
+          title="คลิกเพื่อเปลี่ยนไอคอนที่นั่งเป็นโลโก้สัดส่วน 1:1 ของคุณ"
         >
-          <i class="fa-solid fa-chair"></i>
-        </div>
+          <span id="brand-logo-content" class="w-full h-full flex items-center justify-center">
+            <i class="fa-solid fa-chair"></i>
+          </span>
+          <span class="absolute inset-0 bg-slate-900/55 text-white opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+            <i class="fa-solid fa-pen !text-[11px]"></i>
+          </span>
+        </button>
 
         <!-- Multi-Classroom Dropdown -->
         <select
@@ -604,6 +703,17 @@
           title="โหมดขึ้นจอโปรเจกเตอร์หน้าห้อง"
         >
           <i class="fa-solid fa-tv"></i>
+        </button>
+
+        <!-- Optimized Landscape Auto-Fit Mode Button (Icon-only) -->
+        <button
+          id="btn-landscape-mode"
+          onclick="toggleLandscapeMode()"
+          class="ui-icon-btn rounded-xl bg-slate-100 hover:bg-sky-100 text-sky-600 border border-slate-200 flex items-center justify-center transition relative shrink-0"
+          title="โหมดจัดหน้าจอแนวนอนอัตโนมัติ (Landscape Auto-Fit)"
+        >
+          <i id="landscape-mode-icon" class="fa-solid fa-tablet-screen-button fa-rotate-90"></i>
+          <span id="landscape-scale-badge" class="absolute -bottom-1 -right-1 px-1 h-4 rounded-full bg-slate-800 text-sky-200 text-[8px] font-extrabold flex items-center justify-center leading-none">FIT</span>
         </button>
 
         <!-- Adjustable Icon Size Button (M / L / XL) -->
@@ -856,6 +966,34 @@
 
     <!-- ================= MAIN WORKSPACE: TOOLBAR & SEATING CHART ================= -->
     <main id="main-workspace" class="flex-1 flex flex-col min-w-0 p-2.5 sm:p-4 lg:p-5 overflow-y-auto">
+
+      <!-- Smart Portrait-to-Landscape Optimization Banner (Shown on narrow mobile portrait screens) -->
+      <div
+        id="portrait-landscape-hint"
+        class="hidden mb-2.5 px-3 py-2 rounded-2xl bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-sm items-center justify-between gap-2 no-print"
+      >
+        <div class="flex items-center gap-2 min-w-0 text-xs font-semibold">
+          <i class="fa-solid fa-mobile-screen-button fa-rotate-90 text-base text-sky-200 shrink-0 animate-pulse"></i>
+          <span class="truncate">แนะนำ: หมุนจอเป็นแนวนอน หรือกดปรับพอดีจอเพื่อดูผังครบทุกโต๊ะ</span>
+        </div>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button
+            type="button"
+            onclick="toggleLandscapeMode(true)"
+            class="px-2.5 py-1 rounded-xl bg-white text-indigo-700 font-extrabold text-[11px] shadow-xs hover:bg-sky-50 transition"
+          >
+            โหมดแนวนอน
+          </button>
+          <button
+            type="button"
+            onclick="dismissPortraitHint()"
+            class="w-6 h-6 rounded-lg bg-white/15 hover:bg-white/25 flex items-center justify-center text-xs"
+            title="ซ่อนคำแนะนำนี้"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
       
       <!-- 1. CONFIGURATION TOOLBAR (ICON-ONLY, NO TEXT DESCRIPTIONS) -->
       <section id="config-toolbar" class="bg-white rounded-2xl border border-slate-200/90 p-2.5 mb-3 shadow-xs no-print">
@@ -2028,6 +2166,137 @@
     </div>
   </div>
 
+  <!-- ================= MODAL 12: CUSTOM 1:1 TOP-LEFT LOGO MANAGER ================= -->
+  <div id="logo-modal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden animate-shuffle">
+      <div class="p-4 sm:p-5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <i class="fa-solid fa-crop-simple text-lg"></i>
+          <div>
+            <h3 class="font-bold text-base">เปลี่ยนโลโก้มุมซ้ายบน (สัดส่วน 1:1)</h3>
+            <p class="text-xs text-indigo-100">อัปโหลดรูปโลโก้ 1:1 ครอบภาพอัตโนมัติ หรือเลือกไอคอนแทนเก้าอี้</p>
+          </div>
+        </div>
+        <button onclick="closeLogoModal()" class="w-8 h-8 rounded-lg bg-white/15 hover:bg-white/25 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-5 space-y-4 max-h-[84vh] overflow-y-auto">
+        <!-- Live 1:1 Square Logo Preview & Upload -->
+        <div class="flex flex-col items-center gap-3">
+          <div class="relative">
+            <div
+              id="logo-modal-preview"
+              class="w-28 h-28 aspect-square rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white flex items-center justify-center shadow-lg overflow-hidden border-2 border-indigo-200 text-4xl"
+            >
+              <i class="fa-solid fa-chair"></i>
+            </div>
+            <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-slate-900 text-white text-[9px] font-extrabold tracking-wide shadow-sm whitespace-nowrap">
+              1:1 • 256×256
+            </span>
+          </div>
+
+          <input
+            id="custom-logo-file-input"
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif"
+            class="hidden"
+            onchange="handleCustomLogoUpload(event)"
+          />
+
+          <!-- 1:1 Framing & Zoom Controls (Shown when custom image is loaded) -->
+          <div id="logo-1to1-controls" class="hidden w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 space-y-2.5 mt-1">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] font-bold text-slate-700">รูปแบบกรอบ 1:1:</span>
+              <div class="inline-flex rounded-xl border border-slate-300 bg-white p-0.5 text-[11px] font-bold">
+                <button
+                  type="button"
+                  id="logo-fit-btn-cover"
+                  onclick="setCustomLogoFit('cover')"
+                  class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white transition"
+                  title="ครอบภาพเป็นสี่เหลี่ยมจัตุรัส 1:1 เต็มกรอบ"
+                >
+                  ครอบเต็ม 1:1
+                </button>
+                <button
+                  type="button"
+                  id="logo-fit-btn-contain"
+                  onclick="setCustomLogoFit('contain')"
+                  class="px-2.5 py-1 rounded-lg text-slate-600 hover:bg-slate-100 transition"
+                  title="แสดงโลโก้ครบทั้งภาพภายในกรอบสี่เหลี่ยม 1:1"
+                >
+                  พอดีกรอบ 1:1
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2.5">
+              <label for="logo-zoom-slider" class="text-[11px] font-bold text-slate-700 shrink-0">
+                <i class="fa-solid fa-magnifying-glass-plus text-indigo-500 mr-1"></i>ซูม:
+              </label>
+              <input
+                id="logo-zoom-slider"
+                type="range"
+                min="1"
+                max="2.4"
+                step="0.05"
+                value="1"
+                oninput="updateCustomLogoZoom(this.value)"
+                class="flex-1 accent-indigo-600 cursor-pointer"
+              />
+              <span id="logo-zoom-value" class="text-[11px] font-extrabold text-indigo-700 w-9 text-right">1.0x</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-center gap-2 w-full pt-1">
+            <button
+              type="button"
+              onclick="document.getElementById('custom-logo-file-input').click()"
+              class="flex-1 py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition"
+            >
+              <i class="fa-solid fa-upload"></i> อัปโหลดโลโก้ (1:1)
+            </button>
+            <button
+              type="button"
+              onclick="confirmResetCustomLogo()"
+              class="py-2.5 px-3 rounded-xl border border-rose-200 hover:bg-rose-50 text-rose-600 text-xs font-bold flex items-center justify-center gap-1 transition"
+              title="คืนค่าเป็นไอคอนที่นั่งเริ่มต้น"
+            >
+              <i class="fa-solid fa-rotate-left"></i> คืนค่าเดิม
+            </button>
+          </div>
+        </div>
+
+        <!-- Preset Icons Picker -->
+        <div class="border-t border-slate-100 pt-3 space-y-2">
+          <div class="text-xs font-bold text-slate-700">หรือเลือกไอคอน 1:1 สำเร็จรูป:</div>
+          <div id="logo-preset-icons-grid" class="grid grid-cols-5 gap-2">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- Gradient Color Swatches -->
+        <div class="border-t border-slate-100 pt-3 space-y-2">
+          <div class="text-xs font-bold text-slate-700">เลือกโทนสีพื้นหลังโลโก้:</div>
+          <div id="logo-preset-colors-grid" class="grid grid-cols-6 gap-2">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-2 border-t border-slate-100">
+          <button
+            type="button"
+            onclick="closeLogoModal()"
+            class="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition"
+          >
+            เสร็จสิ้น
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= MODAL 10: CONFIRMATION DIALOG (LOGOUT / DELETE) ================= -->
   <div id="confirm-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-[120] hidden items-center justify-center p-4 no-print">
     <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-slate-200 overflow-hidden text-center p-6 animate-shuffle">
@@ -2247,9 +2516,10 @@
       renderClassroomSelector();
       renderAll();
 
-      // Apply saved White/Black theme, UI Icon Size, and Resizable Sidebar width
+      // Apply saved White/Black theme, UI Icon Size, Custom Logo, and Resizable Sidebar width
       applySavedTheme();
       applySavedUiIconSize();
+      applySavedCustomLogo();
       initResizableSidebar();
 
       // Instant zero-latency sync when student.html updates LocalStorage in another browser tab
@@ -2259,10 +2529,8 @@
         }
       });
 
-      // Auto-fit seating grid whenever screen size or orientation changes
-      window.addEventListener('resize', () => {
-        applyResponsiveGridFit();
-      });
+      // Initialize responsive 2D auto-scaling, ResizeObserver & landscape orientation listeners
+      initResponsiveAutoScaling();
 
       // Start background cloud polling every 12 seconds for live Student Portal updates (auto task check + help alerts)
       setInterval(() => {
@@ -2324,6 +2592,11 @@
       try {
         if (!multiClassStore.activeClassId) multiClassStore.activeClassId = 'class_default_1';
         multiClassStore.classes[multiClassStore.activeClassId] = state;
+        try {
+          const savedLogoRaw = localStorage.getItem('SMART_SEATING_CUSTOM_LOGO_V1');
+          if (savedLogoRaw) multiClassStore.customLogo = JSON.parse(savedLogoRaw);
+          else delete multiClassStore.customLogo;
+        } catch (ex) {}
 
         localStorage.setItem(MULTI_CLASS_KEY, JSON.stringify(multiClassStore));
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -3537,18 +3810,134 @@
       });
     }
 
+    let isLandscapeModeActive = false;
+    let portraitHintDismissed = false;
+    let seatingResizeObserver = null;
+
+    function initResponsiveAutoScaling() {
+      const onViewportChange = () => {
+        updateOrientationAndHintUI();
+        if ((state.seatSize || 'auto') === 'auto') {
+          renderClassroomGrid(false);
+        } else {
+          applyResponsiveGridFit();
+        }
+      };
+
+      let resizeTimer = null;
+      const debouncedChange = () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(onViewportChange, 80);
+      };
+
+      window.addEventListener('resize', debouncedChange);
+      window.addEventListener('orientationchange', () => setTimeout(onViewportChange, 180));
+      if (screen.orientation && typeof screen.orientation.addEventListener === 'function') {
+        screen.orientation.addEventListener('change', () => setTimeout(onViewportChange, 180));
+      }
+
+      if (typeof ResizeObserver !== 'undefined') {
+        const chartEl = document.getElementById('chart-container');
+        if (chartEl) {
+          seatingResizeObserver = new ResizeObserver(() => {
+            requestAnimationFrame(() => applyResponsiveGridFit());
+          });
+          seatingResizeObserver.observe(chartEl);
+        }
+      }
+
+      updateOrientationAndHintUI();
+      requestAnimationFrame(() => applyResponsiveGridFit());
+    }
+
+    function updateOrientationAndHintUI() {
+      const isPortraitMobile = window.innerWidth < 768 && window.innerHeight > window.innerWidth;
+      const hintEl = document.getElementById('portrait-landscape-hint');
+      if (hintEl) {
+        if (isPortraitMobile && !portraitHintDismissed && !isLandscapeModeActive && !state.projectorMode) {
+          hintEl.classList.remove('hidden');
+          hintEl.classList.add('flex');
+        } else {
+          hintEl.classList.add('hidden');
+          hintEl.classList.remove('flex');
+        }
+      }
+    }
+
+    function dismissPortraitHint() {
+      portraitHintDismissed = true;
+      updateOrientationAndHintUI();
+    }
+
+    async function toggleLandscapeMode(forceEnable = null) {
+      isLandscapeModeActive = forceEnable !== null ? Boolean(forceEnable) : !isLandscapeModeActive;
+      const btn = document.getElementById('btn-landscape-mode');
+      const icon = document.getElementById('landscape-mode-icon');
+
+      if (isLandscapeModeActive) {
+        document.body.classList.add('landscape-optimized');
+        // Automatically ensure Auto-Fit scaling is enabled
+        state.seatSize = 'auto';
+        updateSeatSizeButtonsUI();
+
+        // Try native Fullscreen + Landscape orientation lock on supported mobile/tablet browsers
+        if (window.innerWidth < 1024) {
+          try {
+            if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
+              await document.documentElement.requestFullscreen();
+            }
+            if (screen.orientation && typeof screen.orientation.lock === 'function') {
+              await screen.orientation.lock('landscape');
+            }
+          } catch (e) {
+            // Gracefully fall back to CSS landscape-optimized auto-scaling when OS blocks orientation lock
+          }
+        }
+
+        if (btn) {
+          btn.className = 'ui-icon-btn rounded-xl bg-sky-600 hover:bg-sky-700 text-white border border-sky-700 flex items-center justify-center shadow-sm transition relative shrink-0';
+          btn.title = 'กำลังใช้งานโหมดแนวนอนพอดีจอ (คลิกเพื่อกลับมุมมองปกติ)';
+        }
+        if (icon) icon.className = 'fa-solid fa-compress';
+        showToast('เปิดโหมดแนวนอนอัตโนมัติ (ปรับสเกลให้พอดีจอทุกอุปกรณ์) 📱💻', 'indigo');
+      } else {
+        document.body.classList.remove('landscape-optimized', 'toolbar-collapsed');
+        try {
+          if (screen.orientation && typeof screen.orientation.unlock === 'function') {
+            screen.orientation.unlock();
+          }
+          if (document.fullscreenElement && document.exitFullscreen) {
+            await document.exitFullscreen();
+          }
+        } catch (e) {}
+
+        if (btn) {
+          btn.className = 'ui-icon-btn rounded-xl bg-slate-100 hover:bg-sky-100 text-sky-600 border border-slate-200 flex items-center justify-center transition relative shrink-0';
+          btn.title = 'โหมดจัดหน้าจอแนวนอนอัตโนมัติ (Landscape Auto-Fit)';
+        }
+        if (icon) icon.className = 'fa-solid fa-tablet-screen-button fa-rotate-90';
+        showToast('กลับสู่โหมดมุมมองปกติแล้ว', 'slate');
+      }
+
+      updateOrientationAndHintUI();
+      renderClassroomGrid(false);
+    }
+
     function getResolvedSeatSize() {
       const mode = state.seatSize || 'auto';
       if (mode !== 'auto') return mode;
 
       const w = window.innerWidth;
-      // Automatically choose optimal card density based on device width and column count
-      if (w < 640) {
-        return 'xs'; // Mobile phone
+      const h = window.innerHeight;
+      const isShortLandscape = w > h && h <= 620;
+
+      // Choose optimal card density based on screen dimensions, orientation & grid density
+      if (w < 640 || isShortLandscape) {
+        return state.cols >= 5 ? 'xs' : 'sm';
       } else if (w < 1180) {
-        return state.cols >= 7 ? 'xs' : 'sm'; // Tablet / iPad / Small laptop
+        return (state.cols >= 7 || state.rows >= 6) ? 'xs' : 'sm';
       } else {
-        return state.cols >= 8 ? 'xs' : state.cols >= 7 ? 'sm' : 'md'; // Desktop / Projector
+        return (state.cols >= 8 || state.rows >= 7) ? 'xs' : (state.cols >= 7 || state.rows >= 5) ? 'sm' : 'md';
       }
     }
 
@@ -3556,23 +3945,50 @@
       const viewport = document.getElementById('seating-viewport');
       const wrapper = document.getElementById('seating-scale-wrapper');
       const gridEl = document.getElementById('seating-grid');
+      const scaleBadge = document.getElementById('landscape-scale-badge');
       if (!viewport || !wrapper || !gridEl) return;
 
-      // Reset transform first to measure natural width
+      // Reset transform first to measure natural grid dimensions
       wrapper.style.transform = 'none';
       wrapper.style.height = 'auto';
+      wrapper.style.width = 'auto';
+      viewport.classList.remove('auto-scaled-fit');
 
-      if ((state.seatSize || 'auto') !== 'auto') return;
+      if ((state.seatSize || 'auto') !== 'auto') {
+        if (scaleBadge) scaleBadge.textContent = (state.seatSize || 'S').toUpperCase();
+        return;
+      }
 
-      const availableWidth = viewport.clientWidth - 8;
       const naturalWidth = gridEl.scrollWidth;
+      const naturalHeight = gridEl.offsetHeight;
+      if (naturalWidth <= 0 || naturalHeight <= 0) return;
 
-      if (naturalWidth > availableWidth && availableWidth > 200) {
-        const scale = Math.max(0.52, availableWidth / naturalWidth);
+      const availableWidth = Math.max(220, viewport.clientWidth - 8);
+
+      // Compute available vertical viewport space so all rows fit cleanly on screen in landscape or desktop
+      const viewportRect = viewport.getBoundingClientRect();
+      const reservedBottom = state.perspective === 'teacher' ? 98 : 48;
+      const availableHeight = Math.max(220, window.innerHeight - viewportRect.top - reservedBottom);
+
+      const scaleX = availableWidth / naturalWidth;
+      const scaleY = availableHeight / naturalHeight;
+
+      // Allow slight upscale in landscape/projector mode on large displays; otherwise prevent overflow in both X and Y
+      const maxScale = (state.projectorMode || isLandscapeModeActive) ? 1.12 : 1.0;
+      const minScale = 0.36;
+      let scale = Math.min(maxScale, scaleX, scaleY);
+      scale = Math.max(minScale, scale);
+
+      if (Math.abs(scale - 1) > 0.015) {
         wrapper.style.transform = `scale(${scale.toFixed(3)})`;
-        // Adjust wrapper height so there is no empty gap below scaled grid
-        const naturalHeight = gridEl.offsetHeight;
         wrapper.style.height = `${Math.ceil(naturalHeight * scale)}px`;
+        if (naturalWidth * scale <= availableWidth + 4) {
+          viewport.classList.add('auto-scaled-fit');
+        }
+      }
+
+      if (scaleBadge) {
+        scaleBadge.textContent = `${Math.round(scale * 100)}%`;
       }
     }
 
@@ -6322,6 +6738,303 @@
       link.download = `กลุ่มคละความสามารถ_เต็ม20_${state.classroomTitle}.csv`;
       link.click();
       showToast('ส่งออกตารางกลุ่มคละความสามารถ (CSV) เรียบร้อยแล้ว 📥', 'emerald');
+    }
+
+    /*************************************************************************
+     * 12.10C CUSTOM 1:1 TOP-LEFT BRAND LOGO CONTROLLER
+     *************************************************************************/
+    const CUSTOM_LOGO_STORAGE_KEY = 'SMART_SEATING_CUSTOM_LOGO_V1';
+
+    const LOGO_ICON_PRESETS = [
+      { id: 'chair',      cls: 'fa-solid fa-chair',            label: 'โต๊ะเรียน (ค่าเริ่มต้น)' },
+      { id: 'school',     cls: 'fa-solid fa-school',           label: 'โรงเรียน' },
+      { id: 'grad',       cls: 'fa-solid fa-graduation-cap',   label: 'หมวกรับปริญญา' },
+      { id: 'board',      cls: 'fa-solid fa-chalkboard-user',  label: 'ครูหน้าห้อง' },
+      { id: 'book',       cls: 'fa-solid fa-book-open',        label: 'หนังสือ' },
+      { id: 'calc',       cls: 'fa-solid fa-calculator',       label: 'คณิตศาสตร์' },
+      { id: 'atom',       cls: 'fa-solid fa-atom',             label: 'วิทยาศาสตร์' },
+      { id: 'compass',    cls: 'fa-solid fa-compass-drafting', label: 'เรขาคณิต' },
+      { id: 'star',       cls: 'fa-solid fa-star',             label: 'ดาวเด่น' },
+      { id: 'rocket',     cls: 'fa-solid fa-rocket',           label: 'จรวด' }
+    ];
+
+    const LOGO_COLOR_PRESETS = [
+      { id: 'indigo',  grad: 'from-indigo-600 to-violet-600',  label: 'คราม-ม่วง' },
+      { id: 'sky',     grad: 'from-sky-500 to-cyan-600',       label: 'ฟ้า-คราม' },
+      { id: 'emerald', grad: 'from-emerald-500 to-teal-600',   label: 'เขียว-มิ้นต์' },
+      { id: 'amber',   grad: 'from-amber-500 to-orange-600',   label: 'เหลือง-ส้ม' },
+      { id: 'rose',    grad: 'from-pink-500 to-rose-600',      label: 'ชมพู-แดง' },
+      { id: 'slate',   grad: 'from-slate-700 to-slate-900',    label: 'เทาเข้ม' }
+    ];
+
+    const DEFAULT_CUSTOM_LOGO = {
+      type: 'icon',
+      icon: 'fa-solid fa-chair',
+      colorId: 'indigo',
+      dataUrl: '',
+      fit: 'cover',
+      zoom: 1
+    };
+
+    // Keeps original uploaded image during modal editing so zoom/crop stays sharp
+    let pendingRawLogoImage = null;
+
+    function getCurrentCustomLogo() {
+      try {
+        const raw = localStorage.getItem(CUSTOM_LOGO_STORAGE_KEY);
+        if (raw) {
+          return { ...DEFAULT_CUSTOM_LOGO, ...JSON.parse(raw) };
+        }
+        if (multiClassStore && multiClassStore.customLogo) {
+          localStorage.setItem(CUSTOM_LOGO_STORAGE_KEY, JSON.stringify(multiClassStore.customLogo));
+          return { ...DEFAULT_CUSTOM_LOGO, ...multiClassStore.customLogo };
+        }
+      } catch (e) {}
+      return { ...DEFAULT_CUSTOM_LOGO };
+    }
+
+    function saveCustomLogo(logoObj, notifyMsg = '') {
+      const merged = { ...DEFAULT_CUSTOM_LOGO, ...logoObj };
+      localStorage.setItem(CUSTOM_LOGO_STORAGE_KEY, JSON.stringify(merged));
+      multiClassStore.customLogo = merged;
+      applySavedCustomLogo();
+      if (!document.getElementById('logo-modal').classList.contains('hidden')) {
+        renderLogoModalContent();
+      }
+      saveState();
+      if (notifyMsg) showToast(notifyMsg, 'emerald');
+    }
+
+    function applySavedCustomLogo() {
+      const logo = getCurrentCustomLogo();
+      const btn = document.getElementById('brand-logo-btn');
+      const content = document.getElementById('brand-logo-content');
+      if (!btn || !content) return;
+
+      const colorObj = LOGO_COLOR_PRESETS.find(c => c.id === logo.colorId) || LOGO_COLOR_PRESETS[0];
+
+      if (logo.type === 'image' && logo.dataUrl) {
+        btn.className = 'ui-icon-btn aspect-square rounded-xl bg-white border border-slate-200 flex items-center justify-center shadow-sm shrink-0 relative overflow-hidden group cursor-pointer transition hover:ring-2 hover:ring-indigo-400 active:scale-95';
+        content.innerHTML = `<img src="${logo.dataUrl}" alt="Custom 1:1 Logo" class="w-full h-full aspect-square object-cover" />`;
+      } else {
+        btn.className = `ui-icon-btn aspect-square rounded-xl bg-gradient-to-br ${colorObj.grad} flex items-center justify-center text-white shadow-sm shrink-0 relative overflow-hidden group cursor-pointer transition hover:ring-2 hover:ring-indigo-400 active:scale-95`;
+        content.innerHTML = `<i class="${logo.icon || 'fa-solid fa-chair'}"></i>`;
+      }
+    }
+
+    function openLogoModal() {
+      pendingRawLogoImage = null;
+      renderLogoModalContent();
+      const modal = document.getElementById('logo-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeLogoModal() {
+      pendingRawLogoImage = null;
+      const modal = document.getElementById('logo-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function renderLogoModalContent() {
+      const logo = getCurrentCustomLogo();
+      const preview = document.getElementById('logo-modal-preview');
+      const controlsBox = document.getElementById('logo-1to1-controls');
+      const btnCover = document.getElementById('logo-fit-btn-cover');
+      const btnContain = document.getElementById('logo-fit-btn-contain');
+      const zoomSlider = document.getElementById('logo-zoom-slider');
+      const zoomValEl = document.getElementById('logo-zoom-value');
+      const colorObj = LOGO_COLOR_PRESETS.find(c => c.id === logo.colorId) || LOGO_COLOR_PRESETS[0];
+
+      if (logo.type === 'image' && logo.dataUrl) {
+        preview.className = 'w-28 h-28 aspect-square rounded-2xl bg-white flex items-center justify-center shadow-lg overflow-hidden border-2 border-indigo-300';
+        preview.innerHTML = `<img src="${logo.dataUrl}" alt="Custom 1:1 Logo" class="w-full h-full aspect-square object-cover" />`;
+        if (controlsBox) controlsBox.classList.remove('hidden');
+
+        const fit = logo.fit === 'contain' ? 'contain' : 'cover';
+        if (btnCover && btnContain) {
+          btnCover.className = fit === 'cover'
+            ? 'px-2.5 py-1 rounded-lg bg-indigo-600 text-white transition'
+            : 'px-2.5 py-1 rounded-lg text-slate-600 hover:bg-slate-100 transition';
+          btnContain.className = fit === 'contain'
+            ? 'px-2.5 py-1 rounded-lg bg-indigo-600 text-white transition'
+            : 'px-2.5 py-1 rounded-lg text-slate-600 hover:bg-slate-100 transition';
+        }
+        const z = Number(logo.zoom) || 1;
+        if (zoomSlider) zoomSlider.value = String(z);
+        if (zoomValEl) zoomValEl.textContent = `${z.toFixed(1)}x`;
+      } else {
+        preview.className = `w-28 h-28 aspect-square rounded-2xl bg-gradient-to-br ${colorObj.grad} text-white flex items-center justify-center shadow-lg overflow-hidden border-2 border-slate-200 text-4xl`;
+        preview.innerHTML = `<i class="${logo.icon || 'fa-solid fa-chair'}"></i>`;
+        if (controlsBox) controlsBox.classList.add('hidden');
+      }
+
+      // Render Icon Presets
+      const iconsGrid = document.getElementById('logo-preset-icons-grid');
+      iconsGrid.innerHTML = LOGO_ICON_PRESETS.map(item => {
+        const isSelected = logo.type === 'icon' && logo.icon === item.cls;
+        return `
+          <button
+            type="button"
+            onclick="selectPresetLogoIcon('${item.cls}')"
+            class="h-12 aspect-square mx-auto w-full rounded-xl border-2 flex items-center justify-center text-lg transition ${
+              isSelected
+                ? 'border-indigo-600 bg-indigo-50 text-indigo-700 shadow-xs'
+                : 'border-slate-200 hover:border-indigo-300 bg-white text-slate-600'
+            }"
+            title="${item.label}"
+          >
+            <i class="${item.cls}"></i>
+          </button>
+        `;
+      }).join('');
+
+      // Render Color Swatches
+      const colorsGrid = document.getElementById('logo-preset-colors-grid');
+      colorsGrid.innerHTML = LOGO_COLOR_PRESETS.map(c => {
+        const isSelected = logo.type === 'icon' && logo.colorId === c.id;
+        return `
+          <button
+            type="button"
+            onclick="selectPresetLogoColor('${c.id}')"
+            class="h-10 rounded-xl bg-gradient-to-br ${c.grad} transition flex items-center justify-center text-white ${
+              isSelected ? 'ring-2 ring-offset-2 ring-indigo-600 scale-105' : 'opacity-85 hover:opacity-100'
+            }"
+            title="${c.label}"
+          >
+            ${isSelected ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectPresetLogoIcon(iconCls) {
+      pendingRawLogoImage = null;
+      const curr = getCurrentCustomLogo();
+      playTone(620, 0.04, 'sine', 0.05);
+      saveCustomLogo({ ...curr, type: 'icon', icon: iconCls }, 'เปลี่ยนไอคอนโลโก้ 1:1 เรียบร้อยแล้ว');
+    }
+
+    function selectPresetLogoColor(colorId) {
+      pendingRawLogoImage = null;
+      const curr = getCurrentCustomLogo();
+      playTone(580, 0.04, 'sine', 0.05);
+      saveCustomLogo({ ...curr, type: 'icon', colorId }, 'เปลี่ยนสีพื้นหลังโลโก้เรียบร้อยแล้ว');
+    }
+
+    // Strict 1:1 Square (256x256) Canvas Renderer (supports both 'cover' center-crop & 'contain' square-pad + zoom)
+    function renderImageToSquareLogoDataUrl(img, fit = 'cover', zoom = 1, size = 256) {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, size, size);
+
+      const srcW = img.naturalWidth || img.width || size;
+      const srcH = img.naturalHeight || img.height || size;
+      const safeZoom = Math.max(1, Math.min(2.5, Number(zoom) || 1));
+
+      if (fit === 'contain') {
+        // Fit entire image inside 1:1 square canvas with slight breathing room, scaled by zoom
+        const baseScale = (size * 0.92) / Math.max(srcW, srcH);
+        const drawW = srcW * baseScale * safeZoom;
+        const drawH = srcH * baseScale * safeZoom;
+        const dx = (size - drawW) / 2;
+        const dy = (size - drawH) / 2;
+        ctx.drawImage(img, dx, dy, drawW, drawH);
+      } else {
+        // Strict 1:1 center-crop ('cover') scaled by zoom
+        const baseScale = size / Math.min(srcW, srcH);
+        const drawW = srcW * baseScale * safeZoom;
+        const drawH = srcH * baseScale * safeZoom;
+        const dx = (size - drawW) / 2;
+        const dy = (size - drawH) / 2;
+        ctx.drawImage(img, dx, dy, drawW, drawH);
+      }
+
+      return canvas.toDataURL('image/png');
+    }
+
+    function reprocessSquareLogoFromSource(fit, zoom, notifyMsg = '') {
+      const curr = getCurrentCustomLogo();
+      const applyWithImg = (img) => {
+        const squareDataUrl = renderImageToSquareLogoDataUrl(img, fit, zoom, 256);
+        saveCustomLogo({ ...curr, type: 'image', dataUrl: squareDataUrl, fit, zoom }, notifyMsg);
+      };
+
+      if (pendingRawLogoImage) {
+        applyWithImg(pendingRawLogoImage);
+      } else if (curr.dataUrl) {
+        const img = new Image();
+        img.onload = () => {
+          pendingRawLogoImage = img;
+          applyWithImg(img);
+        };
+        img.src = curr.dataUrl;
+      }
+    }
+
+    function setCustomLogoFit(fitMode) {
+      const curr = getCurrentCustomLogo();
+      if (curr.type !== 'image') return;
+      reprocessSquareLogoFromSource(fitMode, curr.zoom || 1);
+    }
+
+    function updateCustomLogoZoom(zoomVal) {
+      const z = parseFloat(zoomVal) || 1;
+      const zoomValEl = document.getElementById('logo-zoom-value');
+      if (zoomValEl) zoomValEl.textContent = `${z.toFixed(1)}x`;
+      const curr = getCurrentCustomLogo();
+      if (curr.type !== 'image') return;
+      reprocessSquareLogoFromSource(curr.fit || 'cover', z);
+    }
+
+    function handleCustomLogoUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      event.target.value = '';
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          pendingRawLogoImage = img;
+          const curr = getCurrentCustomLogo();
+          const fit = curr.fit === 'contain' ? 'contain' : 'cover';
+          const squareDataUrl = renderImageToSquareLogoDataUrl(img, fit, 1, 256);
+          playSuccessChime();
+          saveCustomLogo(
+            { ...curr, type: 'image', dataUrl: squareDataUrl, fit, zoom: 1 },
+            'อัปโหลดโลโก้สัดส่วน 1:1 เรียบร้อยแล้ว! ✨'
+          );
+        };
+        img.onerror = () => {
+          showToast('ไม่สามารถอ่านไฟล์รูปโลโก้นี้ได้ กรุณาลองไฟล์ PNG/JPG อื่นครับ', 'amber');
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function confirmResetCustomLogo() {
+      showConfirmDialog({
+        title: 'คืนค่าโลโก้เริ่มต้น?',
+        message: 'ต้องการลบโลโก้ 1:1 ที่กำหนดเองและกลับไปใช้ไอคอนที่นั่งเริ่มต้นใช่หรือไม่?',
+        confirmText: 'คืนค่าเดิม',
+        iconClass: 'fa-solid fa-rotate-left',
+        onConfirm: () => {
+          pendingRawLogoImage = null;
+          localStorage.removeItem(CUSTOM_LOGO_STORAGE_KEY);
+          delete multiClassStore.customLogo;
+          applySavedCustomLogo();
+          if (!document.getElementById('logo-modal').classList.contains('hidden')) {
+            renderLogoModalContent();
+          }
+          saveState();
+          showToast('คืนค่าไอคอนที่นั่งเริ่มต้นเรียบร้อยแล้ว', 'slate');
+        }
+      });
     }
 
     /*************************************************************************

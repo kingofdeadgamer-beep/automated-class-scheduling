@@ -40,6 +40,39 @@
       height: var(--st-btn-size) !important;
       min-width: var(--st-btn-size);
       min-height: var(--st-btn-size);
+      aspect-ratio: 1 / 1;
+    }
+
+    /* Optimized Landscape Layout for Phones, Tablets & Desktops */
+    @media (orientation: landscape) and (min-width: 600px) {
+      #st-header-inner {
+        max-width: 68rem !important;
+      }
+      #st-main-grid {
+        max-width: 68rem !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 1rem !important;
+        align-items: start !important;
+      }
+      #st-main-grid > section {
+        margin-top: 0 !important;
+      }
+    }
+    @media (orientation: landscape) and (max-height: 540px) {
+      header .ui-icon-btn {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+      }
+      header .ui-icon-btn i {
+        font-size: 0.92rem !important;
+      }
+      #st-main-grid {
+        padding: 0.65rem !important;
+        gap: 0.65rem !important;
+      }
     }
     .ui-icon-btn i {
       font-size: var(--st-icon-size) !important;
@@ -104,9 +137,14 @@
 
   <!-- ================= TOP STUDENT NAVBAR ================= -->
   <header class="bg-gradient-to-r from-sky-600 via-indigo-600 to-violet-600 text-white sticky top-0 z-30 shadow-md">
-    <div class="max-w-xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2.5 min-w-0">
-        <div class="ui-icon-btn rounded-2xl bg-white/15 flex items-center justify-center text-base font-extrabold shrink-0">
+    <div id="st-header-inner" class="max-w-xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2 transition-all">
+      <div class="flex items-center gap-2 min-w-0">
+        <div
+          id="st-brand-logo-slot"
+          class="hidden ui-icon-btn aspect-square rounded-2xl bg-white/95 border border-white/40 overflow-hidden items-center justify-center shrink-0 shadow-xs"
+          title="โลโก้ห้องเรียน (1:1)"
+        ></div>
+        <div class="ui-icon-btn aspect-square rounded-2xl bg-white/15 flex items-center justify-center text-base font-extrabold shrink-0">
           #<span id="nav-st-number">1</span>
         </div>
         <div class="min-w-0">
@@ -159,7 +197,7 @@
   </header>
 
   <!-- ================= MAIN STUDENT WORKSPACE ================= -->
-  <main class="max-w-xl w-full mx-auto p-4 space-y-4 flex-1 pb-12">
+  <main id="st-main-grid" class="max-w-xl w-full mx-auto p-4 space-y-4 flex-1 pb-12 transition-all">
 
     <!-- 1. LIVE QR CODE SCANNER & CLASSROOM CONNECTION -->
     <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200 space-y-3">
@@ -396,6 +434,7 @@
 
       applyStudentTheme(localStorage.getItem(THEME_STORAGE_KEY) || 'light');
       applyStudentIconSize(localStorage.getItem(ICON_SIZE_STORAGE_KEY) || 'lg');
+      applyStudentBrandLogo();
 
       document.getElementById('nav-st-number').textContent = studentUser.number || '-';
       document.getElementById('nav-st-name').textContent = `${studentUser.fullname}${studentUser.nickname ? ` (${studentUser.nickname})` : ''}`;
@@ -419,6 +458,22 @@
     /*************************************************************************
      * 1. THEME, ICON SIZE & LOGOUT CONFIRMATION
      *************************************************************************/
+
+    function applyStudentBrandLogo() {
+      const slot = document.getElementById('st-brand-logo-slot');
+      if (!slot) return;
+      try {
+        const raw = localStorage.getItem('SMART_SEATING_CUSTOM_LOGO_V1');
+        if (!raw) return;
+        const logo = JSON.parse(raw);
+        if (logo && logo.type === 'image' && logo.dataUrl) {
+          slot.innerHTML = `<img src="${logo.dataUrl}" alt="Logo" class="w-full h-full aspect-square object-cover" />`;
+          slot.classList.remove('hidden');
+          slot.classList.add('flex');
+        }
+      } catch (e) {}
+    }
+
     function applyStudentTheme(mode) {
       const icon = document.getElementById('st-theme-icon');
       if (mode === 'dark') {
