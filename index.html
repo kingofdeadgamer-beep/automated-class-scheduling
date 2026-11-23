@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ระบบจัดผังที่นั่งนักเรียนอัจฉริยะ | Smart Seating Chart</title>
+  <!-- Browser Tab Logo (Favicon): แสดงอัตโนมัติ หรือวางไฟล์ favicon.png ในโฟลเดอร์โปรเจกต์ -->
+  <link id="app-favicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%234f46e5%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%237c3aed%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22url%28%23g%29%22/%3E%3Cpath%20d%3D%22M21%2017h22a3%203%200%200%201%203%203v12H18V20a3%203%200%200%201%203-3zm-5%2017h32a3%203%200%200%201%203%203v4a2%202%200%200%201-2%202h-3v8a2%202%200%200%201-4%200v-8H22v8a2%202%200%200%201-4%200v-8h-3a2%202%200%200%201-2-2v-4a3%203%200%200%201%203-3z%22%20fill%3D%22%23ffffff%22/%3E%3C/svg%3E" />
+  <link id="app-apple-icon" rel="apple-touch-icon" href="./favicon.png" />
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script><script src="config.js"></script>
 <script src="auth.js"></script>
@@ -2347,6 +2350,14 @@
             </button>
             <button
               type="button"
+              onclick="downloadCurrentLogoAsFavicon()"
+              class="py-2.5 px-3 rounded-xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center gap-1 transition"
+              title="ดาวน์โหลดเป็นไฟล์ favicon.png เพื่อนำไปวางในโฟลเดอร์เว็บ (แสดงบนแท็บเบราว์เซอร์ทุกคน)"
+            >
+              <i class="fa-solid fa-download"></i> favicon.png
+            </button>
+            <button
+              type="button"
               onclick="confirmResetCustomLogo()"
               class="py-2.5 px-3 rounded-xl border border-rose-200 hover:bg-rose-50 text-rose-600 text-xs font-bold flex items-center justify-center gap-1 transition"
               title="คืนค่าเป็นไอคอนที่นั่งเริ่มต้น"
@@ -2354,6 +2365,9 @@
               <i class="fa-solid fa-rotate-left"></i> คืนค่าเดิม
             </button>
           </div>
+          <p class="text-[11px] text-slate-500 text-center">
+            * โลโก้ที่อัปโหลดจะเปลี่ยนทั้งไอคอนมุมซ้ายบนและ<strong>โลโก้บนแท็บเบราว์เซอร์</strong>ให้อัตโนมัติ
+          </p>
         </div>
 
         <!-- Preset Icons Picker -->
@@ -7428,6 +7442,99 @@
         btn.className = `ui-icon-btn aspect-square rounded-xl bg-gradient-to-br ${colorObj.grad} flex items-center justify-center text-white shadow-sm shrink-0 relative overflow-hidden group cursor-pointer transition hover:ring-2 hover:ring-indigo-400 active:scale-95`;
         content.innerHTML = `<i class="${logo.icon || 'fa-solid fa-chair'}"></i>`;
       }
+      applyBrowserTabFavicon(logo);
+    }
+
+    // --- BROWSER TAB LOGO (FAVICON) CONTROLLER ---
+    const DEFAULT_TAB_FAVICON_URI = 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%234f46e5%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%237c3aed%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22url%28%23g%29%22/%3E%3Cpath%20d%3D%22M21%2017h22a3%203%200%200%201%203%203v12H18V20a3%203%200%200%201%203-3zm-5%2017h32a3%203%200%200%201%203%203v4a2%202%200%200%201-2%202h-3v8a2%202%200%200%201-4%200v-8H22v8a2%202%200%200%201-4%200v-8h-3a2%202%200%200%201-2-2v-4a3%203%200%200%201%203-3z%22%20fill%3D%22%23ffffff%22/%3E%3C/svg%3E';
+    const FAVICON_COLOR_HEX = {
+      indigo:  ['#4f46e5', '#7c3aed'],
+      sky:     ['#0ea5e9', '#0891b2'],
+      emerald: ['#10b981', '#0d9488'],
+      amber:   ['#f59e0b', '#ea580c'],
+      rose:    ['#ec4899', '#e11d48'],
+      slate:   ['#334155', '#0f172a']
+    };
+
+    function buildColorSvgFaviconUri(colorId) {
+      const pair = FAVICON_COLOR_HEX[colorId] || FAVICON_COLOR_HEX.indigo;
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${pair[0]}"/><stop offset="100%" stop-color="${pair[1]}"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#g)"/><path d="M21 17h22a3 3 0 0 1 3 3v12H18V20a3 3 0 0 1 3-3zm-5 17h32a3 3 0 0 1 3 3v4a2 2 0 0 1-2 2h-3v8a2 2 0 0 1-4 0v-8H22v8a2 2 0 0 1-4 0v-8h-3a2 2 0 0 1-2-2v-4a3 3 0 0 1 3-3z" fill="#ffffff"/></svg>`;
+      return 'data:image/svg+xml,' + encodeURIComponent(svg);
+    }
+
+    function setBrowserTabFavicon(href, mimeType = 'image/png') {
+      let link = document.getElementById('app-favicon') || document.querySelector('link[rel~="icon"]');
+      if (!link) {
+        link = document.createElement('link');
+        link.id = 'app-favicon';
+        link.rel = 'icon';
+        document.head.appendChild(link);
+      }
+      link.type = mimeType;
+      link.href = href;
+
+      const apple = document.getElementById('app-apple-icon');
+      if (apple && mimeType === 'image/png') {
+        apple.href = href;
+      }
+    }
+
+    function applyBrowserTabFavicon(logoOverride = null) {
+      try {
+        let logo = logoOverride;
+        if (!logo) {
+          const raw = localStorage.getItem('SMART_SEATING_CUSTOM_LOGO_V1');
+          if (raw) logo = JSON.parse(raw);
+        }
+
+        // 1. If user uploaded a custom 1:1 logo image, apply it directly to the browser tab!
+        if (logo && logo.type === 'image' && logo.dataUrl) {
+          setBrowserTabFavicon(logo.dataUrl, 'image/png');
+          return;
+        }
+
+        // 2. Otherwise check if a static ./favicon.png file exists in the project folder
+        const probe = new Image();
+        probe.onload = () => setBrowserTabFavicon('./favicon.png', 'image/png');
+        probe.onerror = () => {
+          const colorId = (logo && logo.colorId) ? logo.colorId : 'indigo';
+          setBrowserTabFavicon(buildColorSvgFaviconUri(colorId), 'image/svg+xml');
+        };
+        probe.src = './favicon.png';
+      } catch (e) {
+        setBrowserTabFavicon(DEFAULT_TAB_FAVICON_URI, 'image/svg+xml');
+      }
+    }
+
+    function downloadCurrentLogoAsFavicon() {
+      const logo = getCurrentCustomLogo();
+      const triggerDownload = (href) => {
+        const a = document.createElement('a');
+        a.href = href;
+        a.download = 'favicon.png';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        showToast('ดาวน์โหลดไฟล์ favicon.png เรียบร้อย! นำไปวางไว้ข้าง index.html ได้เลยครับ 📥', 'emerald');
+      };
+
+      if (logo.type === 'image' && logo.dataUrl) {
+        triggerDownload(logo.dataUrl);
+        return;
+      }
+
+      // Convert SVG preset icon into 128x128 PNG favicon
+      const svgUri = buildColorSvgFaviconUri(logo.colorId || 'indigo');
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 128;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, 128, 128);
+        triggerDownload(canvas.toDataURL('image/png'));
+      };
+      img.src = svgUri;
     }
 
     function openLogoModal() {
