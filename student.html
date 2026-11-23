@@ -23,10 +23,10 @@
   </script>
   <!-- Config -->
   <script src="config.js"></script>
-  <!-- Fallback Google Font: Niramit (used if local TH Niramit AS .ttf files are not present) -->
+  <!-- Google Fonts (Fallbacks & Optional Web Fonts) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Niramit:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Mali:wght@400;500;600;700&family=Niramit:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Prompt:wght@300;400;500;600;700&family=Sarabun:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <!-- HTML5-QRCode (Camera QR Scanner + Image QR Decoder) -->
@@ -35,7 +35,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 
   <style>
-    /* ================= CUSTOM FONT: TH NIRAMIT AS ================= */
+    /* ================= CUSTOM UPLOADED FONTS ================= */
     @font-face {
       font-family: 'TH Niramit AS';
       src:
@@ -81,8 +81,347 @@
       size-adjust: 122%;
     }
 
+    @font-face {
+      font-family: 'TH Sarabun PSK';
+      src:
+        url('./fonts/THSarabun.ttf') format('truetype'),
+        url('./THSarabun.ttf') format('truetype'),
+        local('TH SarabunPSK'),
+        local('TH Sarabun New');
+      font-weight: 100 500;
+      font-style: normal;
+      font-display: swap;
+      size-adjust: 122%;
+    }
+    @font-face {
+      font-family: 'TH Sarabun PSK';
+      src:
+        url('./fonts/THSarabun%20Italic.ttf') format('truetype'),
+        url('./THSarabun%20Italic.ttf') format('truetype'),
+        local('TH SarabunPSK Italic');
+      font-weight: 100 500;
+      font-style: italic;
+      font-display: swap;
+      size-adjust: 122%;
+    }
+    @font-face {
+      font-family: 'TH Sarabun PSK';
+      src:
+        url('./fonts/THSarabun%20Bold.ttf') format('truetype'),
+        url('./THSarabun%20Bold.ttf') format('truetype'),
+        local('TH SarabunPSK Bold');
+      font-weight: 600 900;
+      font-style: normal;
+      font-display: swap;
+      size-adjust: 122%;
+    }
+    @font-face {
+      font-family: 'TH Sarabun PSK';
+      src:
+        url('./fonts/THSarabun%20Bold%20Italic.ttf') format('truetype'),
+        url('./THSarabun%20Bold%20Italic.ttf') format('truetype'),
+        local('TH SarabunPSK Bold Italic');
+      font-weight: 600 900;
+      font-style: italic;
+      font-display: swap;
+      size-adjust: 122%;
+    }
+
+    @font-face {
+      font-family: 'JaoHalloween';
+      src:
+        url('./fonts/%E0%B8%AA%E0%B8%B3%E0%B9%80%E0%B8%99%E0%B8%B2%E0%B8%82%E0%B8%AD%E0%B8%87%20JaoHalloween%20Bold.ttf') format('truetype'),
+        url('./fonts/JaoHalloween%20Bold.ttf') format('truetype'),
+        url('./%E0%B8%AA%E0%B8%B3%E0%B9%80%E0%B8%99%E0%B8%B2%E0%B8%82%E0%B8%AD%E0%B8%87%20JaoHalloween%20Bold.ttf') format('truetype'),
+        url('./JaoHalloween%20Bold.ttf') format('truetype'),
+        local('JaoHalloween Bold'),
+        local('JaoHalloween');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+      size-adjust: 112%;
+      ascent-override: 95%;
+      descent-override: 25%;
+    }
+
+    @font-face {
+      font-family: 'Royal Institute of Siam New';
+      src:
+        url('./fonts/Royal-Institute-of-Siam-New.ttf') format('truetype'),
+        url('./Royal-Institute-of-Siam-New.ttf') format('truetype'),
+        local('Royal Institute of Siam New');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+      size-adjust: 105%;
+    }
+
+    :root {
+      --app-font-family: var(--app-font-family);
+      --app-accent: #4f46e5;
+      --app-accent-2: #7c3aed;
+      --app-accent-soft: #eef2ff;
+      --app-accent-border: #c7d2fe;
+      --app-accent-text: #3730a3;
+    }
+
     html, body, button, input, select, textarea {
-      font-family: 'TH Niramit AS', 'Niramit', sans-serif;
+      font-family: var(--app-font-family) !important;
+    }
+    .fa-solid, .fa-regular, .fa-brands, .fas, .far, .fab {
+      font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands' !important;
+    }
+
+    /* ================= CUSTOM BACKGROUND IMAGE & GLASS SURFACE SYSTEM ================= */
+    #app-bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+      display: none;
+    }
+    body.has-custom-bg #app-bg-layer {
+      display: block;
+    }
+    body.has-custom-bg {
+      background-color: transparent !important;
+      background-image: none !important;
+    }
+    #app-bg-image {
+      position: absolute;
+      inset: -18px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      transition: filter 0.25s ease;
+    }
+    #app-bg-overlay {
+      position: absolute;
+      inset: 0;
+      transition: background-color 0.25s ease;
+    }
+
+    /* Frosted glass transparency so custom background shines cleanly while keeping high readability */
+    body.has-custom-bg.bg-glass-mode header,
+    body.has-custom-bg.bg-glass-mode aside,
+    body.has-custom-bg.bg-glass-mode #config-toolbar,
+    body.has-custom-bg.bg-glass-mode #chart-container {
+      background-color: rgba(255, 255, 255, 0.84) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    body.dark-theme.has-custom-bg.bg-glass-mode header,
+    body.dark-theme.has-custom-bg.bg-glass-mode aside,
+    body.dark-theme.has-custom-bg.bg-glass-mode #config-toolbar,
+    body.dark-theme.has-custom-bg.bg-glass-mode #chart-container {
+      background-color: rgba(15, 23, 42, 0.82) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* Custom Theme Accent Application */
+    body.has-custom-accent #classroom-selector {
+      border-color: var(--app-accent-border) !important;
+    }
+    body.has-custom-accent #btn-add-classroom,
+    body.has-custom-accent .preset-btn.is-active-preset,
+    body.has-custom-accent #size-btn-auto.is-active-size,
+    body.has-custom-accent #size-btn-xs.is-active-size,
+    body.has-custom-accent #size-btn-sm.is-active-size,
+    body.has-custom-accent #size-btn-md.is-active-size,
+    body.has-custom-accent #btn-save-student-count {
+      background: linear-gradient(135deg, var(--app-accent), var(--app-accent-2)) !important;
+      border-color: var(--app-accent) !important;
+      color: #ffffff !important;
+    }
+    body.has-custom-accent #ui-icon-size-badge {
+      background-color: var(--app-accent) !important;
+    }
+    body.has-custom-accent header {
+      border-bottom-color: var(--app-accent-border) !important;
+    }
+    body.has-custom-accent #settings-modal-header {
+      background: linear-gradient(135deg, var(--app-accent), var(--app-accent-2)) !important;
+    }
+
+    /* ================= HIGH-CONTRAST SIDEBAR STAT CARDS (0.5 CM ICON-NUMBER GAP) ================= */
+    .stat-pill-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 19px; /* ~0.5 cm spacing between icon and number */
+      padding: 10px 6px;
+      border-radius: 0.85rem;
+      border-width: 1.5px;
+      transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .stat-pill-card:hover {
+      transform: translateY(-1px);
+    }
+    .stat-pill-icon {
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+    .stat-pill-val {
+      font-size: 0.92rem;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0.01em;
+    }
+
+    /* Light Mode Stat Cards */
+    .stat-pill-seated     { background-color: #eef2ff; border-color: #a5b4fc; }
+    .stat-pill-seated .stat-pill-icon { color: #4338ca; }
+    .stat-pill-seated .stat-pill-val  { color: #1e1b4b; }
+
+    .stat-pill-unassigned { background-color: #f8fafc; border-color: #cbd5e1; }
+    .stat-pill-unassigned .stat-pill-icon { color: #d97706; }
+    .stat-pill-unassigned .stat-pill-val  { color: #0f172a; }
+
+    .stat-pill-present    { background-color: #ecfdf5; border-color: #6ee7b7; }
+    .stat-pill-present .stat-pill-icon { color: #059669; }
+    .stat-pill-present .stat-pill-val  { color: #064e3b; }
+
+    .stat-pill-task       { background-color: #fffbeb; border-color: #fcd34d; }
+    .stat-pill-task .stat-pill-icon { color: #d97706; }
+    .stat-pill-task .stat-pill-val  { color: #78350f; }
+
+    /* Dark Mode High-Contrast Stat Cards */
+    body.dark-theme .stat-pill-seated     { background-color: #1e293b !important; border-color: #818cf8 !important; }
+    body.dark-theme .stat-pill-seated .stat-pill-icon { color: #a5b4fc !important; }
+    body.dark-theme .stat-pill-seated .stat-pill-val  { color: #ffffff !important; }
+
+    body.dark-theme .stat-pill-unassigned { background-color: #1e293b !important; border-color: #fbbf24 !important; }
+    body.dark-theme .stat-pill-unassigned .stat-pill-icon { color: #fcd34d !important; }
+    body.dark-theme .stat-pill-unassigned .stat-pill-val  { color: #fef3c7 !important; }
+
+    body.dark-theme .stat-pill-present    { background-color: #064e3b !important; border-color: #34d399 !important; }
+    body.dark-theme .stat-pill-present .stat-pill-icon { color: #6ee7b7 !important; }
+    body.dark-theme .stat-pill-present .stat-pill-val  { color: #ffffff !important; }
+
+    body.dark-theme .stat-pill-task       { background-color: #451a03 !important; border-color: #f59e0b !important; }
+    body.dark-theme .stat-pill-task .stat-pill-icon { color: #fde047 !important; }
+    body.dark-theme .stat-pill-task .stat-pill-val  { color: #ffffff !important; }
+
+    /* ================= MOBILE HEADER & ICON FIT OPTIMIZATION ================= */
+    @media (max-width: 1023px) {
+      header .header-inner-wrap {
+        flex-wrap: wrap !important;
+        padding-top: 0.4rem !important;
+        padding-bottom: 0.4rem !important;
+        gap: 0.4rem !important;
+      }
+      header .header-left-group {
+        width: 100% !important;
+        justify-content: space-between;
+      }
+      header #classroom-selector {
+        flex: 1 1 auto !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        height: 38px !important;
+      }
+      header #header-right-controls {
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: space-between !important;
+        overflow-x: visible !important;
+        gap: 6px !important;
+        padding-top: 4px !important;
+        padding-bottom: 2px !important;
+        border-top: 1px solid rgba(148, 163, 184, 0.22);
+      }
+      header #header-right-controls .header-divider {
+        display: none !important;
+      }
+    }
+    @media (max-width: 639px) {
+      header .ui-icon-btn {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        min-height: 36px !important;
+      }
+      header .ui-icon-btn i {
+        font-size: 0.95rem !important;
+      }
+      header #header-right-controls {
+        display: grid !important;
+        grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+        gap: 6px !important;
+        justify-items: center !important;
+      }
+      #config-toolbar .ui-tb-btn {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+      }
+      #chart-container {
+        padding: 0.5rem !important;
+      }
+    }
+
+    /* Mobile Navbar Compact Icon Fit & Dark Mode Contrast Polish */
+    @media (max-width: 440px) {
+      #st-header-inner .ui-icon-btn {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+      }
+      #st-header-inner .ui-icon-btn i {
+        font-size: 0.92rem !important;
+      }
+    }
+    body.has-custom-bg.bg-glass-mode section {
+      background-color: rgba(255, 255, 255, 0.86) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    body.dark-theme.has-custom-bg.bg-glass-mode section {
+      background-color: rgba(15, 23, 42, 0.84) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    body.dark-theme .bg-emerald-50 {
+      background-color: #064e3b !important;
+      border-color: #34d399 !important;
+      color: #ecfdf5 !important;
+    }
+    body.dark-theme .text-emerald-800,
+    body.dark-theme .text-emerald-900 {
+      color: #a7f3d0 !important;
+    }
+    body.dark-theme .bg-amber-100 {
+      background-color: #78350f !important;
+      border-color: #f59e0b !important;
+      color: #fef3c7 !important;
+    }
+    body.dark-theme .text-amber-800,
+    body.dark-theme .text-amber-900 {
+      color: #fde68a !important;
+    }
+    body.dark-theme .bg-indigo-100 {
+      background-color: #312e81 !important;
+      border-color: #818cf8 !important;
+      color: #e0e7ff !important;
+    }
+    body.dark-theme .text-indigo-800 {
+      color: #c7d2fe !important;
+    }
+    body.dark-theme .bg-rose-100,
+    body.dark-theme .bg-rose-50 {
+      background-color: #4c0519 !important;
+      border-color: #fb7185 !important;
+      color: #ffe4e6 !important;
+    }
+    body.dark-theme .bg-sky-100 {
+      background-color: #0c4a6e !important;
+      color: #bae6fd !important;
     }
 
     :root {
@@ -203,7 +542,7 @@
 <body class="min-h-screen flex flex-col icon-size-lg">
 
   <!-- ================= TOP STUDENT NAVBAR ================= -->
-  <header class="bg-gradient-to-r from-sky-600 via-indigo-600 to-violet-600 text-white sticky top-0 z-30 shadow-md">
+  <header id="student-top-header" class="bg-gradient-to-r from-sky-600 via-indigo-600 to-violet-600 text-white sticky top-0 z-30 shadow-md">
     <div id="st-header-inner" class="max-w-xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2 transition-all">
       <div class="flex items-center gap-2 min-w-0">
         <div
@@ -240,6 +579,15 @@
         >
           <i class="fa-solid fa-magnifying-glass-plus"></i>
           <span id="st-icon-size-badge" class="absolute -bottom-1 -right-1 px-1 h-4 rounded-full bg-slate-900 text-sky-200 text-[9px] font-extrabold flex items-center justify-center leading-none">L</span>
+        </button>
+
+        <button
+          type="button"
+          onclick="openSettingsModal()"
+          class="ui-icon-btn rounded-xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition"
+          title="ตั้งค่าฟอนต์ ขนาดตัวอักษร สีธีม และภาพพื้นหลัง"
+        >
+          <i class="fa-solid fa-gear"></i>
         </button>
 
         <button
@@ -486,6 +834,250 @@
   <!-- Hidden div for file-based QR scanning -->
   <div id="qr-file-temp" class="hidden"></div>
 
+  <!-- ================= MODAL 14: APPEARANCE & SETTINGS PAGE ================= -->
+  <div id="settings-modal" class="fixed inset-0 bg-slate-900/75 backdrop-blur-sm z-[110] hidden items-center justify-center p-2.5 sm:p-4 no-print">
+    <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden animate-shuffle flex flex-col max-h-[92vh]">
+      <!-- Header -->
+      <div id="settings-modal-header" class="p-4 sm:p-5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-10 h-10 rounded-2xl bg-white/15 flex items-center justify-center text-lg shrink-0">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <div class="min-w-0">
+            <h3 class="font-extrabold text-base sm:text-lg truncate">ตั้งค่าการแสดงผลและธีม (Settings)</h3>
+            <p class="text-xs text-white/85 truncate">ปรับฟอนต์ ขนาดตัวอักษร โทนสี UI และภาพพื้นหลังตามต้องการ</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeSettingsModal()" class="w-9 h-9 rounded-xl bg-white/15 hover:bg-white/25 flex items-center justify-center shrink-0 transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Scrollable Settings Content -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-5">
+
+        <!-- SECTION 1: FONT FAMILY SELECTOR -->
+        <section class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-font text-indigo-600"></i>
+              <span>1. เลือกแบบอักษร (Font Family)</span>
+            </h4>
+            <span id="settings-current-font-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800">TH Niramit AS</span>
+          </div>
+          <div id="settings-font-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <!-- Populated via JS -->
+          </div>
+        </section>
+
+        <!-- SECTION 2: FONT SIZE ADJUSTMENT -->
+        <section class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-text-height text-indigo-600"></i>
+              <span>2. ปรับขนาดตัวอักษร (Font Size)</span>
+            </h4>
+            <span id="settings-font-size-value" class="text-xs font-extrabold px-2.5 py-0.5 rounded-lg bg-indigo-600 text-white">100%</span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold text-slate-500">ก</span>
+            <input
+              type="range"
+              id="settings-font-size-slider"
+              min="85"
+              max="130"
+              step="5"
+              value="100"
+              oninput="setAppearanceFontSize(this.value)"
+              class="flex-1 accent-indigo-600 cursor-pointer"
+            />
+            <span class="text-lg font-extrabold text-slate-700">ก</span>
+          </div>
+
+          <div class="grid grid-cols-4 gap-1.5">
+            <button type="button" onclick="setAppearanceFontSize(90)" data-fsize="90" class="settings-fsize-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-700 hover:border-indigo-400 transition">เล็ก (90%)</button>
+            <button type="button" onclick="setAppearanceFontSize(100)" data-fsize="100" class="settings-fsize-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-700 hover:border-indigo-400 transition">ปกติ (100%)</button>
+            <button type="button" onclick="setAppearanceFontSize(115)" data-fsize="115" class="settings-fsize-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-700 hover:border-indigo-400 transition">ใหญ่ (115%)</button>
+            <button type="button" onclick="setAppearanceFontSize(125)" data-fsize="125" class="settings-fsize-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-700 hover:border-indigo-400 transition">ใหญ่มาก (125%)</button>
+          </div>
+        </section>
+
+        <!-- SECTION 3: UI COLOR THEME -->
+        <section class="space-y-3">
+          <h4 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-palette text-indigo-600"></i>
+            <span>3. ปรับแต่งธีมสี UI (Color Theme)</span>
+          </h4>
+
+          <!-- Light / Dark Base Switcher -->
+          <div class="grid grid-cols-2 gap-2.5">
+            <button
+              type="button"
+              id="settings-mode-light"
+              onclick="setAppearanceDarkMode(false)"
+              class="p-3 rounded-2xl border-2 border-indigo-600 bg-slate-50 flex items-center justify-center gap-2 text-xs sm:text-sm font-extrabold text-slate-800 transition"
+            >
+              <i class="fa-solid fa-sun text-amber-500 text-base"></i> โหมดสว่าง (Light)
+            </button>
+            <button
+              type="button"
+              id="settings-mode-dark"
+              onclick="setAppearanceDarkMode(true)"
+              class="p-3 rounded-2xl border-2 border-slate-200 bg-slate-900 text-white flex items-center justify-center gap-2 text-xs sm:text-sm font-extrabold transition"
+            >
+              <i class="fa-solid fa-moon text-amber-300 text-base"></i> โหมดมืด (Dark)
+            </button>
+          </div>
+
+          <!-- Accent Color Palette + Custom Hex Picker -->
+          <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold text-slate-700">เลือกสีหลักของระบบ (Accent Color):</span>
+              <label class="inline-flex items-center gap-2 text-xs font-bold text-indigo-700 cursor-pointer bg-white px-2.5 py-1 rounded-xl border border-slate-300 hover:border-indigo-400">
+                <i class="fa-solid fa-eye-dropper"></i>
+                <span>เลือกสีเอง</span>
+                <input
+                  type="color"
+                  id="settings-custom-color-picker"
+                  value="#4f46e5"
+                  oninput="setAppearanceCustomAccent(this.value)"
+                  class="w-6 h-6 rounded border-0 p-0 cursor-pointer bg-transparent"
+                />
+              </label>
+            </div>
+            <div id="settings-accent-grid" class="grid grid-cols-4 sm:grid-cols-8 gap-2">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4: CUSTOM BACKGROUND IMAGE -->
+        <section class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <h4 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-image text-indigo-600"></i>
+              <span>4. ภาพพื้นหลังแบบกำหนดเอง (Custom Background)</span>
+            </h4>
+            <button
+              type="button"
+              id="settings-btn-remove-bg"
+              onclick="clearAppearanceBackground()"
+              class="hidden px-2.5 py-1 rounded-lg border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-700 text-[11px] font-bold transition"
+            >
+              <i class="fa-solid fa-trash-can mr-1"></i>ลบภาพพื้นหลัง
+            </button>
+          </div>
+
+          <!-- Live Preview & Upload Button -->
+          <div class="flex flex-col sm:flex-row items-center gap-3">
+            <div
+              id="settings-bg-preview"
+              class="w-full sm:w-40 h-24 rounded-2xl border-2 border-dashed border-slate-300 bg-white flex flex-col items-center justify-center text-slate-400 text-xs overflow-hidden bg-cover bg-center shrink-0"
+            >
+              <i class="fa-regular fa-image text-2xl mb-1"></i>
+              <span>ยังไม่ได้ตั้งภาพพื้นหลัง</span>
+            </div>
+
+            <div class="flex-1 w-full space-y-2">
+              <input
+                type="file"
+                id="settings-bg-file-input"
+                accept="image/png,image/jpeg,image/webp,image/gif"
+                class="hidden"
+                onchange="handleAppearanceBgUpload(event)"
+              />
+              <button
+                type="button"
+                onclick="document.getElementById('settings-bg-file-input').click()"
+                class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition"
+              >
+                <i class="fa-solid fa-cloud-arrow-up"></i> เลือกรูปภาพจากเครื่องเป็นพื้นหลัง
+              </button>
+
+              <!-- Quick Aesthetic Gradient Wallpapers -->
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[11px] font-bold text-slate-500">หรือพื้นหลังสำเร็จรูป:</span>
+                <button type="button" onclick="setPresetBgGradient('')" class="px-2 py-0.5 rounded-lg border border-slate-300 bg-white text-[10px] font-bold text-slate-700">ไม่มี</button>
+                <button type="button" onclick="setPresetBgGradient('linear-gradient(135deg,#e0f2fe 0%,#ede9fe 50%,#fce7f3 100%)')" class="w-6 h-5 rounded-md border border-slate-300" style="background:linear-gradient(135deg,#e0f2fe,#ede9fe,#fce7f3)" title="พาสเทลสกาย"></button>
+                <button type="button" onclick="setPresetBgGradient('linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f766e 100%)')" class="w-6 h-5 rounded-md border border-slate-300" style="background:linear-gradient(135deg,#0f172a,#1e1b4b,#0f766e)" title="ออโรร่ากลางคืน"></button>
+                <button type="button" onclick="setPresetBgGradient('linear-gradient(135deg,#fef3c7 0%,#fbcfe8 50%,#c7d2fe 100%)')" class="w-6 h-5 rounded-md border border-slate-300" style="background:linear-gradient(135deg,#fef3c7,#fbcfe8,#c7d2fe)" title="พระอาทิตย์ตกพาสเทล"></button>
+                <button type="button" onclick="setPresetBgGradient('linear-gradient(135deg,#d1fae5 0%,#cffafe 50%,#e0e7ff 100%)')" class="w-6 h-5 rounded-md border border-slate-300" style="background:linear-gradient(135deg,#d1fae5,#cffafe,#e0e7ff)" title="มิ้นต์สดชื่น"></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Background Dim & Blur Sliders -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div>
+              <div class="flex items-center justify-between text-[11px] font-bold text-slate-700 mb-1">
+                <span>ความเข้มชั้นกรองแสง (ช่วยให้ตัวหนังสือชัด)</span>
+                <span id="settings-bg-dim-val">35%</span>
+              </div>
+              <input
+                type="range"
+                id="settings-bg-dim-slider"
+                min="0"
+                max="85"
+                step="5"
+                value="35"
+                oninput="setAppearanceBgDim(this.value)"
+                class="w-full accent-indigo-600 cursor-pointer"
+              />
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between text-[11px] font-bold text-slate-700 mb-1">
+                <span>ความเบลอพื้นหลัง (Blur)</span>
+                <span id="settings-bg-blur-val">0 px</span>
+              </div>
+              <input
+                type="range"
+                id="settings-bg-blur-slider"
+                min="0"
+                max="14"
+                step="1"
+                value="0"
+                oninput="setAppearanceBgBlur(this.value)"
+                class="w-full accent-indigo-600 cursor-pointer"
+              />
+            </div>
+          </div>
+
+          <label class="inline-flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              id="settings-bg-glass-toggle"
+              checked
+              onchange="setAppearanceBgGlass(this.checked)"
+              class="rounded text-indigo-600 focus:ring-indigo-500"
+            />
+            <span>เปิดเอฟเฟกต์กระจกโปร่งแสง (Glassmorphism) ให้เห็นภาพพื้นหลังทะลุกรอบได้อย่างสวยงาม</span>
+          </label>
+        </section>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="p-3.5 sm:p-4 border-t border-slate-200 bg-slate-50 flex flex-wrap items-center justify-between gap-2 shrink-0">
+        <button
+          type="button"
+          onclick="resetAllAppearanceSettings()"
+          class="px-3.5 py-2 rounded-xl border border-rose-200 bg-white hover:bg-rose-50 text-rose-600 text-xs font-bold transition"
+        >
+          <i class="fa-solid fa-rotate-left mr-1"></i> คืนค่าเริ่มต้นทั้งหมด
+        </button>
+        <button
+          type="button"
+          onclick="closeSettingsModal()"
+          class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-extrabold shadow-sm transition"
+        >
+          บันทึกและปิดหน้าตั้งค่า
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Container -->
   <div id="st-toast-container" class="fixed bottom-5 right-5 left-5 sm:left-auto z-50 flex flex-col gap-2 pointer-events-none"></div>
 
@@ -564,6 +1156,7 @@
       studentUser = JSON.parse(rawSession);
 
       applyStudentTheme(localStorage.getItem(THEME_STORAGE_KEY) || 'light');
+      applySavedAppearance();
       applyStudentIconSize(localStorage.getItem(ICON_SIZE_STORAGE_KEY) || 'lg');
       applyStudentBrandLogo();
       applyBrowserTabFavicon();
@@ -607,6 +1200,8 @@
       window.addEventListener('storage', (ev) => {
         if (ev.key === MULTI_CLASS_KEY && isJoinedToClassroom) {
           loadTeacherClassroomData(false);
+        } else if (ev.key === APPEARANCE_STORAGE_KEY) {
+          applySavedAppearance();
         }
       });
 
@@ -712,6 +1307,7 @@
 
     function toggleStudentTheme() {
       applyStudentTheme(document.body.classList.contains('dark-theme') ? 'light' : 'dark');
+      applySavedAppearance();
     }
 
     function applyStudentIconSize(size) {
@@ -1716,6 +2312,406 @@
         showToast(`อ่านค่า QR Code ได้: ${text}`, 'indigo');
       }
     }
+
+    /*************************************************************************
+     * APPEARANCE & SETTINGS ENGINE (FONTS, FONT SIZE, COLOR THEME, BACKGROUND)
+     *************************************************************************/
+    const APPEARANCE_STORAGE_KEY = 'SMART_SEATING_APPEARANCE_V1';
+
+    const AVAILABLE_FONTS = [
+      { id: 'TH Niramit AS',              label: 'TH Niramit AS',              desc: 'สุภาพ นุ่มนวล อ่านง่าย (ค่าเริ่มต้น)',   stack: "'TH Niramit AS', 'Niramit', sans-serif", uploaded: true },
+      { id: 'TH Sarabun PSK',             label: 'TH Sarabun PSK',             desc: 'มาตรฐานราชการไทย คมชัด',                 stack: "'TH Sarabun PSK', 'Sarabun', sans-serif", uploaded: true },
+      { id: 'JaoHalloween',               label: 'JaoHalloween Bold',          desc: 'หัวกลมน่ารัก ขี้เล่น สดใส',               stack: "'JaoHalloween', 'Mali', sans-serif", uploaded: true },
+      { id: 'Royal Institute of Siam New',label: 'Royal Institute of Siam',    desc: 'ไทยร่วมสมัย ภูมิฐาน คลาสสิก',             stack: "'Royal Institute of Siam New', 'Niramit', serif", uploaded: true },
+      { id: 'Kanit',                      label: 'Kanit',                      desc: 'ทันสมัย กะทัดรัด ชัดเจนบนหน้าจอ',         stack: "'Kanit', sans-serif", uploaded: false },
+      { id: 'Mali',                       label: 'Mali',                       desc: 'ลายมือเด็กน่ารัก เหมาะกับห้องเรียน',      stack: "'Mali', cursive, sans-serif", uploaded: false },
+      { id: 'Prompt',                     label: 'Prompt',                     desc: 'โมเดิร์น โปร่ง สะอาดตา',                 stack: "'Prompt', sans-serif", uploaded: false }
+    ];
+
+    const ACCENT_THEMES = [
+      { id: 'indigo',  label: 'คราม-ม่วง',   c1: '#4f46e5', c2: '#7c3aed', soft: '#eef2ff', border: '#a5b4fc' },
+      { id: 'sky',     label: 'ฟ้าสดใส',     c1: '#0284c7', c2: '#06b6d4', soft: '#e0f2fe', border: '#7dd3fc' },
+      { id: 'emerald', label: 'เขียวมิ้นต์', c1: '#059669', c2: '#14b8a6', soft: '#d1fae5', border: '#6ee7b7' },
+      { id: 'rose',    label: 'ชมพูซากุระ',  c1: '#e11d48', c2: '#ec4899', soft: '#ffe4e6', border: '#fda4af' },
+      { id: 'amber',   label: 'ส้มอบอุ่น',   c1: '#d97706', c2: '#f97316', soft: '#fef3c7', border: '#fcd34d' },
+      { id: 'violet',  label: 'ม่วงพาสเทล',  c1: '#7c3aed', c2: '#c026d3', soft: '#f3e8ff', border: '#d8b4fe' },
+      { id: 'crimson', label: 'แดงทับทิม',   c1: '#dc2626', c2: '#e11d48', soft: '#fee2e2', border: '#fca5a5' },
+      { id: 'slate',   label: 'เทามินิมอล',  c1: '#334155', c2: '#475569', soft: '#f1f5f9', border: '#94a3b8' }
+    ];
+
+    const DEFAULT_APPEARANCE = {
+      fontFamily: 'TH Niramit AS',
+      fontSizePct: 100,
+      accentId: 'indigo',
+      customAccentHex: '#4f46e5',
+      bgImage: '',
+      bgGradient: '',
+      bgDim: 35,
+      bgBlur: 0,
+      bgGlass: true
+    };
+
+    function getSavedAppearance() {
+      try {
+        const raw = localStorage.getItem(APPEARANCE_STORAGE_KEY);
+        if (raw) return { ...DEFAULT_APPEARANCE, ...JSON.parse(raw) };
+      } catch (e) {}
+      return { ...DEFAULT_APPEARANCE };
+    }
+
+    function saveAppearance(nextObj, notifyMsg = '') {
+      const merged = { ...DEFAULT_APPEARANCE, ...nextObj };
+      try {
+        localStorage.setItem(APPEARANCE_STORAGE_KEY, JSON.stringify(merged));
+      } catch (quotaErr) {
+        // If custom image was too big for quota, keep settings without image and alert user
+        merged.bgImage = '';
+        localStorage.setItem(APPEARANCE_STORAGE_KEY, JSON.stringify(merged));
+        if (typeof showToast === 'function') {
+          showToast('ไฟล์รูปพื้นหลังใหญ่เกินพื้นที่จัดเก็บ กรุณาเลือกรูปที่ขนาดเล็กลง', 'amber');
+        }
+      }
+      applySavedAppearance(merged);
+      if (document.getElementById('settings-modal') && !document.getElementById('settings-modal').classList.contains('hidden')) {
+        renderSettingsModalContent();
+      }
+      if (notifyMsg && typeof showToast === 'function') {
+        showToast(notifyMsg, 'indigo');
+      }
+    }
+
+    function shadeHexColor(hex, percent) {
+      const clean = String(hex || '#4f46e5').replace('#', '');
+      if (clean.length !== 6) return '#7c3aed';
+      const num = parseInt(clean, 16);
+      const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(2.55 * percent)));
+      const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00ff) + Math.round(2.55 * percent)));
+      const b = Math.min(255, Math.max(0, (num & 0x0000ff) + Math.round(2.55 * percent)));
+      return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+
+    function ensureBackgroundLayerElement() {
+      let layer = document.getElementById('app-bg-layer');
+      if (!layer) {
+        layer = document.createElement('div');
+        layer.id = 'app-bg-layer';
+        layer.innerHTML = '<div id="app-bg-image"></div><div id="app-bg-overlay"></div>';
+        document.body.prepend(layer);
+      }
+      return layer;
+    }
+
+    function applySavedAppearance(override = null) {
+      const cfg = override || getSavedAppearance();
+      const root = document.documentElement;
+
+      // 1. Font Family
+      const fontObj = AVAILABLE_FONTS.find(f => f.id === cfg.fontFamily) || AVAILABLE_FONTS[0];
+      root.style.setProperty('--app-font-family', fontObj.stack);
+
+      // 2. Root Font Size Scaling (scales all Tailwind rem text proportionally)
+      const pct = Math.min(130, Math.max(85, Number(cfg.fontSizePct) || 100));
+      root.style.fontSize = `${(16 * pct / 100).toFixed(2)}px`;
+
+      // 3. Accent Color Theme
+      let c1 = '#4f46e5', c2 = '#7c3aed', soft = '#eef2ff', border = '#a5b4fc';
+      if (cfg.accentId === 'custom' && cfg.customAccentHex) {
+        c1 = cfg.customAccentHex;
+        c2 = shadeHexColor(c1, -18);
+        soft = c1 + '22';
+        border = c1 + '88';
+      } else {
+        const preset = ACCENT_THEMES.find(t => t.id === cfg.accentId) || ACCENT_THEMES[0];
+        c1 = preset.c1; c2 = preset.c2; soft = preset.soft; border = preset.border;
+      }
+      root.style.setProperty('--app-accent', c1);
+      root.style.setProperty('--app-accent-2', c2);
+      root.style.setProperty('--app-accent-soft', soft);
+      root.style.setProperty('--app-accent-border', border);
+      if (cfg.accentId && cfg.accentId !== 'indigo') {
+        document.body.classList.add('has-custom-accent');
+      } else {
+        document.body.classList.remove('has-custom-accent');
+      }
+
+      // Apply accent to student.html header if present
+      const stHeader = document.getElementById('student-top-header');
+      if (stHeader && cfg.accentId && cfg.accentId !== 'indigo') {
+        stHeader.style.background = `linear-gradient(90deg, ${c1}, ${c2})`;
+      } else if (stHeader) {
+        stHeader.style.background = '';
+      }
+
+      // 4. Custom Background Image / Gradient
+      const layer = ensureBackgroundLayerElement();
+      const bgImgEl = document.getElementById('app-bg-image');
+      const bgOverlayEl = document.getElementById('app-bg-overlay');
+      const isDark = document.body.classList.contains('dark-theme');
+
+      if (cfg.bgImage || cfg.bgGradient) {
+        document.body.classList.add('has-custom-bg');
+        if (cfg.bgGlass !== false) document.body.classList.add('bg-glass-mode');
+        else document.body.classList.remove('bg-glass-mode');
+
+        if (cfg.bgImage) {
+          bgImgEl.style.backgroundImage = `url("${cfg.bgImage}")`;
+        } else {
+          bgImgEl.style.backgroundImage = cfg.bgGradient;
+        }
+        const blurPx = Math.max(0, Math.min(14, Number(cfg.bgBlur) || 0));
+        bgImgEl.style.filter = blurPx > 0 ? `blur(${blurPx}px)` : 'none';
+
+        const dimAlpha = Math.max(0, Math.min(0.85, (Number(cfg.bgDim) || 0) / 100));
+        bgOverlayEl.style.backgroundColor = isDark
+          ? `rgba(9, 13, 22, ${dimAlpha})`
+          : `rgba(241, 245, 249, ${dimAlpha})`;
+      } else {
+        document.body.classList.remove('has-custom-bg', 'bg-glass-mode');
+        bgImgEl.style.backgroundImage = 'none';
+        bgOverlayEl.style.backgroundColor = 'transparent';
+      }
+
+      if (typeof applyResponsiveGridFit === 'function') {
+        requestAnimationFrame(() => applyResponsiveGridFit());
+      }
+    }
+
+    function openSettingsModal() {
+      renderSettingsModalContent();
+      const modal = document.getElementById('settings-modal');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeSettingsModal() {
+      const modal = document.getElementById('settings-modal');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function renderSettingsModalContent() {
+      const cfg = getSavedAppearance();
+      const isDark = document.body.classList.contains('dark-theme');
+
+      // 1. Font Cards
+      const fontGrid = document.getElementById('settings-font-grid');
+      const fontBadge = document.getElementById('settings-current-font-badge');
+      if (fontBadge) fontBadge.textContent = cfg.fontFamily;
+      if (fontGrid) {
+        fontGrid.innerHTML = AVAILABLE_FONTS.map(f => {
+          const active = cfg.fontFamily === f.id;
+          return `
+            <button
+              type="button"
+              onclick="setAppearanceFont('${f.id}')"
+              class="p-3 rounded-2xl border-2 text-left transition flex items-center justify-between gap-2 ${
+                active
+                  ? 'border-indigo-600 bg-indigo-50/70 shadow-xs'
+                  : 'border-slate-200 bg-white hover:border-indigo-300'
+              }"
+            >
+              <div class="min-w-0">
+                <div class="text-sm font-bold text-slate-900 truncate" style="font-family: ${f.stack} !important;">
+                  ${f.label} • กขคง 123
+                </div>
+                <div class="text-[11px] text-slate-500 truncate">${f.desc}</div>
+              </div>
+              <div class="shrink-0">
+                ${active
+                  ? '<span class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></span>'
+                  : (f.uploaded ? '<span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[9px] font-bold">ฟอนต์หลัก</span>' : '')
+                }
+              </div>
+            </button>
+          `;
+        }).join('');
+      }
+
+      // 2. Font Size Slider & Preset Buttons
+      const slider = document.getElementById('settings-font-size-slider');
+      const sizeVal = document.getElementById('settings-font-size-value');
+      if (slider) slider.value = String(cfg.fontSizePct || 100);
+      if (sizeVal) sizeVal.textContent = `${cfg.fontSizePct || 100}%`;
+      document.querySelectorAll('.settings-fsize-btn').forEach(btn => {
+        const v = Number(btn.getAttribute('data-fsize'));
+        if (v === Number(cfg.fontSizePct || 100)) {
+          btn.className = 'settings-fsize-btn py-1.5 rounded-xl border-2 border-indigo-600 bg-indigo-600 text-white text-xs font-extrabold transition';
+        } else {
+          btn.className = 'settings-fsize-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-700 hover:border-indigo-400 transition';
+        }
+      });
+
+      // 3. Light / Dark Mode Buttons
+      const btnL = document.getElementById('settings-mode-light');
+      const btnD = document.getElementById('settings-mode-dark');
+      if (btnL && btnD) {
+        btnL.className = !isDark
+          ? 'p-3 rounded-2xl border-2 border-indigo-600 bg-indigo-50 flex items-center justify-center gap-2 text-xs sm:text-sm font-extrabold text-indigo-900 shadow-xs transition'
+          : 'p-3 rounded-2xl border-2 border-slate-600 bg-slate-800 flex items-center justify-center gap-2 text-xs sm:text-sm font-bold text-slate-300 hover:border-indigo-400 transition';
+        btnD.className = isDark
+          ? 'p-3 rounded-2xl border-2 border-indigo-400 bg-slate-950 text-white flex items-center justify-center gap-2 text-xs sm:text-sm font-extrabold shadow-xs transition'
+          : 'p-3 rounded-2xl border-2 border-slate-200 bg-slate-800 text-white flex items-center justify-center gap-2 text-xs sm:text-sm font-bold hover:border-indigo-400 transition';
+      }
+
+      // Accent Swatches
+      const accentGrid = document.getElementById('settings-accent-grid');
+      const customPicker = document.getElementById('settings-custom-color-picker');
+      if (customPicker && cfg.customAccentHex) customPicker.value = cfg.customAccentHex;
+      if (accentGrid) {
+        accentGrid.innerHTML = ACCENT_THEMES.map(t => {
+          const active = cfg.accentId === t.id;
+          return `
+            <button
+              type="button"
+              onclick="setAppearanceAccent('${t.id}')"
+              class="h-10 rounded-xl flex items-center justify-center text-white transition ${active ? 'ring-2 ring-offset-2 ring-slate-900 scale-105' : 'opacity-85 hover:opacity-100'}"
+              style="background: linear-gradient(135deg, ${t.c1}, ${t.c2});"
+              title="${t.label}"
+            >
+              ${active ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+            </button>
+          `;
+        }).join('');
+      }
+
+      // 4. Custom Background Preview & Sliders
+      const preview = document.getElementById('settings-bg-preview');
+      const rmBtn = document.getElementById('settings-btn-remove-bg');
+      const dimSlider = document.getElementById('settings-bg-dim-slider');
+      const dimVal = document.getElementById('settings-bg-dim-val');
+      const blurSlider = document.getElementById('settings-bg-blur-slider');
+      const blurVal = document.getElementById('settings-bg-blur-val');
+      const glassToggle = document.getElementById('settings-bg-glass-toggle');
+
+      if (preview) {
+        if (cfg.bgImage) {
+          preview.style.backgroundImage = `url("${cfg.bgImage}")`;
+          preview.innerHTML = '';
+        } else if (cfg.bgGradient) {
+          preview.style.backgroundImage = cfg.bgGradient;
+          preview.innerHTML = '';
+        } else {
+          preview.style.backgroundImage = 'none';
+          preview.innerHTML = '<i class="fa-regular fa-image text-2xl mb-1"></i><span>ยังไม่ได้ตั้งภาพพื้นหลัง</span>';
+        }
+      }
+      if (rmBtn) {
+        if (cfg.bgImage || cfg.bgGradient) rmBtn.classList.remove('hidden');
+        else rmBtn.classList.add('hidden');
+      }
+      if (dimSlider) dimSlider.value = String(cfg.bgDim ?? 35);
+      if (dimVal) dimVal.textContent = `${cfg.bgDim ?? 35}%`;
+      if (blurSlider) blurSlider.value = String(cfg.bgBlur ?? 0);
+      if (blurVal) blurVal.textContent = `${cfg.bgBlur ?? 0} px`;
+      if (glassToggle) glassToggle.checked = cfg.bgGlass !== false;
+    }
+
+    function setAppearanceFont(fontId) {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, fontFamily: fontId }, `เปลี่ยนฟอนต์เป็น "${fontId}" แล้ว ✨`);
+    }
+
+    function setAppearanceFontSize(val) {
+      const pct = Math.min(130, Math.max(85, parseInt(val, 10) || 100));
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, fontSizePct: pct });
+    }
+
+    function setAppearanceDarkMode(isDark) {
+      if (typeof setAppTheme === 'function') {
+        setAppTheme(isDark ? 'dark' : 'light', false);
+      } else if (typeof applyStudentTheme === 'function') {
+        applyStudentTheme(isDark ? 'dark' : 'light');
+      }
+      applySavedAppearance();
+      renderSettingsModalContent();
+    }
+
+    function setAppearanceAccent(accentId) {
+      const curr = getSavedAppearance();
+      const preset = ACCENT_THEMES.find(t => t.id === accentId);
+      saveAppearance({ ...curr, accentId, customAccentHex: preset ? preset.c1 : curr.customAccentHex }, `เปลี่ยนธีมสี UI เป็น "${preset ? preset.label : accentId}" แล้ว 🎨`);
+    }
+
+    function setAppearanceCustomAccent(hex) {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, accentId: 'custom', customAccentHex: hex });
+    }
+
+    function setPresetBgGradient(grad) {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, bgImage: '', bgGradient: grad }, grad ? 'ตั้งค่าพื้นหลังสำเร็จรูปแล้ว ✨' : 'ลบภาพพื้นหลังแล้ว');
+    }
+
+    function setAppearanceBgDim(val) {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, bgDim: parseInt(val, 10) || 0 });
+    }
+
+    function setAppearanceBgBlur(val) {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, bgBlur: parseInt(val, 10) || 0 });
+    }
+
+    function setAppearanceBgGlass(enabled) {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, bgGlass: Boolean(enabled) });
+    }
+
+    function clearAppearanceBackground() {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, bgImage: '', bgGradient: '' }, 'ลบภาพพื้นหลังเรียบร้อยแล้ว');
+    }
+
+    function handleAppearanceBgUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      event.target.value = '';
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          // Compress nicely to max 1600px so it stays sharp and fits smoothly inside localStorage
+          const maxDim = 1600;
+          let w = img.naturalWidth || img.width;
+          let h = img.naturalHeight || img.height;
+          if (w > maxDim || h > maxDim) {
+            const ratio = maxDim / Math.max(w, h);
+            w = Math.round(w * ratio);
+            h = Math.round(h * ratio);
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.80);
+
+          const curr = getSavedAppearance();
+          saveAppearance({ ...curr, bgImage: dataUrl, bgGradient: '' }, 'ตั้งค่ารูปภาพพื้นหลังใหม่เรียบร้อยแล้ว! 🖼️');
+        };
+        img.onerror = () => {
+          if (typeof showToast === 'function') showToast('ไม่สามารถอ่านไฟล์รูปภาพนี้ได้', 'amber');
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetAllAppearanceSettings() {
+      localStorage.removeItem(APPEARANCE_STORAGE_KEY);
+      applySavedAppearance(DEFAULT_APPEARANCE);
+      if (document.getElementById('settings-modal') && !document.getElementById('settings-modal').classList.contains('hidden')) {
+        renderSettingsModalContent();
+      }
+      if (typeof showToast === 'function') {
+        showToast('คืนค่าฟอนต์ ขนาดตัวอักษร สีธีม และพื้นหลังกลับเป็นค่าเริ่มต้นแล้ว', 'slate');
+      }
+    }
+
 
     function escapeHtml(str) {
       if (!str) return '';

@@ -10,10 +10,10 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script><script src="config.js"></script>
 <script src="auth.js"></script>
-  <!-- Fallback Google Font: Niramit (used if local TH Niramit AS .ttf files are not present) -->
+  <!-- Google Fonts (Fallbacks & Optional Web Fonts) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Niramit:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Mali:wght@400;500;600;700&family=Niramit:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Prompt:wght@300;400;500;600;700&family=Sarabun:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <!-- QRCode.js Generator -->
@@ -55,7 +55,7 @@
   </script>
 
   <style>
-    /* ================= CUSTOM FONT: TH NIRAMIT AS ================= */
+    /* ================= CUSTOM UPLOADED FONTS ================= */
     @font-face {
       font-family: 'TH Niramit AS';
       src:
@@ -101,12 +101,292 @@
       size-adjust: 122%;
     }
 
+    @font-face {
+      font-family: 'TH Sarabun PSK';
+      src:
+        url('./fonts/THSarabun.ttf') format('truetype'),
+        url('./THSarabun.ttf') format('truetype'),
+        local('TH SarabunPSK'),
+        local('TH Sarabun New');
+      font-weight: 100 500;
+      font-style: normal;
+      font-display: swap;
+      size-adjust: 122%;
+    }
+    @font-face {
+      font-family: 'TH Sarabun PSK';
+      src:
+        url('./fonts/THSarabun%20Italic.ttf') format('truetype'),
+        url('./THSarabun%20Italic.ttf') format('truetype'),
+        local('TH SarabunPSK Italic');
+      font-weight: 100 500;
+      font-style: italic;
+      font-display: swap;
+      size-adjust: 122%;
+    }
+    @font-face {
+      font-family: 'TH Sarabun PSK';
+      src:
+        url('./fonts/THSarabun%20Bold.ttf') format('truetype'),
+        url('./THSarabun%20Bold.ttf') format('truetype'),
+        local('TH SarabunPSK Bold');
+      font-weight: 600 900;
+      font-style: normal;
+      font-display: swap;
+      size-adjust: 122%;
+    }
+    @font-face {
+      font-family: 'TH Sarabun PSK';
+      src:
+        url('./fonts/THSarabun%20Bold%20Italic.ttf') format('truetype'),
+        url('./THSarabun%20Bold%20Italic.ttf') format('truetype'),
+        local('TH SarabunPSK Bold Italic');
+      font-weight: 600 900;
+      font-style: italic;
+      font-display: swap;
+      size-adjust: 122%;
+    }
+
+    @font-face {
+      font-family: 'JaoHalloween';
+      src:
+        url('./fonts/%E0%B8%AA%E0%B8%B3%E0%B9%80%E0%B8%99%E0%B8%B2%E0%B8%82%E0%B8%AD%E0%B8%87%20JaoHalloween%20Bold.ttf') format('truetype'),
+        url('./fonts/JaoHalloween%20Bold.ttf') format('truetype'),
+        url('./%E0%B8%AA%E0%B8%B3%E0%B9%80%E0%B8%99%E0%B8%B2%E0%B8%82%E0%B8%AD%E0%B8%87%20JaoHalloween%20Bold.ttf') format('truetype'),
+        url('./JaoHalloween%20Bold.ttf') format('truetype'),
+        local('JaoHalloween Bold'),
+        local('JaoHalloween');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+      size-adjust: 112%;
+      ascent-override: 95%;
+      descent-override: 25%;
+    }
+
+    @font-face {
+      font-family: 'Royal Institute of Siam New';
+      src:
+        url('./fonts/Royal-Institute-of-Siam-New.ttf') format('truetype'),
+        url('./Royal-Institute-of-Siam-New.ttf') format('truetype'),
+        local('Royal Institute of Siam New');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+      size-adjust: 105%;
+    }
+
+    :root {
+      --app-font-family: 'TH Niramit AS', 'Niramit', sans-serif;
+      --app-accent: #4f46e5;
+      --app-accent-2: #7c3aed;
+      --app-accent-soft: #eef2ff;
+      --app-accent-border: #c7d2fe;
+      --app-accent-text: #3730a3;
+    }
+
     html, body, button, input, select, textarea {
-      font-family: 'TH Niramit AS', 'Niramit', sans-serif;
+      font-family: var(--app-font-family) !important;
+    }
+    .fa-solid, .fa-regular, .fa-brands, .fas, .far, .fab {
+      font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands' !important;
+    }
+
+    /* ================= CUSTOM BACKGROUND IMAGE & GLASS SURFACE SYSTEM ================= */
+    #app-bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+      display: none;
+    }
+    body.has-custom-bg #app-bg-layer {
+      display: block;
+    }
+    body.has-custom-bg {
+      background-color: transparent !important;
+      background-image: none !important;
+    }
+    #app-bg-image {
+      position: absolute;
+      inset: -18px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      transition: filter 0.25s ease;
+    }
+    #app-bg-overlay {
+      position: absolute;
+      inset: 0;
+      transition: background-color 0.25s ease;
+    }
+
+    /* Frosted glass transparency so custom background shines cleanly while keeping high readability */
+    body.has-custom-bg.bg-glass-mode header,
+    body.has-custom-bg.bg-glass-mode aside,
+    body.has-custom-bg.bg-glass-mode #config-toolbar,
+    body.has-custom-bg.bg-glass-mode #chart-container {
+      background-color: rgba(255, 255, 255, 0.84) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    body.dark-theme.has-custom-bg.bg-glass-mode header,
+    body.dark-theme.has-custom-bg.bg-glass-mode aside,
+    body.dark-theme.has-custom-bg.bg-glass-mode #config-toolbar,
+    body.dark-theme.has-custom-bg.bg-glass-mode #chart-container {
+      background-color: rgba(15, 23, 42, 0.82) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* Custom Theme Accent Application */
+    body.has-custom-accent #classroom-selector {
+      border-color: var(--app-accent-border) !important;
+    }
+    body.has-custom-accent #btn-add-classroom,
+    body.has-custom-accent .preset-btn.is-active-preset,
+    body.has-custom-accent #size-btn-auto.is-active-size,
+    body.has-custom-accent #size-btn-xs.is-active-size,
+    body.has-custom-accent #size-btn-sm.is-active-size,
+    body.has-custom-accent #size-btn-md.is-active-size,
+    body.has-custom-accent #btn-save-student-count {
+      background: linear-gradient(135deg, var(--app-accent), var(--app-accent-2)) !important;
+      border-color: var(--app-accent) !important;
+      color: #ffffff !important;
+    }
+    body.has-custom-accent #ui-icon-size-badge {
+      background-color: var(--app-accent) !important;
+    }
+    body.has-custom-accent header {
+      border-bottom-color: var(--app-accent-border) !important;
+    }
+    body.has-custom-accent #settings-modal-header {
+      background: linear-gradient(135deg, var(--app-accent), var(--app-accent-2)) !important;
+    }
+
+    /* ================= HIGH-CONTRAST SIDEBAR STAT CARDS (0.5 CM ICON-NUMBER GAP) ================= */
+    .stat-pill-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 19px; /* ~0.5 cm spacing between icon and number */
+      padding: 10px 6px;
+      border-radius: 0.85rem;
+      border-width: 1.5px;
+      transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .stat-pill-card:hover {
+      transform: translateY(-1px);
+    }
+    .stat-pill-icon {
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+    .stat-pill-val {
+      font-size: 0.92rem;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0.01em;
+    }
+
+    /* Light Mode Stat Cards */
+    .stat-pill-seated     { background-color: #eef2ff; border-color: #a5b4fc; }
+    .stat-pill-seated .stat-pill-icon { color: #4338ca; }
+    .stat-pill-seated .stat-pill-val  { color: #1e1b4b; }
+
+    .stat-pill-unassigned { background-color: #f8fafc; border-color: #cbd5e1; }
+    .stat-pill-unassigned .stat-pill-icon { color: #d97706; }
+    .stat-pill-unassigned .stat-pill-val  { color: #0f172a; }
+
+    .stat-pill-present    { background-color: #ecfdf5; border-color: #6ee7b7; }
+    .stat-pill-present .stat-pill-icon { color: #059669; }
+    .stat-pill-present .stat-pill-val  { color: #064e3b; }
+
+    .stat-pill-task       { background-color: #fffbeb; border-color: #fcd34d; }
+    .stat-pill-task .stat-pill-icon { color: #d97706; }
+    .stat-pill-task .stat-pill-val  { color: #78350f; }
+
+    /* Dark Mode High-Contrast Stat Cards */
+    body.dark-theme .stat-pill-seated     { background-color: #1e293b !important; border-color: #818cf8 !important; }
+    body.dark-theme .stat-pill-seated .stat-pill-icon { color: #a5b4fc !important; }
+    body.dark-theme .stat-pill-seated .stat-pill-val  { color: #ffffff !important; }
+
+    body.dark-theme .stat-pill-unassigned { background-color: #1e293b !important; border-color: #fbbf24 !important; }
+    body.dark-theme .stat-pill-unassigned .stat-pill-icon { color: #fcd34d !important; }
+    body.dark-theme .stat-pill-unassigned .stat-pill-val  { color: #fef3c7 !important; }
+
+    body.dark-theme .stat-pill-present    { background-color: #064e3b !important; border-color: #34d399 !important; }
+    body.dark-theme .stat-pill-present .stat-pill-icon { color: #6ee7b7 !important; }
+    body.dark-theme .stat-pill-present .stat-pill-val  { color: #ffffff !important; }
+
+    body.dark-theme .stat-pill-task       { background-color: #451a03 !important; border-color: #f59e0b !important; }
+    body.dark-theme .stat-pill-task .stat-pill-icon { color: #fde047 !important; }
+    body.dark-theme .stat-pill-task .stat-pill-val  { color: #ffffff !important; }
+
+    /* ================= MOBILE HEADER & ICON FIT OPTIMIZATION ================= */
+    @media (max-width: 1023px) {
+      header .header-inner-wrap {
+        flex-wrap: wrap !important;
+        padding-top: 0.4rem !important;
+        padding-bottom: 0.4rem !important;
+        gap: 0.4rem !important;
+      }
+      header .header-left-group {
+        width: 100% !important;
+        justify-content: space-between;
+      }
+      header #classroom-selector {
+        flex: 1 1 auto !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        height: 38px !important;
+      }
+      header #header-right-controls {
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: space-between !important;
+        overflow-x: visible !important;
+        gap: 6px !important;
+        padding-top: 4px !important;
+        padding-bottom: 2px !important;
+        border-top: 1px solid rgba(148, 163, 184, 0.22);
+      }
+      header #header-right-controls .header-divider {
+        display: none !important;
+      }
+    }
+    @media (max-width: 639px) {
+      header .ui-icon-btn {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        min-height: 36px !important;
+      }
+      header .ui-icon-btn i {
+        font-size: 0.95rem !important;
+      }
+      header #header-right-controls {
+        display: grid !important;
+        grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+        gap: 6px !important;
+        justify-items: center !important;
+      }
+      #config-toolbar .ui-tb-btn {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+      }
+      #chart-container {
+        padding: 0.5rem !important;
+      }
     }
 
     body {
-      font-family: 'TH Niramit AS', 'Niramit', sans-serif;
+      font-family: var(--app-font-family);
       background-color: #f1f5f9;
       color: #0f172a;
       overflow-x: hidden;
@@ -621,10 +901,10 @@
 
   <!-- ================= TOP NAVIGATION & CLASSROOM HEADER (ADJUSTABLE ICON-ONLY) ================= -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 no-print shadow-sm">
-    <div class="max-w-[1600px] mx-auto px-3 sm:px-5 min-h-14 py-1.5 flex items-center justify-between gap-2">
+    <div class="header-inner-wrap max-w-[1600px] mx-auto px-2.5 sm:px-5 min-h-14 py-1.5 flex items-center justify-between gap-2">
       
       <!-- Left: Brand Icon, Classroom Selector & Icon-Only Class Controls -->
-      <div class="flex items-center gap-2 min-w-0">
+      <div class="header-left-group flex items-center gap-1.5 sm:gap-2 min-w-0">
         <button
           id="btn-toggle-sidebar"
           onclick="toggleSidebar()"
@@ -660,6 +940,7 @@
         <!-- Add / Manage Classroom (Icon-only) -->
         <button
           type="button"
+          id="btn-add-classroom"
           onclick="openClassroomManagerModal()"
           class="ui-icon-btn rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center shadow-2xs shrink-0 transition active:scale-95"
           title="จัดการ / เพิ่มชั้นเรียนใหม่"
@@ -805,6 +1086,17 @@
           <span id="theme-toggle-label" class="hidden">พื้นหลังดำ</span>
         </button>
 
+        <!-- Settings Page Button (Fonts, Font Size, Color Theme, Custom Background) -->
+        <button
+          type="button"
+          id="btn-open-settings"
+          onclick="openSettingsModal()"
+          class="ui-icon-btn rounded-xl bg-slate-100 hover:bg-indigo-100 text-indigo-600 border border-slate-200 flex items-center justify-center transition active:scale-95 shrink-0"
+          title="ตั้งค่าฟอนต์ ขนาดตัวอักษร สีธีม และภาพพื้นหลัง"
+        >
+          <i class="fa-solid fa-gear"></i>
+        </button>
+
         <!-- Print Button (Icon-only) -->
         <button
           onclick="window.print()"
@@ -814,7 +1106,7 @@
           <i class="fa-solid fa-print"></i>
         </button>
 
-        <div class="h-6 w-[1px] bg-slate-300 mx-0.5 shrink-0"></div>
+        <div class="header-divider h-6 w-[1px] bg-slate-300 mx-0.5 shrink-0"></div>
 
         <!-- Logout Button (Top bar alongside other controls, triggers confirmation dialog) -->
         <button
@@ -842,19 +1134,20 @@
       <div class="p-3 border-b border-slate-100 bg-slate-50/70 space-y-2.5">
         <div class="flex items-center justify-between gap-2">
           <!-- Student Count Setter (Icon + Input + Check Icon) -->
-          <form onsubmit="handleSetStudentCount(event)" class="flex items-center gap-1.5 bg-white px-2 py-1 rounded-xl border border-slate-200/90 shadow-2xs">
-            <i class="fa-solid fa-users text-indigo-500 text-xs" title="จำนวนนักเรียนทั้งหมด"></i>
+          <form onsubmit="handleSetStudentCount(event)" class="flex items-center gap-3 bg-white px-2.5 py-1 rounded-xl border border-slate-200/90 shadow-2xs">
+            <i class="fa-solid fa-users text-indigo-500 text-sm" title="จำนวนนักเรียนทั้งหมด"></i>
             <input
               id="total-student-count-input"
               type="number"
               min="1"
               max="80"
               value="24"
-              class="w-12 px-1 py-0.5 text-center text-xs font-bold text-indigo-700 bg-slate-50 border border-slate-300 rounded-lg outline-none"
+              class="w-12 px-1 py-0.5 text-center text-xs font-extrabold text-indigo-700 bg-slate-50 border border-slate-300 rounded-lg outline-none"
               title="ระบุจำนวนนักเรียน (1 - 80 คน)"
             />
             <button
               type="submit"
+              id="btn-save-student-count"
               class="w-6 h-6 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] flex items-center justify-center transition"
               title="บันทึกจำนวนนักเรียน"
             >
@@ -919,23 +1212,23 @@
           </div>
         </div>
 
-        <!-- Compact Icon + Number Summary Counters -->
-        <div class="grid grid-cols-4 gap-1.5 text-center">
-          <div class="bg-white p-1.5 rounded-xl border border-slate-200/80 shadow-2xs flex flex-col items-center" title="มีที่นั่งแล้ว">
-            <i class="fa-solid fa-chair text-[10px] text-indigo-500 mb-0.5"></i>
-            <div id="stat-seated" class="text-xs font-bold text-indigo-600 leading-none">0</div>
+        <!-- High-Contrast Icon + Number Summary Counters (~0.5 cm / 19px icon-number spacing) -->
+        <div class="grid grid-cols-4 gap-2 text-center">
+          <div class="stat-pill-card stat-pill-seated shadow-2xs" title="มีที่นั่งแล้ว">
+            <i class="fa-solid fa-chair stat-pill-icon"></i>
+            <div id="stat-seated" class="stat-pill-val">0</div>
           </div>
-          <div class="bg-white p-1.5 rounded-xl border border-slate-200/80 shadow-2xs flex flex-col items-center" title="รอจัดที่นั่ง">
-            <i class="fa-solid fa-hourglass-half text-[10px] text-amber-500 mb-0.5"></i>
-            <div id="stat-unassigned" class="text-xs font-bold text-amber-600 leading-none">0</div>
+          <div class="stat-pill-card stat-pill-unassigned shadow-2xs" title="รอจัดที่นั่ง">
+            <i class="fa-solid fa-hourglass-half stat-pill-icon"></i>
+            <div id="stat-unassigned" class="stat-pill-val">0</div>
           </div>
-          <div onclick="openAttendanceModal()" class="bg-emerald-50/70 hover:bg-emerald-100/80 cursor-pointer p-1.5 rounded-xl border border-emerald-200 shadow-2xs flex flex-col items-center transition" title="มาเรียนวันนี้ (คลิกเพื่อเช็คชื่อ)">
-            <i class="fa-solid fa-user-check text-[10px] text-emerald-600 mb-0.5"></i>
-            <div id="stat-present" class="text-xs font-bold text-emerald-700 leading-none">0</div>
+          <div onclick="openAttendanceModal()" class="stat-pill-card stat-pill-present cursor-pointer shadow-2xs" title="มาเรียนวันนี้ (คลิกเพื่อเช็คชื่อ)">
+            <i class="fa-solid fa-user-check stat-pill-icon"></i>
+            <div id="stat-present" class="stat-pill-val">0</div>
           </div>
-          <div onclick="openTaskModal()" class="bg-amber-50/70 hover:bg-amber-100/80 cursor-pointer p-1.5 rounded-xl border border-amber-200 shadow-2xs flex flex-col items-center transition" title="ส่งงานแล้ว (คลิกเพื่อตรวจงาน)">
-            <i class="fa-solid fa-file-circle-check text-[10px] text-amber-600 mb-0.5"></i>
-            <div id="stat-task-done" class="text-xs font-bold text-amber-800 leading-none">0/0</div>
+          <div onclick="openTaskModal()" class="stat-pill-card stat-pill-task cursor-pointer shadow-2xs" title="ส่งงานแล้ว (คลิกเพื่อตรวจงาน)">
+            <i class="fa-solid fa-file-circle-check stat-pill-icon"></i>
+            <div id="stat-task-done" class="stat-pill-val">0/0</div>
           </div>
         </div>
         <span id="stat-empty-desks" class="hidden">0</span>
@@ -1287,8 +1580,8 @@
         </div>
 
         <!-- SEATING GRID CONTAINER (Auto-Responsive Wrapper) -->
-        <div id="seating-viewport" class="my-auto py-1 w-full overflow-x-auto flex items-start justify-center">
-          <div id="seating-scale-wrapper" class="flex items-center justify-center">
+        <div id="seating-viewport" class="my-auto py-1 w-full overflow-x-auto">
+          <div id="seating-scale-wrapper" class="flex items-center justify-center mx-auto w-fit">
             <div id="seating-grid" class="grid gap-1.5 sm:gap-2 mx-auto transition-all duration-300 max-w-5xl">
               <!-- Desks dynamically generated here -->
             </div>
@@ -1313,18 +1606,7 @@
           </div>
         </div>
 
-        <!-- Classroom Footer Legend (Compact Icons Only) -->
-        <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between gap-2 text-xs text-slate-400 no-print">
-          <div class="flex items-center gap-3">
-            <span class="w-2.5 h-2.5 rounded-full bg-sky-500 inline-block" title="นักเรียนชาย"></span>
-            <span class="w-2.5 h-2.5 rounded-full bg-pink-500 inline-block" title="นักเรียนหญิง"></span>
-            <span title="ตำแหน่งในห้องเรียน">👑</span>
-            <span title="ควรนั่งแถวหน้า 1-2">👓</span>
-            <span title="แยกนั่งห่างกัน">💬</span>
-            <i class="fa-solid fa-lock text-amber-500 text-[11px]" title="ล็อกที่นั่ง"></i>
-          </div>
-          <i class="fa-solid fa-cloud-check text-emerald-500 text-xs" title="บันทึกอัตโนมัติ"></i>
-        </div>
+
       </section>
     </main>
   </div>
@@ -2532,6 +2814,250 @@
     </div>
   </div>
 
+  <!-- ================= MODAL 14: APPEARANCE & SETTINGS PAGE ================= -->
+  <div id="settings-modal" class="fixed inset-0 bg-slate-900/75 backdrop-blur-sm z-[110] hidden items-center justify-center p-2.5 sm:p-4 no-print">
+    <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden animate-shuffle flex flex-col max-h-[92vh]">
+      <!-- Header -->
+      <div id="settings-modal-header" class="p-4 sm:p-5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-10 h-10 rounded-2xl bg-white/15 flex items-center justify-center text-lg shrink-0">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <div class="min-w-0">
+            <h3 class="font-extrabold text-base sm:text-lg truncate">ตั้งค่าการแสดงผลและธีม (Settings)</h3>
+            <p class="text-xs text-white/85 truncate">ปรับฟอนต์ ขนาดตัวอักษร โทนสี UI และภาพพื้นหลังตามต้องการ</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeSettingsModal()" class="w-9 h-9 rounded-xl bg-white/15 hover:bg-white/25 flex items-center justify-center shrink-0 transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Scrollable Settings Content -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-5">
+
+        <!-- SECTION 1: FONT FAMILY SELECTOR -->
+        <section class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-font text-indigo-600"></i>
+              <span>1. เลือกแบบอักษร (Font Family)</span>
+            </h4>
+            <span id="settings-current-font-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800">TH Niramit AS</span>
+          </div>
+          <div id="settings-font-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <!-- Populated via JS -->
+          </div>
+        </section>
+
+        <!-- SECTION 2: FONT SIZE ADJUSTMENT -->
+        <section class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-text-height text-indigo-600"></i>
+              <span>2. ปรับขนาดตัวอักษร (Font Size)</span>
+            </h4>
+            <span id="settings-font-size-value" class="text-xs font-extrabold px-2.5 py-0.5 rounded-lg bg-indigo-600 text-white">100%</span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold text-slate-500">ก</span>
+            <input
+              type="range"
+              id="settings-font-size-slider"
+              min="85"
+              max="130"
+              step="5"
+              value="100"
+              oninput="setAppearanceFontSize(this.value)"
+              class="flex-1 accent-indigo-600 cursor-pointer"
+            />
+            <span class="text-lg font-extrabold text-slate-700">ก</span>
+          </div>
+
+          <div class="grid grid-cols-4 gap-1.5">
+            <button type="button" onclick="setAppearanceFontSize(90)" data-fsize="90" class="settings-fsize-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-700 hover:border-indigo-400 transition">เล็ก (90%)</button>
+            <button type="button" onclick="setAppearanceFontSize(100)" data-fsize="100" class="settings-fsize-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-700 hover:border-indigo-400 transition">ปกติ (100%)</button>
+            <button type="button" onclick="setAppearanceFontSize(115)" data-fsize="115" class="settings-fsize-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-700 hover:border-indigo-400 transition">ใหญ่ (115%)</button>
+            <button type="button" onclick="setAppearanceFontSize(125)" data-fsize="125" class="settings-fsize-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-700 hover:border-indigo-400 transition">ใหญ่มาก (125%)</button>
+          </div>
+        </section>
+
+        <!-- SECTION 3: UI COLOR THEME -->
+        <section class="space-y-3">
+          <h4 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-palette text-indigo-600"></i>
+            <span>3. ปรับแต่งธีมสี UI (Color Theme)</span>
+          </h4>
+
+          <!-- Light / Dark Base Switcher -->
+          <div class="grid grid-cols-2 gap-2.5">
+            <button
+              type="button"
+              id="settings-mode-light"
+              onclick="setAppearanceDarkMode(false)"
+              class="p-3 rounded-2xl border-2 border-indigo-600 bg-slate-50 flex items-center justify-center gap-2 text-xs sm:text-sm font-extrabold text-slate-800 transition"
+            >
+              <i class="fa-solid fa-sun text-amber-500 text-base"></i> โหมดสว่าง (Light)
+            </button>
+            <button
+              type="button"
+              id="settings-mode-dark"
+              onclick="setAppearanceDarkMode(true)"
+              class="p-3 rounded-2xl border-2 border-slate-200 bg-slate-900 text-white flex items-center justify-center gap-2 text-xs sm:text-sm font-extrabold transition"
+            >
+              <i class="fa-solid fa-moon text-amber-300 text-base"></i> โหมดมืด (Dark)
+            </button>
+          </div>
+
+          <!-- Accent Color Palette + Custom Hex Picker -->
+          <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold text-slate-700">เลือกสีหลักของระบบ (Accent Color):</span>
+              <label class="inline-flex items-center gap-2 text-xs font-bold text-indigo-700 cursor-pointer bg-white px-2.5 py-1 rounded-xl border border-slate-300 hover:border-indigo-400">
+                <i class="fa-solid fa-eye-dropper"></i>
+                <span>เลือกสีเอง</span>
+                <input
+                  type="color"
+                  id="settings-custom-color-picker"
+                  value="#4f46e5"
+                  oninput="setAppearanceCustomAccent(this.value)"
+                  class="w-6 h-6 rounded border-0 p-0 cursor-pointer bg-transparent"
+                />
+              </label>
+            </div>
+            <div id="settings-accent-grid" class="grid grid-cols-4 sm:grid-cols-8 gap-2">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4: CUSTOM BACKGROUND IMAGE -->
+        <section class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <h4 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-image text-indigo-600"></i>
+              <span>4. ภาพพื้นหลังแบบกำหนดเอง (Custom Background)</span>
+            </h4>
+            <button
+              type="button"
+              id="settings-btn-remove-bg"
+              onclick="clearAppearanceBackground()"
+              class="hidden px-2.5 py-1 rounded-lg border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-700 text-[11px] font-bold transition"
+            >
+              <i class="fa-solid fa-trash-can mr-1"></i>ลบภาพพื้นหลัง
+            </button>
+          </div>
+
+          <!-- Live Preview & Upload Button -->
+          <div class="flex flex-col sm:flex-row items-center gap-3">
+            <div
+              id="settings-bg-preview"
+              class="w-full sm:w-40 h-24 rounded-2xl border-2 border-dashed border-slate-300 bg-white flex flex-col items-center justify-center text-slate-400 text-xs overflow-hidden bg-cover bg-center shrink-0"
+            >
+              <i class="fa-regular fa-image text-2xl mb-1"></i>
+              <span>ยังไม่ได้ตั้งภาพพื้นหลัง</span>
+            </div>
+
+            <div class="flex-1 w-full space-y-2">
+              <input
+                type="file"
+                id="settings-bg-file-input"
+                accept="image/png,image/jpeg,image/webp,image/gif"
+                class="hidden"
+                onchange="handleAppearanceBgUpload(event)"
+              />
+              <button
+                type="button"
+                onclick="document.getElementById('settings-bg-file-input').click()"
+                class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition"
+              >
+                <i class="fa-solid fa-cloud-arrow-up"></i> เลือกรูปภาพจากเครื่องเป็นพื้นหลัง
+              </button>
+
+              <!-- Quick Aesthetic Gradient Wallpapers -->
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[11px] font-bold text-slate-500">หรือพื้นหลังสำเร็จรูป:</span>
+                <button type="button" onclick="setPresetBgGradient('')" class="px-2 py-0.5 rounded-lg border border-slate-300 bg-white text-[10px] font-bold text-slate-700">ไม่มี</button>
+                <button type="button" onclick="setPresetBgGradient('linear-gradient(135deg,#e0f2fe 0%,#ede9fe 50%,#fce7f3 100%)')" class="w-6 h-5 rounded-md border border-slate-300" style="background:linear-gradient(135deg,#e0f2fe,#ede9fe,#fce7f3)" title="พาสเทลสกาย"></button>
+                <button type="button" onclick="setPresetBgGradient('linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f766e 100%)')" class="w-6 h-5 rounded-md border border-slate-300" style="background:linear-gradient(135deg,#0f172a,#1e1b4b,#0f766e)" title="ออโรร่ากลางคืน"></button>
+                <button type="button" onclick="setPresetBgGradient('linear-gradient(135deg,#fef3c7 0%,#fbcfe8 50%,#c7d2fe 100%)')" class="w-6 h-5 rounded-md border border-slate-300" style="background:linear-gradient(135deg,#fef3c7,#fbcfe8,#c7d2fe)" title="พระอาทิตย์ตกพาสเทล"></button>
+                <button type="button" onclick="setPresetBgGradient('linear-gradient(135deg,#d1fae5 0%,#cffafe 50%,#e0e7ff 100%)')" class="w-6 h-5 rounded-md border border-slate-300" style="background:linear-gradient(135deg,#d1fae5,#cffafe,#e0e7ff)" title="มิ้นต์สดชื่น"></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Background Dim & Blur Sliders -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div>
+              <div class="flex items-center justify-between text-[11px] font-bold text-slate-700 mb-1">
+                <span>ความเข้มชั้นกรองแสง (ช่วยให้ตัวหนังสือชัด)</span>
+                <span id="settings-bg-dim-val">35%</span>
+              </div>
+              <input
+                type="range"
+                id="settings-bg-dim-slider"
+                min="0"
+                max="85"
+                step="5"
+                value="35"
+                oninput="setAppearanceBgDim(this.value)"
+                class="w-full accent-indigo-600 cursor-pointer"
+              />
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between text-[11px] font-bold text-slate-700 mb-1">
+                <span>ความเบลอพื้นหลัง (Blur)</span>
+                <span id="settings-bg-blur-val">0 px</span>
+              </div>
+              <input
+                type="range"
+                id="settings-bg-blur-slider"
+                min="0"
+                max="14"
+                step="1"
+                value="0"
+                oninput="setAppearanceBgBlur(this.value)"
+                class="w-full accent-indigo-600 cursor-pointer"
+              />
+            </div>
+          </div>
+
+          <label class="inline-flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              id="settings-bg-glass-toggle"
+              checked
+              onchange="setAppearanceBgGlass(this.checked)"
+              class="rounded text-indigo-600 focus:ring-indigo-500"
+            />
+            <span>เปิดเอฟเฟกต์กระจกโปร่งแสง (Glassmorphism) ให้เห็นภาพพื้นหลังทะลุกรอบได้อย่างสวยงาม</span>
+          </label>
+        </section>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="p-3.5 sm:p-4 border-t border-slate-200 bg-slate-50 flex flex-wrap items-center justify-between gap-2 shrink-0">
+        <button
+          type="button"
+          onclick="resetAllAppearanceSettings()"
+          class="px-3.5 py-2 rounded-xl border border-rose-200 bg-white hover:bg-rose-50 text-rose-600 text-xs font-bold transition"
+        >
+          <i class="fa-solid fa-rotate-left mr-1"></i> คืนค่าเริ่มต้นทั้งหมด
+        </button>
+        <button
+          type="button"
+          onclick="closeSettingsModal()"
+          class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-extrabold shadow-sm transition"
+        >
+          บันทึกและปิดหน้าตั้งค่า
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= TOAST NOTIFICATION ================= -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
 
@@ -2551,18 +3077,18 @@
 
     const ROLE_ORDER = ['', 'leader', 'vice', 'secretary', 'treasurer', 'committee'];
 
-    // Cute SVG Student Avatar Presets (Encoded as lightweight data URLs)
+    // Playful, Dimensional, Cute Kawaii SVG Student Avatar Presets (3D gradients, glossy eyes & blush)
     const AVATAR_PRESETS = [
-      { id: 'boy1', label: 'ชายผมสั้น', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#e0f2fe"/><circle cx="50" cy="54" r="28" fill="#fbd38d"/><path d="M22 48 C22 25 78 25 78 48 C70 36 30 36 22 48 Z" fill="#1e293b"/><circle cx="40" cy="54" r="3.5" fill="#1e293b"/><circle cx="60" cy="54" r="3.5" fill="#1e293b"/><path d="M42 66 Q50 73 58 66" stroke="#1e293b" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M26 100 C26 80 74 80 74 100" fill="#0284c7"/></svg>` },
-      { id: 'boy2', label: 'ชายใส่แว่น', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#dbeafe"/><circle cx="50" cy="54" r="28" fill="#fde68a"/><path d="M20 50 C22 22 78 22 80 50 C65 34 35 34 20 50 Z" fill="#334155"/><rect x="31" y="48" width="15" height="11" rx="3" fill="none" stroke="#0f172a" stroke-width="2.8"/><rect x="54" y="48" width="15" height="11" rx="3" fill="none" stroke="#0f172a" stroke-width="2.8"/><line x1="46" y1="53" x2="54" y2="53" stroke="#0f172a" stroke-width="2.8"/><circle cx="38.5" cy="53.5" r="2.5" fill="#0f172a"/><circle cx="61.5" cy="53.5" r="2.5" fill="#0f172a"/><path d="M43 67 Q50 72 57 67" stroke="#0f172a" stroke-width="2.8" fill="none" stroke-linecap="round"/><path d="M26 100 C26 80 74 80 74 100" fill="#2563eb"/></svg>` },
-      { id: 'boy3', label: 'ชายผมหยักศก', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#e0e7ff"/><circle cx="50" cy="55" r="28" fill="#f6ad55"/><circle cx="32" cy="33" r="10" fill="#27272a"/><circle cx="50" cy="29" r="12" fill="#27272a"/><circle cx="68" cy="33" r="10" fill="#27272a"/><circle cx="40" cy="55" r="3.5" fill="#18181b"/><circle cx="60" cy="55" r="3.5" fill="#18181b"/><path d="M42 66 Q50 74 58 66" stroke="#18181b" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M26 100 C26 80 74 80 74 100" fill="#4f46e5"/></svg>` },
-      { id: 'boy4', label: 'ชายยิ้มแฉ่ง', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#ccfbf1"/><circle cx="50" cy="54" r="28" fill="#fbd38d"/><path d="M22 46 C26 24 74 24 78 46 L72 38 L58 42 L45 36 L28 42 Z" fill="#451a03"/><circle cx="40" cy="54" r="3.5" fill="#1e293b"/><circle cx="60" cy="54" r="3.5" fill="#1e293b"/><path d="M40 64 Q50 75 60 64 Z" fill="#ffffff" stroke="#1e293b" stroke-width="2"/><path d="M26 100 C26 80 74 80 74 100" fill="#0d9488"/></svg>` },
-      { id: 'boy5', label: 'ชายหัวเกรียน', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#fef3c7"/><circle cx="50" cy="54" r="28" fill="#fbd38d"/><path d="M24 45 C26 26 74 26 76 45 C66 36 34 36 24 45 Z" fill="#0f172a"/><circle cx="40" cy="54" r="3.5" fill="#0f172a"/><circle cx="60" cy="54" r="3.5" fill="#0f172a"/><circle cx="33" cy="60" r="4" fill="#fca5a5" opacity="0.6"/><circle cx="67" cy="60" r="4" fill="#fca5a5" opacity="0.6"/><path d="M43 66 Q50 71 57 66" stroke="#0f172a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M26 100 C26 80 74 80 74 100" fill="#d97706"/></svg>` },
-      { id: 'girl1', label: 'หญิงมัดแกละ', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#fce7f3"/><circle cx="20" cy="52" r="10" fill="#1e293b"/><circle cx="80" cy="52" r="10" fill="#1e293b"/><circle cx="50" cy="54" r="27" fill="#fde68a"/><path d="M23 48 C23 24 77 24 77 48 C65 35 35 35 23 48 Z" fill="#1e293b"/><circle cx="40" cy="54" r="3.5" fill="#1e293b"/><circle cx="60" cy="54" r="3.5" fill="#1e293b"/><circle cx="33" cy="60" r="4.5" fill="#f472b6" opacity="0.45"/><circle cx="67" cy="60" r="4.5" fill="#f472b6" opacity="0.45"/><path d="M43 65 Q50 71 57 65" stroke="#1e293b" stroke-width="2.8" fill="none" stroke-linecap="round"/><path d="M26 100 C26 80 74 80 74 100" fill="#db2777"/></svg>` },
-      { id: 'girl2', label: 'หญิงผมบ็อบ', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#ffe4e6"/><path d="M20 55 C20 22 80 22 80 55 L82 72 L18 72 Z" fill="#31102f"/><circle cx="50" cy="55" r="26" fill="#fbd38d"/><path d="M24 44 L76 44 C72 28 28 28 24 44 Z" fill="#31102f"/><circle cx="40" cy="55" r="3.5" fill="#1e293b"/><circle cx="60" cy="55" r="3.5" fill="#1e293b"/><path d="M43 66 Q50 71 57 66" stroke="#1e293b" stroke-width="2.8" fill="none" stroke-linecap="round"/><path d="M26 100 C26 80 74 80 74 100" fill="#e11d48"/></svg>` },
-      { id: 'girl3', label: 'หญิงใส่แว่น', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#f3e8ff"/><path d="M20 58 C20 22 80 22 80 58 L78 75 L22 75 Z" fill="#3b0764"/><circle cx="50" cy="54" r="26" fill="#fde68a"/><path d="M24 46 C28 26 72 26 76 46 C64 36 36 36 24 46 Z" fill="#3b0764"/><circle cx="39" cy="54" r="8" fill="none" stroke="#be185d" stroke-width="2.6"/><circle cx="61" cy="54" r="8" fill="none" stroke="#be185d" stroke-width="2.6"/><line x1="47" y1="54" x2="53" y2="54" stroke="#be185d" stroke-width="2.6"/><circle cx="39" cy="54" r="2.5" fill="#1e293b"/><circle cx="61" cy="54" r="2.5" fill="#1e293b"/><path d="M44 66 Q50 71 56 66" stroke="#1e293b" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M26 100 C26 80 74 80 74 100" fill="#9333ea"/></svg>` },
-      { id: 'girl4', label: 'หญิงติดโบว์', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#fae8ff"/><circle cx="50" cy="22" r="11" fill="#1e293b"/><path d="M36 24 L50 29 L36 34 Z" fill="#f43f5e"/><path d="M64 24 L50 29 L64 34 Z" fill="#f43f5e"/><circle cx="50" cy="55" r="26" fill="#fde68a"/><path d="M24 48 C24 26 76 26 76 48 C65 36 35 36 24 48 Z" fill="#1e293b"/><circle cx="40" cy="55" r="3.5" fill="#1e293b"/><circle cx="60" cy="55" r="3.5" fill="#1e293b"/><path d="M43 66 Q50 72 57 66" stroke="#1e293b" stroke-width="2.8" fill="none" stroke-linecap="round"/><path d="M26 100 C26 80 74 80 74 100" fill="#c026d3"/></svg>` },
-      { id: 'girl5', label: 'หญิงผมยาว', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#ecfdf5"/><path d="M18 55 C18 20 82 20 82 55 L85 84 L15 84 Z" fill="#451a03"/><circle cx="50" cy="54" r="26" fill="#fbd38d"/><path d="M23 46 C30 26 70 26 77 46 C62 35 38 35 23 46 Z" fill="#451a03"/><circle cx="40" cy="54" r="3.5" fill="#1e293b"/><circle cx="60" cy="54" r="3.5" fill="#1e293b"/><circle cx="33" cy="60" r="4" fill="#fb7185" opacity="0.45"/><circle cx="67" cy="60" r="4" fill="#fb7185" opacity="0.45"/><path d="M43 65 Q50 71 57 65" stroke="#1e293b" stroke-width="2.8" fill="none" stroke-linecap="round"/><path d="M26 100 C26 80 74 80 74 100" fill="#10b981"/></svg>` }
+      { id: 'boy1', label: 'หนุ่มน้อยยิ้มใส', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#e0f2fe"/><stop offset="100%" stop-color="#7dd3fc"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff0db"/><stop offset="65%" stop-color="#fbd39b"/><stop offset="100%" stop-color="#e9ad6c"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#334155"/><stop offset="100%" stop-color="#0f172a"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0369a1"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.6"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="16" cy="20" r="4" fill="#fff" opacity="0.55"/><circle cx="85" cy="24" r="3" fill="#fff" opacity="0.6"/><circle cx="82" cy="76" r="5" fill="#fff" opacity="0.35"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M40 75 L50 86 L60 75 Z" fill="#ffffff" opacity="0.92"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#e5a668"/><circle cx="24" cy="54" r="6.5" fill="#f3bd82"/><circle cx="76" cy="54" r="6.5" fill="#f3bd82"/><circle cx="50" cy="52" r="27" fill="url(#sk)"/><path d="M21 50 C19 22 40 13 55 16 C72 17 82 28 79 50 C74 37 64 31 54 35 C46 27 32 32 21 50 Z" fill="url(#hr)"/><path d="M32 26 Q46 19 60 25" stroke="#94a3b8" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.55"/><ellipse cx="34" cy="60" rx="6.5" ry="4" fill="url(#bl)"/><ellipse cx="66" cy="60" rx="6.5" ry="4" fill="url(#bl)"/><circle cx="39.5" cy="53" r="4.3" fill="#0f172a"/><circle cx="60.5" cy="53" r="4.3" fill="#0f172a"/><circle cx="41" cy="51.3" r="1.6" fill="#fff"/><circle cx="62" cy="51.3" r="1.6" fill="#fff"/><circle cx="38" cy="54.8" r="0.8" fill="#fff" opacity="0.8"/><circle cx="59" cy="54.8" r="0.8" fill="#fff" opacity="0.8"/><path d="M35 45 Q39.5 42.5 44 45" stroke="#334155" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M56 45 Q60.5 42.5 65 45" stroke="#334155" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M43 63 Q50 71 57 63" stroke="#9a3412" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 'boy2', label: 'หนุ่มแว่นเนิร์ด', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#ede9fe"/><stop offset="100%" stop-color="#a5b4fc"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff4e4"/><stop offset="68%" stop-color="#fde0b2"/><stop offset="100%" stop-color="#eab676"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#475569"/><stop offset="100%" stop-color="#1e293b"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#3730a3"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f472b6" stop-opacity="0.55"/><stop offset="100%" stop-color="#f472b6" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="18" cy="22" r="3.5" fill="#fff" opacity="0.6"/><circle cx="84" cy="18" r="4.5" fill="#fff" opacity="0.45"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M41 75 L50 87 L59 75 Z" fill="#fff"/><path d="M48 82 L52 82 L53 95 L50 98 L47 95 Z" fill="#f59e0b"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#e5ae73"/><circle cx="24" cy="54" r="6.5" fill="#f4c58e"/><circle cx="76" cy="54" r="6.5" fill="#f4c58e"/><circle cx="50" cy="52" r="27" fill="url(#sk)"/><path d="M20 51 C20 20 48 13 62 17 C76 20 82 32 79 51 C70 36 58 34 46 31 C36 37 28 38 20 51 Z" fill="url(#hr)"/><path d="M34 24 Q50 18 65 25" stroke="#cbd5e1" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.45"/><ellipse cx="34" cy="61" rx="6" ry="3.6" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6" ry="3.6" fill="url(#bl)"/><circle cx="39" cy="53" r="3.9" fill="#0f172a"/><circle cx="61" cy="53" r="3.9" fill="#0f172a"/><circle cx="40.3" cy="51.6" r="1.4" fill="#fff"/><circle cx="62.3" cy="51.6" r="1.4" fill="#fff"/><rect x="29.5" y="45.5" width="18" height="14" rx="5.5" fill="#ffffff" fill-opacity="0.22" stroke="#1e293b" stroke-width="2.6"/><rect x="52.5" y="45.5" width="18" height="14" rx="5.5" fill="#ffffff" fill-opacity="0.22" stroke="#1e293b" stroke-width="2.6"/><line x1="47.5" y1="52" x2="52.5" y2="52" stroke="#1e293b" stroke-width="2.6"/><path d="M44 64 Q50 69.5 56 64" stroke="#9a3412" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 'boy3', label: 'หนุ่มหยักศกขี้เล่น', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#fef3c7"/><stop offset="100%" stop-color="#fdba74"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#ffe8cc"/><stop offset="68%" stop-color="#f5be82"/><stop offset="100%" stop-color="#dd9857"/></radialGradient><radialGradient id="hr" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#57534e"/><stop offset="100%" stop-color="#1c1917"/></radialGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#c2410c"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.52"/><stop offset="100%" stop-color="#f43f5e" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="16" cy="24" r="4" fill="#fff" opacity="0.55"/><circle cx="84" cy="20" r="3" fill="#fff" opacity="0.6"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M35 76 Q50 86 65 76" stroke="#fed7aa" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#d99456"/><circle cx="24" cy="55" r="6.5" fill="#ebaf72"/><circle cx="76" cy="55" r="6.5" fill="#ebaf72"/><circle cx="50" cy="54" r="26.5" fill="url(#sk)"/><g fill="url(#hr)"><circle cx="27" cy="36" r="10"/><circle cx="38" cy="27" r="11"/><circle cx="52" cy="25" r="12"/><circle cx="65" cy="28" r="11"/><circle cx="74" cy="37" r="9.5"/><circle cx="34" cy="36" r="7.5"/><circle cx="50" cy="34" r="8"/><circle cx="66" cy="36" r="7.5"/></g><ellipse cx="34" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54" r="4.3" fill="#1c1917"/><circle cx="41" cy="52.4" r="1.5" fill="#fff"/><path d="M56 54.5 Q60.5 49.5 65 54.5" stroke="#1c1917" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M41 63 Q50 73 59 63 Z" fill="#991b1b"/><path d="M44 69 Q50 72 56 69 Q50 65.5 44 69 Z" fill="#fb7185"/><path d="M42.5 63.6 L57.5 63.6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>` },
+      { id: 'boy4', label: 'หนุ่มหมวกแก๊ปสปอร์ต', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#ccfbf1"/><stop offset="100%" stop-color="#5eead4"/></radialGradient><radialGradient id="sk" cx="42%" cy="38%" r="65%"><stop offset="0%" stop-color="#fff0db"/><stop offset="68%" stop-color="#fbd39b"/><stop offset="100%" stop-color="#e5a668"/></radialGradient><linearGradient id="cap" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#14b8a6"/><stop offset="100%" stop-color="#0f766e"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#0369a1"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.55"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="15" cy="72" r="4" fill="#fff" opacity="0.5"/><circle cx="84" cy="24" r="4" fill="#fff" opacity="0.55"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M39 75 Q50 84 61 75" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#e2a365"/><circle cx="24" cy="56" r="6.5" fill="#f3be83"/><circle cx="76" cy="56" r="6.5" fill="#f3be83"/><circle cx="50" cy="54" r="26.5" fill="url(#sk)"/><path d="M23 44 C26 19 74 19 77 44 Z" fill="url(#cap)"/><path d="M20 42 Q52 34 86 43 Q74 49 52 46 Q32 45 20 42 Z" fill="#115e59"/><circle cx="50" cy="30" r="4" fill="#fef08a"/><ellipse cx="34" cy="61" rx="6" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54.5" r="4.2" fill="#0f172a"/><circle cx="60.5" cy="54.5" r="4.2" fill="#0f172a"/><circle cx="41" cy="53" r="1.5" fill="#fff"/><circle cx="62" cy="53" r="1.5" fill="#fff"/><path d="M41 64 Q50 73 59 64 Z" fill="#fff" stroke="#0f172a" stroke-width="2" stroke-linejoin="round"/></svg>` },
+      { id: 'boy5', label: 'หนุ่มผมตั้งสุดเท่', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#dcfce7"/><stop offset="100%" stop-color="#86efac"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff1df"/><stop offset="68%" stop-color="#fbd39b"/><stop offset="100%" stop-color="#e5a668"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#78350f"/><stop offset="100%" stop-color="#451a03"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.55"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><path d="M82 16 L84 21 L89 23 L84 25 L82 30 L80 25 L75 23 L80 21 Z" fill="#fef08a"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M40 75 L50 86 L60 75 Z" fill="#ecfdf5"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#e3a466"/><circle cx="24" cy="55" r="6.5" fill="#f2bd83"/><circle cx="76" cy="55" r="6.5" fill="#f2bd83"/><circle cx="50" cy="53" r="26.5" fill="url(#sk)"/><path d="M22 48 L24 31 L34 34 L42 17 L52 28 L63 16 L69 31 L79 29 L78 48 C68 36 32 36 22 48 Z" fill="url(#hr)"/><ellipse cx="34" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54" r="4.3" fill="#1e293b"/><circle cx="60.5" cy="54" r="4.3" fill="#1e293b"/><circle cx="41" cy="52.4" r="1.5" fill="#fff"/><circle cx="62" cy="52.4" r="1.5" fill="#fff"/><path d="M43 64 Q50 70 57 64" stroke="#9a3412" stroke-width="2.7" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 'girl1', label: 'สาวน้อยมัดแกละ', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#fdf2f8"/><stop offset="100%" stop-color="#f9a8d4"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff4e6"/><stop offset="68%" stop-color="#fde0b8"/><stop offset="100%" stop-color="#ebb478"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4c1d95"/><stop offset="100%" stop-color="#1e1b4b"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#be185d"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.65"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="15" cy="20" r="3.5" fill="#fff" opacity="0.7"/><circle cx="85" cy="22" r="4" fill="#fff" opacity="0.6"/><circle cx="17" cy="48" r="12" fill="url(#hr)"/><circle cx="83" cy="48" r="12" fill="url(#hr)"/><circle cx="25" cy="43" r="4" fill="#fb7185"/><circle cx="75" cy="43" r="4" fill="#fb7185"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M36 76 Q43 85 50 80 Q57 85 64 76" fill="#fff"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e6ae74"/><circle cx="50" cy="53" r="26.5" fill="url(#sk)"/><path d="M22 50 C22 20 78 20 78 50 C70 36 58 34 50 38 C42 34 30 36 22 50 Z" fill="url(#hr)"/><path d="M33 27 Q50 20 67 27" stroke="#c4b5fd" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/><ellipse cx="33" cy="60" rx="6.5" ry="4" fill="url(#bl)"/><ellipse cx="67" cy="60" rx="6.5" ry="4" fill="url(#bl)"/><circle cx="39" cy="53.5" r="4.5" fill="#1e1b4b"/><circle cx="61" cy="53.5" r="4.5" fill="#1e1b4b"/><circle cx="40.6" cy="51.8" r="1.7" fill="#fff"/><circle cx="62.6" cy="51.8" r="1.7" fill="#fff"/><circle cx="37.6" cy="55.2" r="0.9" fill="#fff"/><circle cx="59.6" cy="55.2" r="0.9" fill="#fff"/><path d="M44 63.5 Q50 69.5 56 63.5" stroke="#be123c" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 'girl2', label: 'สาวผมบ็อบติดกิ๊บ', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#fff1f2"/><stop offset="100%" stop-color="#fda4af"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff3e2"/><stop offset="68%" stop-color="#fcdab0"/><stop offset="100%" stop-color="#e8ae72"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#581c87"/><stop offset="100%" stop-color="#2e1065"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f43f5e"/><stop offset="100%" stop-color="#be123c"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.6"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><path d="M18 56 C18 18 82 18 82 56 L84 74 C76 78 68 78 65 73 L35 73 C32 78 24 78 16 74 Z" fill="url(#hr)"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M40 75 L50 86 L60 75 Z" fill="#fff1f2"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e5ac72"/><circle cx="50" cy="54" r="25.5" fill="url(#sk)"/><path d="M23 47 C26 24 74 24 77 47 L67 43 L62 47 L52 41 L42 47 L34 42 Z" fill="url(#hr)"/><rect x="61" y="34" width="11" height="4.5" rx="2.2" transform="rotate(14 66 36)" fill="#fde047" stroke="#f59e0b" stroke-width="0.8"/><ellipse cx="34" cy="61" rx="6" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54.5" r="4.3" fill="#1e1b4b"/><circle cx="60.5" cy="54.5" r="4.3" fill="#1e1b4b"/><circle cx="41" cy="52.8" r="1.6" fill="#fff"/><circle cx="62" cy="52.8" r="1.6" fill="#fff"/><path d="M43.5 64 Q50 70.5 56.5 64" stroke="#be123c" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 'girl3', label: 'สาวแว่นน่ารัก', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#f3e8ff"/><stop offset="100%" stop-color="#d8b4fe"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff4e4"/><stop offset="68%" stop-color="#fde0b8"/><stop offset="100%" stop-color="#eab477"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6b21a8"/><stop offset="100%" stop-color="#3b0764"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7e22ce"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f472b6" stop-opacity="0.58"/><stop offset="100%" stop-color="#f472b6" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><path d="M18 58 C18 18 82 18 82 58 L80 86 L20 86 Z" fill="url(#hr)"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M40 75 L50 85 L60 75 Z" fill="#fff"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e6ae74"/><circle cx="50" cy="53" r="25.5" fill="url(#sk)"/><path d="M24 47 C27 24 73 24 76 47 C64 35 36 35 24 47 Z" fill="url(#hr)"/><ellipse cx="33" cy="61" rx="6" ry="3.6" fill="url(#bl)"/><ellipse cx="67" cy="61" rx="6" ry="3.6" fill="url(#bl)"/><circle cx="39" cy="54" r="3.9" fill="#1e1b4b"/><circle cx="61" cy="54" r="3.9" fill="#1e1b4b"/><circle cx="40.3" cy="52.6" r="1.4" fill="#fff"/><circle cx="62.3" cy="52.6" r="1.4" fill="#fff"/><circle cx="39" cy="54" r="8.5" fill="#ffffff" fill-opacity="0.22" stroke="#ec4899" stroke-width="2.5"/><circle cx="61" cy="54" r="8.5" fill="#ffffff" fill-opacity="0.22" stroke="#ec4899" stroke-width="2.5"/><line x1="47.5" y1="54" x2="52.5" y2="54" stroke="#ec4899" stroke-width="2.5"/><path d="M44.5 64.5 Q50 69.5 55.5 64.5" stroke="#be185d" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 'girl4', label: 'สาวดังโงะติดโบว์', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#fae8ff"/><stop offset="100%" stop-color="#f0abfc"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff4e4"/><stop offset="68%" stop-color="#fde0b8"/><stop offset="100%" stop-color="#ebb478"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#334155"/><stop offset="100%" stop-color="#0f172a"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d946ef"/><stop offset="100%" stop-color="#a21caf"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.62"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="16" cy="22" r="3" fill="#fff" opacity="0.7"/><circle cx="84" cy="24" r="3.5" fill="#fff" opacity="0.6"/><circle cx="50" cy="21" r="12" fill="url(#hr)"/><path d="M35 23 L50 29 L35 35 C33 31 33 27 35 23 Z" fill="#f43f5e"/><path d="M65 23 L50 29 L65 35 C67 31 67 27 65 23 Z" fill="#f43f5e"/><circle cx="50" cy="29" r="3.5" fill="#ffe4e6"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M38 76 Q50 86 62 76" stroke="#fae8ff" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e5ad73"/><circle cx="50" cy="54" r="25.5" fill="url(#sk)"/><path d="M24 50 C24 25 76 25 76 50 C64 36 36 36 24 50 Z" fill="url(#hr)"/><ellipse cx="34" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><path d="M35 54.5 Q39.5 49.5 44 54.5" stroke="#0f172a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M56 54.5 Q60.5 49.5 65 54.5" stroke="#0f172a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M43 63.5 Q50 71.5 57 63.5 Z" fill="#fb7185" stroke="#be123c" stroke-width="1.8" stroke-linejoin="round"/></svg>` },
+      { id: 'girl5', label: 'สาวผมยาวติดดาว', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#ecfdf5"/><stop offset="100%" stop-color="#6ee7b7"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff3e2"/><stop offset="68%" stop-color="#fbd39b"/><stop offset="100%" stop-color="#e5a668"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#92400e"/><stop offset="100%" stop-color="#451a03"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.6"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><path d="M16 56 C16 17 84 17 84 56 L87 90 L13 90 Z" fill="url(#hr)"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M39 75 L50 86 L61 75 Z" fill="#ecfdf5"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e5a76a"/><circle cx="50" cy="54" r="25.5" fill="url(#sk)"/><path d="M23 48 C28 24 72 24 77 48 C65 36 53 35 45 41 C38 35 28 38 23 48 Z" fill="url(#hr)"/><path d="M30 33 L32 37 L36 37.5 L33 40 L34 44 L30 42 L26 44 L27 40 L24 37.5 L28 37 Z" fill="#fde047" stroke="#eab308" stroke-width="0.7"/><ellipse cx="34" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54.5" r="4.4" fill="#291509"/><circle cx="60.5" cy="54.5" r="4.4" fill="#291509"/><circle cx="41" cy="52.8" r="1.6" fill="#fff"/><circle cx="62" cy="52.8" r="1.6" fill="#fff"/><circle cx="38" cy="56" r="0.8" fill="#fff"/><circle cx="59" cy="56" r="0.8" fill="#fff"/><path d="M43.5 64 Q50 70.5 56.5 64" stroke="#9a3412" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` }
     ].map(item => ({
       ...item,
       dataUrl: 'data:image/svg+xml;utf8,' + encodeURIComponent(item.svg)
@@ -2726,8 +3252,9 @@
       renderClassroomSelector();
       renderAll();
 
-      // Apply saved White/Black theme, UI Icon Size, Custom Logo, and Resizable Sidebar width
+      // Apply saved White/Black theme, Appearance Settings (Font, Size, Theme, BG), UI Icon Size, Custom Logo & Sidebar
       applySavedTheme();
+      applySavedAppearance();
       applySavedUiIconSize();
       applySavedCustomLogo();
       initResizableSidebar();
@@ -2736,6 +3263,8 @@
       window.addEventListener('storage', (ev) => {
         if (ev.key === MULTI_CLASS_KEY) {
           syncClassroomPortalFromCloud(false);
+        } else if (ev.key === APPEARANCE_STORAGE_KEY) {
+          applySavedAppearance();
         }
       });
 
@@ -3403,7 +3932,7 @@
                     onclick="event.stopPropagation(); openPhotoModal('${student.id}')"
                     class="${avatarSizeClass} rounded-full overflow-hidden border ${
                       student.gender === 'M' ? 'border-sky-300' : 'border-pink-300'
-                    } shadow-2xs mb-0.5 shrink-0 bg-slate-100 hover:ring-2 hover:ring-indigo-400 transition"
+                    } shadow-md ring-2 ring-white/80 mb-0.5 shrink-0 bg-slate-100 hover:scale-105 hover:ring-indigo-400 transition"
                     title="คลิกเพื่อเปลี่ยนรูปนักเรียน"
                   >
                     <img src="${avatarSrc}" alt="${escapeHtml(student.nickname || student.name)}" class="w-full h-full object-cover" />
@@ -3995,7 +4524,7 @@
         const btn = document.getElementById(`preset-btn-${p}`);
         if (!btn) return;
         if (state.preset === p) {
-          btn.className = 'preset-btn ui-tb-btn rounded-xl border border-indigo-600 bg-indigo-600 text-white shadow-xs transition flex items-center justify-center';
+          btn.className = 'preset-btn is-active-preset ui-tb-btn rounded-xl border border-indigo-600 bg-indigo-600 text-white shadow-xs transition flex items-center justify-center';
         } else {
           btn.className = 'preset-btn ui-tb-btn rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition flex items-center justify-center';
         }
@@ -4029,7 +4558,7 @@
         const btn = document.getElementById(`size-btn-${sz}`);
         if (!btn) return;
         if (sz === current) {
-          btn.className = 'w-7 h-6 rounded-md text-[10px] font-bold bg-indigo-600 text-white shadow-2xs flex items-center justify-center transition';
+          btn.className = 'is-active-size w-7 h-6 rounded-md text-[10px] font-bold bg-indigo-600 text-white shadow-2xs flex items-center justify-center transition';
         } else {
           btn.className = 'w-7 h-6 rounded-md text-[10px] font-semibold text-slate-600 hover:bg-slate-100 flex items-center justify-center transition';
         }
@@ -4251,6 +4780,7 @@
         if (btn) btn.title = 'เปลี่ยนเป็นพื้นหลังสีดำ (Dark Mode)';
         if (notify) showToast('เปลี่ยนเป็นพื้นหลังสีขาว (Light Mode) เรียบร้อยแล้ว ☀️', 'indigo');
       }
+      if (typeof applySavedAppearance === 'function') applySavedAppearance();
     }
 
     // --- ADJUSTABLE UI ICON SIZE CONTROLLER (M / L / XL) ---
@@ -7808,6 +8338,406 @@
         }
       });
     }
+
+    /*************************************************************************
+     * APPEARANCE & SETTINGS ENGINE (FONTS, FONT SIZE, COLOR THEME, BACKGROUND)
+     *************************************************************************/
+    const APPEARANCE_STORAGE_KEY = 'SMART_SEATING_APPEARANCE_V1';
+
+    const AVAILABLE_FONTS = [
+      { id: 'TH Niramit AS',              label: 'TH Niramit AS',              desc: 'สุภาพ นุ่มนวล อ่านง่าย (ค่าเริ่มต้น)',   stack: "'TH Niramit AS', 'Niramit', sans-serif", uploaded: true },
+      { id: 'TH Sarabun PSK',             label: 'TH Sarabun PSK',             desc: 'มาตรฐานราชการไทย คมชัด',                 stack: "'TH Sarabun PSK', 'Sarabun', sans-serif", uploaded: true },
+      { id: 'JaoHalloween',               label: 'JaoHalloween Bold',          desc: 'หัวกลมน่ารัก ขี้เล่น สดใส',               stack: "'JaoHalloween', 'Mali', sans-serif", uploaded: true },
+      { id: 'Royal Institute of Siam New',label: 'Royal Institute of Siam',    desc: 'ไทยร่วมสมัย ภูมิฐาน คลาสสิก',             stack: "'Royal Institute of Siam New', 'Niramit', serif", uploaded: true },
+      { id: 'Kanit',                      label: 'Kanit',                      desc: 'ทันสมัย กะทัดรัด ชัดเจนบนหน้าจอ',         stack: "'Kanit', sans-serif", uploaded: false },
+      { id: 'Mali',                       label: 'Mali',                       desc: 'ลายมือเด็กน่ารัก เหมาะกับห้องเรียน',      stack: "'Mali', cursive, sans-serif", uploaded: false },
+      { id: 'Prompt',                     label: 'Prompt',                     desc: 'โมเดิร์น โปร่ง สะอาดตา',                 stack: "'Prompt', sans-serif", uploaded: false }
+    ];
+
+    const ACCENT_THEMES = [
+      { id: 'indigo',  label: 'คราม-ม่วง',   c1: '#4f46e5', c2: '#7c3aed', soft: '#eef2ff', border: '#a5b4fc' },
+      { id: 'sky',     label: 'ฟ้าสดใส',     c1: '#0284c7', c2: '#06b6d4', soft: '#e0f2fe', border: '#7dd3fc' },
+      { id: 'emerald', label: 'เขียวมิ้นต์', c1: '#059669', c2: '#14b8a6', soft: '#d1fae5', border: '#6ee7b7' },
+      { id: 'rose',    label: 'ชมพูซากุระ',  c1: '#e11d48', c2: '#ec4899', soft: '#ffe4e6', border: '#fda4af' },
+      { id: 'amber',   label: 'ส้มอบอุ่น',   c1: '#d97706', c2: '#f97316', soft: '#fef3c7', border: '#fcd34d' },
+      { id: 'violet',  label: 'ม่วงพาสเทล',  c1: '#7c3aed', c2: '#c026d3', soft: '#f3e8ff', border: '#d8b4fe' },
+      { id: 'crimson', label: 'แดงทับทิม',   c1: '#dc2626', c2: '#e11d48', soft: '#fee2e2', border: '#fca5a5' },
+      { id: 'slate',   label: 'เทามินิมอล',  c1: '#334155', c2: '#475569', soft: '#f1f5f9', border: '#94a3b8' }
+    ];
+
+    const DEFAULT_APPEARANCE = {
+      fontFamily: 'TH Niramit AS',
+      fontSizePct: 100,
+      accentId: 'indigo',
+      customAccentHex: '#4f46e5',
+      bgImage: '',
+      bgGradient: '',
+      bgDim: 35,
+      bgBlur: 0,
+      bgGlass: true
+    };
+
+    function getSavedAppearance() {
+      try {
+        const raw = localStorage.getItem(APPEARANCE_STORAGE_KEY);
+        if (raw) return { ...DEFAULT_APPEARANCE, ...JSON.parse(raw) };
+      } catch (e) {}
+      return { ...DEFAULT_APPEARANCE };
+    }
+
+    function saveAppearance(nextObj, notifyMsg = '') {
+      const merged = { ...DEFAULT_APPEARANCE, ...nextObj };
+      try {
+        localStorage.setItem(APPEARANCE_STORAGE_KEY, JSON.stringify(merged));
+      } catch (quotaErr) {
+        // If custom image was too big for quota, keep settings without image and alert user
+        merged.bgImage = '';
+        localStorage.setItem(APPEARANCE_STORAGE_KEY, JSON.stringify(merged));
+        if (typeof showToast === 'function') {
+          showToast('ไฟล์รูปพื้นหลังใหญ่เกินพื้นที่จัดเก็บ กรุณาเลือกรูปที่ขนาดเล็กลง', 'amber');
+        }
+      }
+      applySavedAppearance(merged);
+      if (document.getElementById('settings-modal') && !document.getElementById('settings-modal').classList.contains('hidden')) {
+        renderSettingsModalContent();
+      }
+      if (notifyMsg && typeof showToast === 'function') {
+        showToast(notifyMsg, 'indigo');
+      }
+    }
+
+    function shadeHexColor(hex, percent) {
+      const clean = String(hex || '#4f46e5').replace('#', '');
+      if (clean.length !== 6) return '#7c3aed';
+      const num = parseInt(clean, 16);
+      const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(2.55 * percent)));
+      const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00ff) + Math.round(2.55 * percent)));
+      const b = Math.min(255, Math.max(0, (num & 0x0000ff) + Math.round(2.55 * percent)));
+      return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+
+    function ensureBackgroundLayerElement() {
+      let layer = document.getElementById('app-bg-layer');
+      if (!layer) {
+        layer = document.createElement('div');
+        layer.id = 'app-bg-layer';
+        layer.innerHTML = '<div id="app-bg-image"></div><div id="app-bg-overlay"></div>';
+        document.body.prepend(layer);
+      }
+      return layer;
+    }
+
+    function applySavedAppearance(override = null) {
+      const cfg = override || getSavedAppearance();
+      const root = document.documentElement;
+
+      // 1. Font Family
+      const fontObj = AVAILABLE_FONTS.find(f => f.id === cfg.fontFamily) || AVAILABLE_FONTS[0];
+      root.style.setProperty('--app-font-family', fontObj.stack);
+
+      // 2. Root Font Size Scaling (scales all Tailwind rem text proportionally)
+      const pct = Math.min(130, Math.max(85, Number(cfg.fontSizePct) || 100));
+      root.style.fontSize = `${(16 * pct / 100).toFixed(2)}px`;
+
+      // 3. Accent Color Theme
+      let c1 = '#4f46e5', c2 = '#7c3aed', soft = '#eef2ff', border = '#a5b4fc';
+      if (cfg.accentId === 'custom' && cfg.customAccentHex) {
+        c1 = cfg.customAccentHex;
+        c2 = shadeHexColor(c1, -18);
+        soft = c1 + '22';
+        border = c1 + '88';
+      } else {
+        const preset = ACCENT_THEMES.find(t => t.id === cfg.accentId) || ACCENT_THEMES[0];
+        c1 = preset.c1; c2 = preset.c2; soft = preset.soft; border = preset.border;
+      }
+      root.style.setProperty('--app-accent', c1);
+      root.style.setProperty('--app-accent-2', c2);
+      root.style.setProperty('--app-accent-soft', soft);
+      root.style.setProperty('--app-accent-border', border);
+      if (cfg.accentId && cfg.accentId !== 'indigo') {
+        document.body.classList.add('has-custom-accent');
+      } else {
+        document.body.classList.remove('has-custom-accent');
+      }
+
+      // Apply accent to student.html header if present
+      const stHeader = document.getElementById('student-top-header');
+      if (stHeader && cfg.accentId && cfg.accentId !== 'indigo') {
+        stHeader.style.background = `linear-gradient(90deg, ${c1}, ${c2})`;
+      } else if (stHeader) {
+        stHeader.style.background = '';
+      }
+
+      // 4. Custom Background Image / Gradient
+      const layer = ensureBackgroundLayerElement();
+      const bgImgEl = document.getElementById('app-bg-image');
+      const bgOverlayEl = document.getElementById('app-bg-overlay');
+      const isDark = document.body.classList.contains('dark-theme');
+
+      if (cfg.bgImage || cfg.bgGradient) {
+        document.body.classList.add('has-custom-bg');
+        if (cfg.bgGlass !== false) document.body.classList.add('bg-glass-mode');
+        else document.body.classList.remove('bg-glass-mode');
+
+        if (cfg.bgImage) {
+          bgImgEl.style.backgroundImage = `url("${cfg.bgImage}")`;
+        } else {
+          bgImgEl.style.backgroundImage = cfg.bgGradient;
+        }
+        const blurPx = Math.max(0, Math.min(14, Number(cfg.bgBlur) || 0));
+        bgImgEl.style.filter = blurPx > 0 ? `blur(${blurPx}px)` : 'none';
+
+        const dimAlpha = Math.max(0, Math.min(0.85, (Number(cfg.bgDim) || 0) / 100));
+        bgOverlayEl.style.backgroundColor = isDark
+          ? `rgba(9, 13, 22, ${dimAlpha})`
+          : `rgba(241, 245, 249, ${dimAlpha})`;
+      } else {
+        document.body.classList.remove('has-custom-bg', 'bg-glass-mode');
+        bgImgEl.style.backgroundImage = 'none';
+        bgOverlayEl.style.backgroundColor = 'transparent';
+      }
+
+      if (typeof applyResponsiveGridFit === 'function') {
+        requestAnimationFrame(() => applyResponsiveGridFit());
+      }
+    }
+
+    function openSettingsModal() {
+      renderSettingsModalContent();
+      const modal = document.getElementById('settings-modal');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeSettingsModal() {
+      const modal = document.getElementById('settings-modal');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function renderSettingsModalContent() {
+      const cfg = getSavedAppearance();
+      const isDark = document.body.classList.contains('dark-theme');
+
+      // 1. Font Cards
+      const fontGrid = document.getElementById('settings-font-grid');
+      const fontBadge = document.getElementById('settings-current-font-badge');
+      if (fontBadge) fontBadge.textContent = cfg.fontFamily;
+      if (fontGrid) {
+        fontGrid.innerHTML = AVAILABLE_FONTS.map(f => {
+          const active = cfg.fontFamily === f.id;
+          return `
+            <button
+              type="button"
+              onclick="setAppearanceFont('${f.id}')"
+              class="p-3 rounded-2xl border-2 text-left transition flex items-center justify-between gap-2 ${
+                active
+                  ? 'border-indigo-600 bg-indigo-50/70 shadow-xs'
+                  : 'border-slate-200 bg-white hover:border-indigo-300'
+              }"
+            >
+              <div class="min-w-0">
+                <div class="text-sm font-bold text-slate-900 truncate" style="font-family: ${f.stack} !important;">
+                  ${f.label} • กขคง 123
+                </div>
+                <div class="text-[11px] text-slate-500 truncate">${f.desc}</div>
+              </div>
+              <div class="shrink-0">
+                ${active
+                  ? '<span class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></span>'
+                  : (f.uploaded ? '<span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[9px] font-bold">ฟอนต์หลัก</span>' : '')
+                }
+              </div>
+            </button>
+          `;
+        }).join('');
+      }
+
+      // 2. Font Size Slider & Preset Buttons
+      const slider = document.getElementById('settings-font-size-slider');
+      const sizeVal = document.getElementById('settings-font-size-value');
+      if (slider) slider.value = String(cfg.fontSizePct || 100);
+      if (sizeVal) sizeVal.textContent = `${cfg.fontSizePct || 100}%`;
+      document.querySelectorAll('.settings-fsize-btn').forEach(btn => {
+        const v = Number(btn.getAttribute('data-fsize'));
+        if (v === Number(cfg.fontSizePct || 100)) {
+          btn.className = 'settings-fsize-btn py-1.5 rounded-xl border-2 border-indigo-600 bg-indigo-600 text-white text-xs font-extrabold transition';
+        } else {
+          btn.className = 'settings-fsize-btn py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-700 hover:border-indigo-400 transition';
+        }
+      });
+
+      // 3. Light / Dark Mode Buttons
+      const btnL = document.getElementById('settings-mode-light');
+      const btnD = document.getElementById('settings-mode-dark');
+      if (btnL && btnD) {
+        btnL.className = !isDark
+          ? 'p-3 rounded-2xl border-2 border-indigo-600 bg-indigo-50 flex items-center justify-center gap-2 text-xs sm:text-sm font-extrabold text-indigo-900 shadow-xs transition'
+          : 'p-3 rounded-2xl border-2 border-slate-600 bg-slate-800 flex items-center justify-center gap-2 text-xs sm:text-sm font-bold text-slate-300 hover:border-indigo-400 transition';
+        btnD.className = isDark
+          ? 'p-3 rounded-2xl border-2 border-indigo-400 bg-slate-950 text-white flex items-center justify-center gap-2 text-xs sm:text-sm font-extrabold shadow-xs transition'
+          : 'p-3 rounded-2xl border-2 border-slate-200 bg-slate-800 text-white flex items-center justify-center gap-2 text-xs sm:text-sm font-bold hover:border-indigo-400 transition';
+      }
+
+      // Accent Swatches
+      const accentGrid = document.getElementById('settings-accent-grid');
+      const customPicker = document.getElementById('settings-custom-color-picker');
+      if (customPicker && cfg.customAccentHex) customPicker.value = cfg.customAccentHex;
+      if (accentGrid) {
+        accentGrid.innerHTML = ACCENT_THEMES.map(t => {
+          const active = cfg.accentId === t.id;
+          return `
+            <button
+              type="button"
+              onclick="setAppearanceAccent('${t.id}')"
+              class="h-10 rounded-xl flex items-center justify-center text-white transition ${active ? 'ring-2 ring-offset-2 ring-slate-900 scale-105' : 'opacity-85 hover:opacity-100'}"
+              style="background: linear-gradient(135deg, ${t.c1}, ${t.c2});"
+              title="${t.label}"
+            >
+              ${active ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+            </button>
+          `;
+        }).join('');
+      }
+
+      // 4. Custom Background Preview & Sliders
+      const preview = document.getElementById('settings-bg-preview');
+      const rmBtn = document.getElementById('settings-btn-remove-bg');
+      const dimSlider = document.getElementById('settings-bg-dim-slider');
+      const dimVal = document.getElementById('settings-bg-dim-val');
+      const blurSlider = document.getElementById('settings-bg-blur-slider');
+      const blurVal = document.getElementById('settings-bg-blur-val');
+      const glassToggle = document.getElementById('settings-bg-glass-toggle');
+
+      if (preview) {
+        if (cfg.bgImage) {
+          preview.style.backgroundImage = `url("${cfg.bgImage}")`;
+          preview.innerHTML = '';
+        } else if (cfg.bgGradient) {
+          preview.style.backgroundImage = cfg.bgGradient;
+          preview.innerHTML = '';
+        } else {
+          preview.style.backgroundImage = 'none';
+          preview.innerHTML = '<i class="fa-regular fa-image text-2xl mb-1"></i><span>ยังไม่ได้ตั้งภาพพื้นหลัง</span>';
+        }
+      }
+      if (rmBtn) {
+        if (cfg.bgImage || cfg.bgGradient) rmBtn.classList.remove('hidden');
+        else rmBtn.classList.add('hidden');
+      }
+      if (dimSlider) dimSlider.value = String(cfg.bgDim ?? 35);
+      if (dimVal) dimVal.textContent = `${cfg.bgDim ?? 35}%`;
+      if (blurSlider) blurSlider.value = String(cfg.bgBlur ?? 0);
+      if (blurVal) blurVal.textContent = `${cfg.bgBlur ?? 0} px`;
+      if (glassToggle) glassToggle.checked = cfg.bgGlass !== false;
+    }
+
+    function setAppearanceFont(fontId) {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, fontFamily: fontId }, `เปลี่ยนฟอนต์เป็น "${fontId}" แล้ว ✨`);
+    }
+
+    function setAppearanceFontSize(val) {
+      const pct = Math.min(130, Math.max(85, parseInt(val, 10) || 100));
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, fontSizePct: pct });
+    }
+
+    function setAppearanceDarkMode(isDark) {
+      if (typeof setAppTheme === 'function') {
+        setAppTheme(isDark ? 'dark' : 'light', false);
+      } else if (typeof applyStudentTheme === 'function') {
+        applyStudentTheme(isDark ? 'dark' : 'light');
+      }
+      applySavedAppearance();
+      renderSettingsModalContent();
+    }
+
+    function setAppearanceAccent(accentId) {
+      const curr = getSavedAppearance();
+      const preset = ACCENT_THEMES.find(t => t.id === accentId);
+      saveAppearance({ ...curr, accentId, customAccentHex: preset ? preset.c1 : curr.customAccentHex }, `เปลี่ยนธีมสี UI เป็น "${preset ? preset.label : accentId}" แล้ว 🎨`);
+    }
+
+    function setAppearanceCustomAccent(hex) {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, accentId: 'custom', customAccentHex: hex });
+    }
+
+    function setPresetBgGradient(grad) {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, bgImage: '', bgGradient: grad }, grad ? 'ตั้งค่าพื้นหลังสำเร็จรูปแล้ว ✨' : 'ลบภาพพื้นหลังแล้ว');
+    }
+
+    function setAppearanceBgDim(val) {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, bgDim: parseInt(val, 10) || 0 });
+    }
+
+    function setAppearanceBgBlur(val) {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, bgBlur: parseInt(val, 10) || 0 });
+    }
+
+    function setAppearanceBgGlass(enabled) {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, bgGlass: Boolean(enabled) });
+    }
+
+    function clearAppearanceBackground() {
+      const curr = getSavedAppearance();
+      saveAppearance({ ...curr, bgImage: '', bgGradient: '' }, 'ลบภาพพื้นหลังเรียบร้อยแล้ว');
+    }
+
+    function handleAppearanceBgUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      event.target.value = '';
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          // Compress nicely to max 1600px so it stays sharp and fits smoothly inside localStorage
+          const maxDim = 1600;
+          let w = img.naturalWidth || img.width;
+          let h = img.naturalHeight || img.height;
+          if (w > maxDim || h > maxDim) {
+            const ratio = maxDim / Math.max(w, h);
+            w = Math.round(w * ratio);
+            h = Math.round(h * ratio);
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.80);
+
+          const curr = getSavedAppearance();
+          saveAppearance({ ...curr, bgImage: dataUrl, bgGradient: '' }, 'ตั้งค่ารูปภาพพื้นหลังใหม่เรียบร้อยแล้ว! 🖼️');
+        };
+        img.onerror = () => {
+          if (typeof showToast === 'function') showToast('ไม่สามารถอ่านไฟล์รูปภาพนี้ได้', 'amber');
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetAllAppearanceSettings() {
+      localStorage.removeItem(APPEARANCE_STORAGE_KEY);
+      applySavedAppearance(DEFAULT_APPEARANCE);
+      if (document.getElementById('settings-modal') && !document.getElementById('settings-modal').classList.contains('hidden')) {
+        renderSettingsModalContent();
+      }
+      if (typeof showToast === 'function') {
+        showToast('คืนค่าฟอนต์ ขนาดตัวอักษร สีธีม และพื้นหลังกลับเป็นค่าเริ่มต้นแล้ว', 'slate');
+      }
+    }
+
 
     /*************************************************************************
      * 13. UTILITIES & TOAST NOTIFICATIONS
