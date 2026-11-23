@@ -47,7 +47,7 @@
       font-weight: 100 500;
       font-style: normal;
       font-display: swap;
-      size-adjust: 122%;
+      size-adjust: 134%;
     }
     @font-face {
       font-family: 'TH Niramit AS';
@@ -58,7 +58,7 @@
       font-weight: 100 500;
       font-style: italic;
       font-display: swap;
-      size-adjust: 122%;
+      size-adjust: 134%;
     }
     @font-face {
       font-family: 'TH Niramit AS';
@@ -69,7 +69,7 @@
       font-weight: 600 900;
       font-style: normal;
       font-display: swap;
-      size-adjust: 122%;
+      size-adjust: 134%;
     }
     @font-face {
       font-family: 'TH Niramit AS';
@@ -80,7 +80,7 @@
       font-weight: 600 900;
       font-style: italic;
       font-display: swap;
-      size-adjust: 122%;
+      size-adjust: 134%;
     }
 
     @font-face {
@@ -93,7 +93,7 @@
       font-weight: 100 500;
       font-style: normal;
       font-display: swap;
-      size-adjust: 122%;
+      size-adjust: 134%;
     }
     @font-face {
       font-family: 'TH Sarabun PSK';
@@ -104,7 +104,7 @@
       font-weight: 100 500;
       font-style: italic;
       font-display: swap;
-      size-adjust: 122%;
+      size-adjust: 134%;
     }
     @font-face {
       font-family: 'TH Sarabun PSK';
@@ -115,7 +115,7 @@
       font-weight: 600 900;
       font-style: normal;
       font-display: swap;
-      size-adjust: 122%;
+      size-adjust: 134%;
     }
     @font-face {
       font-family: 'TH Sarabun PSK';
@@ -126,7 +126,7 @@
       font-weight: 600 900;
       font-style: italic;
       font-display: swap;
-      size-adjust: 122%;
+      size-adjust: 134%;
     }
 
     @font-face {
@@ -141,7 +141,7 @@
       font-weight: 100 900;
       font-style: normal;
       font-display: swap;
-      size-adjust: 112%;
+      size-adjust: 122%;
       ascent-override: 95%;
       descent-override: 25%;
     }
@@ -155,7 +155,7 @@
       font-weight: 100 900;
       font-style: normal;
       font-display: swap;
-      size-adjust: 105%;
+      size-adjust: 118%;
     }
 
     :root {
@@ -953,7 +953,7 @@
               type="range"
               id="settings-font-size-slider"
               min="85"
-              max="130"
+              max="140"
               step="5"
               value="100"
               oninput="setAppearanceFontSize(this.value)"
@@ -2686,9 +2686,9 @@
       const fontObj = AVAILABLE_FONTS.find(f => f.id === cfg.fontFamily) || AVAILABLE_FONTS[0];
       root.style.setProperty('--app-font-family', fontObj.stack);
 
-      // 2. Root Font Size Scaling (scales all Tailwind rem text proportionally)
-      const pct = Math.min(130, Math.max(85, Number(cfg.fontSizePct) || 100));
-      root.style.fontSize = `${(16 * pct / 100).toFixed(2)}px`;
+      // 2. Root Font Size Scaling (larger 18px base so ALL text is crisp & easy to read everywhere)
+      const pct = Math.min(140, Math.max(85, Number(cfg.fontSizePct) || 100));
+      root.style.fontSize = `${(18 * pct / 100).toFixed(2)}px`;
 
       // 3. Accent Color Theme
       let c1 = '#4f46e5', c2 = '#7c3aed', soft = '#eef2ff', border = '#a5b4fc';
@@ -2891,7 +2891,7 @@
     }
 
     function setAppearanceFontSize(val) {
-      const pct = Math.min(130, Math.max(85, parseInt(val, 10) || 100));
+      const pct = Math.min(140, Math.max(85, parseInt(val, 10) || 100));
       const curr = getSavedAppearance();
       saveAppearance({ ...curr, fontSizePct: pct });
     }
