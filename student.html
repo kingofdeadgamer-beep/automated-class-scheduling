@@ -29,6 +29,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Mali:wght@400;500;600;700&family=Niramit:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Prompt:wght@300;400;500;600;700&family=Sarabun:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Canvas Confetti for Student Milestones -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
   <!-- HTML5-QRCode (Camera QR Scanner + Image QR Decoder) -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <!-- jsQR Fallback for Reliable Screenshot / Photo QR Decoding -->
@@ -157,7 +159,7 @@
     }
 
     :root {
-      --app-font-family: var(--app-font-family);
+      --app-font-family: 'TH Niramit AS', 'Niramit', sans-serif;
       --app-accent: #4f46e5;
       --app-accent-2: #7c3aed;
       --app-accent-soft: #eef2ff;
@@ -220,225 +222,49 @@
       -webkit-backdrop-filter: blur(10px);
     }
 
-    /* Custom Theme Accent Application */
-    body.has-custom-accent #classroom-selector {
-      border-color: var(--app-accent-border) !important;
-    }
-    body.has-custom-accent #btn-add-classroom,
-    body.has-custom-accent .preset-btn.is-active-preset,
-    body.has-custom-accent #size-btn-auto.is-active-size,
-    body.has-custom-accent #size-btn-xs.is-active-size,
-    body.has-custom-accent #size-btn-sm.is-active-size,
-    body.has-custom-accent #size-btn-md.is-active-size,
-    body.has-custom-accent #btn-save-student-count {
-      background: linear-gradient(135deg, var(--app-accent), var(--app-accent-2)) !important;
-      border-color: var(--app-accent) !important;
-      color: #ffffff !important;
-    }
-    body.has-custom-accent #ui-icon-size-badge {
-      background-color: var(--app-accent) !important;
-    }
-    body.has-custom-accent header {
-      border-bottom-color: var(--app-accent-border) !important;
-    }
-    body.has-custom-accent #settings-modal-header {
-      background: linear-gradient(135deg, var(--app-accent), var(--app-accent-2)) !important;
-    }
 
-    /* ================= HIGH-CONTRAST SIDEBAR STAT CARDS (0.5 CM ICON-NUMBER GAP) ================= */
-    .stat-pill-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 19px; /* ~0.5 cm spacing between icon and number */
-      padding: 10px 6px;
-      border-radius: 0.85rem;
-      border-width: 1.5px;
-      transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
-    }
-    .stat-pill-card:hover {
-      transform: translateY(-1px);
-    }
-    .stat-pill-icon {
-      font-size: 0.95rem;
-      line-height: 1;
-    }
-    .stat-pill-val {
-      font-size: 0.92rem;
-      font-weight: 800;
-      line-height: 1;
-      letter-spacing: 0.01em;
-    }
-
-    /* Light Mode Stat Cards */
-    .stat-pill-seated     { background-color: #eef2ff; border-color: #a5b4fc; }
-    .stat-pill-seated .stat-pill-icon { color: #4338ca; }
-    .stat-pill-seated .stat-pill-val  { color: #1e1b4b; }
-
-    .stat-pill-unassigned { background-color: #f8fafc; border-color: #cbd5e1; }
-    .stat-pill-unassigned .stat-pill-icon { color: #d97706; }
-    .stat-pill-unassigned .stat-pill-val  { color: #0f172a; }
-
-    .stat-pill-present    { background-color: #ecfdf5; border-color: #6ee7b7; }
-    .stat-pill-present .stat-pill-icon { color: #059669; }
-    .stat-pill-present .stat-pill-val  { color: #064e3b; }
-
-    .stat-pill-task       { background-color: #fffbeb; border-color: #fcd34d; }
-    .stat-pill-task .stat-pill-icon { color: #d97706; }
-    .stat-pill-task .stat-pill-val  { color: #78350f; }
-
-    /* Dark Mode High-Contrast Stat Cards */
-    body.dark-theme .stat-pill-seated     { background-color: #1e293b !important; border-color: #818cf8 !important; }
-    body.dark-theme .stat-pill-seated .stat-pill-icon { color: #a5b4fc !important; }
-    body.dark-theme .stat-pill-seated .stat-pill-val  { color: #ffffff !important; }
-
-    body.dark-theme .stat-pill-unassigned { background-color: #1e293b !important; border-color: #fbbf24 !important; }
-    body.dark-theme .stat-pill-unassigned .stat-pill-icon { color: #fcd34d !important; }
-    body.dark-theme .stat-pill-unassigned .stat-pill-val  { color: #fef3c7 !important; }
-
-    body.dark-theme .stat-pill-present    { background-color: #064e3b !important; border-color: #34d399 !important; }
-    body.dark-theme .stat-pill-present .stat-pill-icon { color: #6ee7b7 !important; }
-    body.dark-theme .stat-pill-present .stat-pill-val  { color: #ffffff !important; }
-
-    body.dark-theme .stat-pill-task       { background-color: #451a03 !important; border-color: #f59e0b !important; }
-    body.dark-theme .stat-pill-task .stat-pill-icon { color: #fde047 !important; }
-    body.dark-theme .stat-pill-task .stat-pill-val  { color: #ffffff !important; }
-
-    /* ================= MOBILE HEADER & ICON FIT OPTIMIZATION ================= */
-    @media (max-width: 1023px) {
-      header .header-inner-wrap {
-        flex-wrap: wrap !important;
-        padding-top: 0.4rem !important;
-        padding-bottom: 0.4rem !important;
-        gap: 0.4rem !important;
-      }
-      header .header-left-group {
-        width: 100% !important;
-        justify-content: space-between;
-      }
-      header #classroom-selector {
-        flex: 1 1 auto !important;
-        max-width: none !important;
-        min-width: 0 !important;
-        height: 38px !important;
-      }
-      header #header-right-controls {
-        width: 100% !important;
-        display: flex !important;
-        flex-wrap: wrap !important;
-        justify-content: space-between !important;
-        overflow-x: visible !important;
-        gap: 6px !important;
-        padding-top: 4px !important;
-        padding-bottom: 2px !important;
-        border-top: 1px solid rgba(148, 163, 184, 0.22);
-      }
-      header #header-right-controls .header-divider {
-        display: none !important;
-      }
-    }
-    @media (max-width: 639px) {
-      header .ui-icon-btn {
-        width: 36px !important;
-        height: 36px !important;
-        min-width: 36px !important;
-        min-height: 36px !important;
-      }
-      header .ui-icon-btn i {
-        font-size: 0.95rem !important;
-      }
-      header #header-right-controls {
-        display: grid !important;
-        grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
-        gap: 6px !important;
-        justify-items: center !important;
-      }
-      #config-toolbar .ui-tb-btn {
-        width: 34px !important;
-        height: 34px !important;
-        min-width: 34px !important;
-        min-height: 34px !important;
-      }
-      #chart-container {
-        padding: 0.5rem !important;
-      }
-    }
-
-    /* Mobile Navbar Compact Icon Fit & Dark Mode Contrast Polish */
-    @media (max-width: 440px) {
-      #st-header-inner .ui-icon-btn {
-        width: 34px !important;
-        height: 34px !important;
-        min-width: 34px !important;
-        min-height: 34px !important;
-      }
-      #st-header-inner .ui-icon-btn i {
-        font-size: 0.92rem !important;
-      }
-    }
-    body.has-custom-bg.bg-glass-mode section {
-      background-color: rgba(255, 255, 255, 0.86) !important;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-    body.dark-theme.has-custom-bg.bg-glass-mode section {
-      background-color: rgba(15, 23, 42, 0.84) !important;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-    body.dark-theme .bg-emerald-50 {
-      background-color: #064e3b !important;
-      border-color: #34d399 !important;
-      color: #ecfdf5 !important;
-    }
-    body.dark-theme .text-emerald-800,
-    body.dark-theme .text-emerald-900 {
-      color: #a7f3d0 !important;
-    }
-    body.dark-theme .bg-amber-100 {
-      background-color: #78350f !important;
-      border-color: #f59e0b !important;
-      color: #fef3c7 !important;
-    }
-    body.dark-theme .text-amber-800,
-    body.dark-theme .text-amber-900 {
-      color: #fde68a !important;
-    }
-    body.dark-theme .bg-indigo-100 {
-      background-color: #312e81 !important;
-      border-color: #818cf8 !important;
-      color: #e0e7ff !important;
-    }
-    body.dark-theme .text-indigo-800 {
-      color: #c7d2fe !important;
-    }
-    body.dark-theme .bg-rose-100,
-    body.dark-theme .bg-rose-50 {
-      background-color: #4c0519 !important;
-      border-color: #fb7185 !important;
-      color: #ffe4e6 !important;
-    }
-    body.dark-theme .bg-sky-100 {
-      background-color: #0c4a6e !important;
-      color: #bae6fd !important;
-    }
-
+    /* ================= STUDENT MODERN ENGAGING THEME ================= */
     :root {
-      --st-btn-size: 44px;
-      --st-icon-size: 1.15rem;
+      --st-btn-size: 42px;
+      --st-icon-size: 1.12rem;
     }
     body.icon-size-md {
-      --st-btn-size: 38px;
-      --st-icon-size: 0.95rem;
+      --st-btn-size: 36px;
+      --st-icon-size: 0.94rem;
     }
     body.icon-size-lg {
-      --st-btn-size: 44px;
-      --st-icon-size: 1.18rem;
+      --st-btn-size: 42px;
+      --st-icon-size: 1.12rem;
     }
     body.icon-size-xl {
-      --st-btn-size: 50px;
-      --st-icon-size: 1.38rem;
+      --st-btn-size: 48px;
+      --st-icon-size: 1.32rem;
+    }
+
+    body {
+      font-family: var(--app-font-family);
+      background: linear-gradient(155deg, #eef2ff 0%, #f0f9ff 48%, #fdf2f8 100%);
+      color: #0f172a;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      overflow-x: hidden;
+    }
+
+    /* Subtle Ambient Floating Orbs */
+    .st-ambient-orb {
+      position: fixed;
+      border-radius: 9999px;
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: -2;
+      opacity: 0.5;
+      animation: float-orb 14s ease-in-out infinite alternate;
+    }
+    body.has-custom-bg .st-ambient-orb {
+      display: none !important;
+    }
+    @keyframes float-orb {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(18px, -20px) scale(1.08); }
     }
 
     .ui-icon-btn {
@@ -448,58 +274,52 @@
       min-height: var(--st-btn-size);
       aspect-ratio: 1 / 1;
     }
-
-    /* Optimized Landscape Layout for Phones, Tablets & Desktops */
-    @media (orientation: landscape) and (min-width: 600px) {
-      #st-header-inner {
-        max-width: 68rem !important;
-      }
-      #st-main-grid {
-        max-width: 68rem !important;
-        display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 1rem !important;
-        align-items: start !important;
-      }
-      #st-main-grid > section {
-        margin-top: 0 !important;
-      }
-    }
-    @media (orientation: landscape) and (max-height: 540px) {
-      header .ui-icon-btn {
-        width: 34px !important;
-        height: 34px !important;
-        min-width: 34px !important;
-        min-height: 34px !important;
-      }
-      header .ui-icon-btn i {
-        font-size: 0.92rem !important;
-      }
-      #st-main-grid {
-        padding: 0.65rem !important;
-        gap: 0.65rem !important;
-      }
-    }
     .ui-icon-btn i {
       font-size: var(--st-icon-size) !important;
     }
 
-    body {
-      font-family: 'TH Niramit AS', 'Niramit', sans-serif;
-      background-color: #f1f5f9;
-      color: #0f172a;
-      transition: background-color 0.25s ease, color 0.25s ease;
+    /* Modern Glass Bento Cards */
+    .st-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 12px 32px -12px rgba(79, 70, 229, 0.14), 0 2px 6px rgba(15, 23, 42, 0.04);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .st-card:hover {
+      box-shadow: 0 16px 36px -12px rgba(79, 70, 229, 0.18), 0 4px 10px rgba(15, 23, 42, 0.05);
     }
 
-    /* Dark Theme */
+    body.has-custom-bg.bg-glass-mode .st-card,
+    body.has-custom-bg.bg-glass-mode section {
+      background-color: rgba(255, 255, 255, 0.84) !important;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    body.dark-theme.has-custom-bg.bg-glass-mode .st-card,
+    body.dark-theme.has-custom-bg.bg-glass-mode section {
+      background-color: rgba(15, 23, 42, 0.82) !important;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    /* Accent overrides */
+    body.has-custom-accent #settings-modal-header {
+      background: linear-gradient(135deg, var(--app-accent), var(--app-accent-2)) !important;
+    }
+
+    /* Dark Theme (Rich Midnight Aurora + High Contrast) */
     body.dark-theme {
-      background-color: #090d16 !important;
+      background: radial-gradient(circle at 15% 10%, #1e1b4b 0%, #090d16 55%, #0c192c 100%) !important;
       color: #f1f5f9 !important;
     }
+    body.dark-theme .st-card,
     body.dark-theme .bg-white {
-      background-color: #0f172a !important;
+      background-color: rgba(15, 23, 42, 0.9) !important;
       color: #f1f5f9 !important;
       border-color: #1e293b !important;
+      box-shadow: 0 14px 34px -12px rgba(0, 0, 0, 0.55) !important;
     }
     body.dark-theme .bg-slate-50,
     body.dark-theme .bg-slate-50\/60,
@@ -526,45 +346,189 @@
     body.dark-theme .border-slate-200,
     body.dark-theme .border-slate-200\/80,
     body.dark-theme .border-indigo-200,
-    body.dark-theme .border-amber-200 {
+    body.dark-theme .border-amber-200,
+    body.dark-theme .border-rose-200 {
       border-color: #334155 !important;
     }
+    body.dark-theme .bg-emerald-50,
+    body.dark-theme .bg-emerald-50\/40 {
+      background-color: rgba(6, 78, 59, 0.55) !important;
+      border-color: #34d399 !important;
+      color: #ecfdf5 !important;
+    }
+    body.dark-theme .text-emerald-800,
+    body.dark-theme .text-emerald-900 {
+      color: #a7f3d0 !important;
+    }
+    body.dark-theme .bg-amber-100,
+    body.dark-theme .bg-amber-50 {
+      background-color: rgba(120, 53, 15, 0.65) !important;
+      border-color: #f59e0b !important;
+      color: #fef3c7 !important;
+    }
+    body.dark-theme .text-amber-800,
+    body.dark-theme .text-amber-900 {
+      color: #fde68a !important;
+    }
+    body.dark-theme .bg-indigo-100,
+    body.dark-theme .bg-indigo-50,
+    body.dark-theme .bg-indigo-50\/50 {
+      background-color: rgba(49, 46, 129, 0.55) !important;
+      border-color: #818cf8 !important;
+      color: #e0e7ff !important;
+    }
+    body.dark-theme .text-indigo-800,
+    body.dark-theme .text-indigo-950 {
+      color: #c7d2fe !important;
+    }
+    body.dark-theme .bg-rose-100,
+    body.dark-theme .bg-rose-50 {
+      background-color: rgba(76, 5, 25, 0.65) !important;
+      border-color: #fb7185 !important;
+      color: #ffe4e6 !important;
+    }
+    body.dark-theme .bg-sky-100,
+    body.dark-theme .bg-sky-50 {
+      background-color: rgba(12, 74, 110, 0.65) !important;
+      border-color: #38bdf8 !important;
+      color: #bae6fd !important;
+    }
+    body.dark-theme .bg-violet-50,
+    body.dark-theme .bg-violet-100 {
+      background-color: rgba(76, 29, 149, 0.6) !important;
+      border-color: #a78bfa !important;
+      color: #ede9fe !important;
+    }
+    body.dark-theme .text-violet-900,
+    body.dark-theme .text-violet-800 {
+      color: #ddd6fe !important;
+    }
+    body.dark-theme .bg-teal-50,
+    body.dark-theme .bg-teal-100 {
+      background-color: rgba(19, 78, 74, 0.6) !important;
+      border-color: #2dd4bf !important;
+      color: #ccfbf1 !important;
+    }
+    body.dark-theme .text-teal-900,
+    body.dark-theme .text-teal-800 {
+      color: #99f6e4 !important;
+    }
 
+    /* Animations */
     @keyframes pulse-ring {
       0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.55); }
-      50% { box-shadow: 0 0 0 10px rgba(244, 63, 94, 0); }
+      50% { box-shadow: 0 0 0 12px rgba(244, 63, 94, 0); }
     }
     .help-active-ring {
-      animation: pulse-ring 1.6s infinite;
+      animation: pulse-ring 1.5s infinite;
+    }
+    @keyframes wave-hand {
+      0%, 100% { transform: rotate(0deg); }
+      20% { transform: rotate(16deg); }
+      40% { transform: rotate(-10deg); }
+      60% { transform: rotate(14deg); }
+      80% { transform: rotate(-6deg); }
+    }
+    .animate-wave {
+      display: inline-block;
+      transform-origin: 70% 70%;
+      animation: wave-hand 2.4s ease-in-out infinite;
+    }
+    @keyframes shuffle-pop {
+      0% { transform: scale(0.94); opacity: 0.5; }
+      65% { transform: scale(1.02); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-shuffle {
+      animation: shuffle-pop 0.3s ease-out forwards;
+    }
+
+    /* Responsive Bento Layout for Landscape Phones, Tablets & Desktops */
+    @media (max-width: 440px) {
+      #st-header-inner .ui-icon-btn {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+      }
+      #st-header-inner .ui-icon-btn i {
+        font-size: 0.9rem !important;
+      }
+    }
+    @media (min-width: 768px) {
+      #st-header-inner {
+        max-width: 68rem !important;
+      }
+      #st-main-grid {
+        max-width: 68rem !important;
+        display: grid !important;
+        grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+        gap: 1.15rem !important;
+        align-items: start !important;
+      }
+      #st-main-grid > section {
+        margin-top: 0 !important;
+      }
+      #st-mission-hero { grid-column: span 12 / span 12; }
+      #section-qr-connect { grid-column: span 5 / span 5; }
+      #section-connected-classroom { grid-column: span 7 / span 7; }
+      #help-request-card { grid-column: span 5 / span 5; }
+      #section-student-tasks { grid-column: span 7 / span 7; }
+    }
+    @media (orientation: landscape) and (max-height: 540px) {
+      header .ui-icon-btn {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+      }
+      #st-main-grid {
+        padding: 0.75rem !important;
+        gap: 0.75rem !important;
+      }
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col icon-size-lg">
+<body class="min-h-screen flex flex-col icon-size-lg relative">
 
-  <!-- ================= TOP STUDENT NAVBAR ================= -->
-  <header id="student-top-header" class="bg-gradient-to-r from-sky-600 via-indigo-600 to-violet-600 text-white sticky top-0 z-30 shadow-md">
-    <div id="st-header-inner" class="max-w-xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2 transition-all">
-      <div class="flex items-center gap-2 min-w-0">
+  <!-- Ambient Decorative Soft Orbs -->
+  <div class="st-ambient-orb w-72 h-72 bg-indigo-300/60 -top-20 -left-20"></div>
+  <div class="st-ambient-orb w-80 h-80 bg-sky-300/50 top-1/3 -right-24" style="animation-delay: -4s;"></div>
+  <div class="st-ambient-orb w-72 h-72 bg-pink-300/45 bottom-0 left-1/4" style="animation-delay: -8s;"></div>
+
+  <!-- ================= FLOATING MODERN STUDENT NAVBAR ================= -->
+  <header id="student-top-header" class="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-500 text-white sticky top-0 z-30 shadow-lg shadow-indigo-500/20">
+    <div id="st-header-inner" class="max-w-xl mx-auto px-3 sm:px-5 py-2.5 flex items-center justify-between gap-2 transition-all">
+      <div class="flex items-center gap-2.5 min-w-0">
         <div
           id="st-brand-logo-slot"
-          class="hidden ui-icon-btn aspect-square rounded-2xl bg-white/95 border border-white/40 overflow-hidden items-center justify-center shrink-0 shadow-xs"
+          class="hidden ui-icon-btn aspect-square rounded-2xl bg-white/95 border border-white/40 overflow-hidden items-center justify-center shrink-0 shadow-sm"
           title="โลโก้ห้องเรียน (1:1)"
         ></div>
-        <div class="ui-icon-btn aspect-square rounded-2xl bg-white/15 flex items-center justify-center text-base font-extrabold shrink-0">
-          #<span id="nav-st-number">1</span>
+        <!-- Student Playful 3D Avatar + Number Badge -->
+        <div class="relative shrink-0">
+          <div id="nav-st-avatar-wrap" class="w-11 h-11 rounded-2xl overflow-hidden border-2 border-white/80 bg-white/20 shadow-md flex items-center justify-center">
+            <span class="text-sm font-extrabold">#<span id="nav-st-number">1</span></span>
+          </div>
+          <span id="nav-st-number-pill" class="absolute -bottom-1 -right-1 px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 text-[9px] font-extrabold shadow-sm border border-white">
+            #1
+          </span>
         </div>
         <div class="min-w-0">
-          <div id="nav-st-name" class="text-sm font-extrabold truncate">นักเรียน</div>
-          <div id="nav-st-room" class="text-[11px] text-sky-100 truncate">ยังไม่ได้เชื่อมต่อห้องเรียน</div>
+          <div id="nav-st-name" class="text-sm sm:text-base font-extrabold truncate leading-tight">นักเรียน</div>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span id="nav-conn-dot" class="w-2 h-2 rounded-full bg-amber-300 shrink-0"></span>
+            <span id="nav-st-room" class="text-[11px] text-white/90 truncate font-medium">ยังไม่ได้เชื่อมต่อห้องเรียน</span>
+          </div>
         </div>
       </div>
 
-      <!-- Top-Right Icon Controls (Sync, Icon Size, Theme, Logout) -->
+      <!-- Top-Right Tactile Icon Controls -->
       <div class="flex items-center gap-1.5 shrink-0">
         <button
           type="button"
           onclick="refreshClassroomConnection(true)"
-          class="ui-icon-btn rounded-xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition"
+          class="ui-icon-btn rounded-2xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition active:scale-95"
           title="ซิงก์ข้อมูลล่าสุดกับระบบครู"
         >
           <i id="st-sync-icon" class="fa-solid fa-rotate"></i>
@@ -574,7 +538,7 @@
           type="button"
           id="st-btn-icon-size"
           onclick="cycleStudentIconSize()"
-          class="ui-icon-btn rounded-xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition relative"
+          class="ui-icon-btn rounded-2xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition relative active:scale-95"
           title="ปรับขนาดไอคอน (M / L / XL)"
         >
           <i class="fa-solid fa-magnifying-glass-plus"></i>
@@ -584,7 +548,7 @@
         <button
           type="button"
           onclick="openSettingsModal()"
-          class="ui-icon-btn rounded-xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition"
+          class="ui-icon-btn rounded-2xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition active:scale-95"
           title="ตั้งค่าฟอนต์ ขนาดตัวอักษร สีธีม และภาพพื้นหลัง"
         >
           <i class="fa-solid fa-gear"></i>
@@ -593,7 +557,7 @@
         <button
           type="button"
           onclick="toggleStudentTheme()"
-          class="ui-icon-btn rounded-xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition"
+          class="ui-icon-btn rounded-2xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition active:scale-95"
           title="เปลี่ยนสีพื้นหลัง (ขาว / ดำ)"
         >
           <i id="st-theme-icon" class="fa-solid fa-moon"></i>
@@ -602,7 +566,7 @@
         <button
           type="button"
           onclick="openStudentLogoutConfirm()"
-          class="ui-icon-btn rounded-xl bg-rose-500/90 hover:bg-rose-600 text-white flex items-center justify-center transition shadow-sm"
+          class="ui-icon-btn rounded-2xl bg-rose-500/95 hover:bg-rose-600 text-white flex items-center justify-center transition shadow-md active:scale-95"
           title="ออกจากระบบ"
         >
           <i class="fa-solid fa-right-from-bracket"></i>
@@ -611,25 +575,64 @@
     </div>
   </header>
 
-  <!-- ================= MAIN STUDENT WORKSPACE ================= -->
-  <main id="st-main-grid" class="max-w-xl w-full mx-auto p-4 space-y-4 flex-1 pb-12 transition-all">
+  <!-- ================= MAIN STUDENT BENTO WORKSPACE ================= -->
+  <main id="st-main-grid" class="max-w-xl w-full mx-auto p-3.5 sm:p-5 space-y-4 flex-1 pb-14 transition-all">
 
-    <!-- 1. LIVE QR CODE SCANNER & CLASSROOM CONNECTION -->
-    <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200 space-y-3">
-      <div class="flex items-center justify-between gap-2">
-        <div class="flex items-center gap-2.5">
-          <div class="ui-icon-btn rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
-            <i class="fa-solid fa-qrcode"></i>
+    <!-- 0. GAMIFIED WELCOME & DAILY MISSION PROGRESS HERO (Shown when connected) -->
+    <section id="st-mission-hero" class="hidden rounded-3xl p-4 sm:p-5 bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 text-white shadow-xl shadow-indigo-500/20 relative overflow-hidden">
+      <div class="absolute -right-8 -top-10 w-40 h-40 rounded-full bg-white/10 blur-xl pointer-events-none"></div>
+      <div class="absolute -left-10 -bottom-10 w-36 h-36 rounded-full bg-sky-300/20 blur-xl pointer-events-none"></div>
+
+      <div class="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3.5 min-w-0">
+          <div id="hero-st-avatar" class="w-16 h-16 rounded-3xl overflow-hidden border-3 border-white/90 shadow-lg bg-white/20 shrink-0 ring-4 ring-white/20"></div>
+          <div class="min-w-0">
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 text-[11px] font-bold backdrop-blur-xs mb-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
+              <span id="hero-room-pill">เชื่อมต่อห้องเรียนแล้ว</span>
+            </div>
+            <h1 class="text-lg sm:text-xl font-extrabold truncate">
+              <span id="hero-greeting-text">สวัสดีครับ!</span> <span class="animate-wave">👋</span>
+            </h1>
+            <p id="hero-motivation-text" class="text-xs text-white/90 mt-0.5">พร้อมลุยภารกิจในห้องเรียนวันนี้กันหรือยัง?</p>
           </div>
-          <div>
-            <h2 class="text-sm sm:text-base font-extrabold text-slate-900">เชื่อมต่อห้องเรียน / สแกน QR</h2>
-            <p class="text-[11px] text-slate-500">สแกน QR หน้าจอครู หรือกรอกชื่อผู้ใช้ครูเพื่อเข้าร่วมห้อง</p>
+        </div>
+
+        <!-- Daily Mission Progress Meter -->
+        <div class="bg-white/15 backdrop-blur-md rounded-2xl p-3 border border-white/20 min-w-[230px] sm:max-w-xs space-y-2">
+          <div class="flex items-center justify-between text-xs font-extrabold">
+            <span><i class="fa-solid fa-trophy text-amber-300 mr-1.5"></i>ภารกิจวันนี้</span>
+            <span id="hero-progress-pct" class="px-2 py-0.5 rounded-full bg-white text-indigo-700 text-[11px]">33%</span>
+          </div>
+          <div class="w-full h-2.5 rounded-full bg-black/25 overflow-hidden">
+            <div id="hero-progress-bar" class="h-full rounded-full bg-gradient-to-r from-amber-300 via-emerald-300 to-teal-300 transition-all duration-500" style="width: 33%;"></div>
+          </div>
+          <div class="grid grid-cols-3 gap-1 text-[10px] font-bold text-center pt-0.5">
+            <div id="mission-pill-join" class="px-1.5 py-1 rounded-xl bg-emerald-400/25 border border-emerald-300/50 text-emerald-100">✓ เข้าห้อง</div>
+            <div id="mission-pill-checkin" class="px-1.5 py-1 rounded-xl bg-white/10 border border-white/15 text-white/75">• เช็คชื่อ</div>
+            <div id="mission-pill-tasks" class="px-1.5 py-1 rounded-xl bg-white/10 border border-white/15 text-white/75">• ส่งงาน</div>
           </div>
         </div>
       </div>
+    </section>
+
+    <!-- 1. LIVE QR CODE SCANNER & CLASSROOM CONNECTION -->
+    <section id="section-qr-connect" class="st-card rounded-3xl p-4 sm:p-5 space-y-3.5">
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-sky-500/25 text-lg">
+            <i class="fa-solid fa-qrcode"></i>
+          </div>
+          <div>
+            <h2 class="text-sm sm:text-base font-extrabold text-slate-900">สแกน QR / เชื่อมต่อห้องเรียน</h2>
+            <p class="text-[11px] text-slate-500">สแกน QR หน้าจอครูเพื่อเข้าห้องเรียน หรือสแกน QR ใบงาน</p>
+          </div>
+        </div>
+        <span id="qr-status-chip" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-extrabold shrink-0">พร้อมสแกน</span>
+      </div>
 
       <!-- Disconnected / Removed Alert Banner -->
-      <div id="st-disconnected-banner" class="hidden p-3 rounded-2xl border text-xs font-bold flex items-start gap-2.5">
+      <div id="st-disconnected-banner" class="hidden p-3.5 rounded-2xl border text-xs font-bold flex items-start gap-2.5">
         <i id="st-disconnected-icon" class="fa-solid fa-circle-info text-base mt-0.5 shrink-0"></i>
         <div id="st-disconnected-msg" class="leading-relaxed"></div>
       </div>
@@ -637,7 +640,7 @@
       <!-- Scanned Assignment / External Link Banner (Fallback if mobile blocks popups) -->
       <div id="st-scanned-link-banner" class="hidden p-3 rounded-2xl border-2 border-indigo-300 bg-indigo-50 text-indigo-950 text-xs font-bold flex items-center justify-between gap-2">
         <div class="min-w-0">
-          <div class="text-[10px] uppercase tracking-wider text-indigo-600">สแกนลิงก์จาก QR Code สำเร็จ</div>
+          <div class="text-[10px] uppercase tracking-wider text-indigo-600">สแกนลิงก์จาก QR Code สำเร็จ ✨</div>
           <div id="st-scanned-link-text" class="truncate text-xs font-bold"></div>
         </div>
         <a
@@ -652,39 +655,42 @@
       </div>
 
       <!-- Camera Scanner Container -->
-      <div id="qr-reader-wrapper" class="hidden overflow-hidden rounded-2xl border-2 border-sky-400 bg-slate-900 relative">
+      <div id="qr-reader-wrapper" class="hidden overflow-hidden rounded-2xl border-2 border-sky-400 bg-slate-900 relative shadow-inner">
         <div id="qr-reader" class="w-full"></div>
-        <button type="button" onclick="stopQrScanner()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold">
+        <button type="button" onclick="stopQrScanner()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold">
           <i class="fa-solid fa-stop mr-1"></i> ปิดกล้องสแกน
         </button>
       </div>
 
-      <!-- Scanner Buttons -->
-      <div class="grid grid-cols-2 gap-2">
+      <!-- Vibrant Scanner Action Buttons -->
+      <div class="grid grid-cols-2 gap-2.5">
         <button
           type="button"
           onclick="startQrScanner()"
-          class="py-3 px-3 rounded-2xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white text-xs sm:text-sm font-extrabold shadow-md flex items-center justify-center gap-2 transition active:scale-[0.98]"
+          class="py-3.5 px-3 rounded-2xl bg-gradient-to-r from-sky-500 via-indigo-600 to-violet-600 hover:from-sky-600 hover:to-violet-700 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 transition active:scale-[0.97]"
         >
-          <i class="fa-solid fa-camera text-lg"></i> เปิดกล้องสแกน QR
+          <i class="fa-solid fa-camera text-base"></i> เปิดกล้องสแกน
         </button>
 
-        <label class="py-3 px-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 cursor-pointer transition text-center">
-          <i class="fa-solid fa-image text-indigo-600 text-lg"></i> เลือกรูป QR
+        <label class="py-3.5 px-3 rounded-2xl bg-indigo-50 hover:bg-indigo-100 border-2 border-indigo-200 text-indigo-800 text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2 cursor-pointer transition text-center active:scale-[0.97]">
+          <i class="fa-solid fa-image text-indigo-600 text-base"></i> เลือกรูป QR
           <input type="file" accept="image/*" class="hidden" onchange="scanQrFromImageFile(event)" />
         </label>
       </div>
 
       <!-- Connect by Paste Link or Teacher Username -->
-      <form onsubmit="handleManualJoinInput(event)" class="flex gap-1.5 pt-1">
-        <input
-          type="text"
-          id="manual-room-link"
-          placeholder="วางลิงก์เข้าห้อง หรือพิมพ์ Username ของครู..."
-          class="flex-1 px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs outline-none focus:border-indigo-500"
-        />
-        <button type="submit" id="btn-manual-join" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold shrink-0">
-          <i class="fa-solid fa-plug mr-1"></i> เข้าร่วม
+      <form onsubmit="handleManualJoinInput(event)" class="flex gap-1.5 pt-0.5">
+        <div class="relative flex-1">
+          <i class="fa-solid fa-link absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input
+            type="text"
+            id="manual-room-link"
+            placeholder="วางลิงก์ห้องเรียน หรือพิมพ์ Username ครู..."
+            class="w-full pl-8 pr-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs outline-none focus:border-indigo-500 transition"
+          />
+        </div>
+        <button type="submit" id="btn-manual-join" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shrink-0 transition active:scale-95">
+          เข้าร่วม
         </button>
       </form>
 
@@ -702,34 +708,76 @@
           class="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shrink-0 transition"
           title="เข้าร่วมห้องเรียนที่เลือก"
         >
-          เข้าร่วมห้องนี้
+          เข้าห้องนี้
         </button>
       </div>
     </section>
 
-    <!-- 2. CONNECTED CLASSROOM, ROSTER IDENTITY & CHECK-IN (Hidden when not joined / removed by teacher) -->
-    <section id="section-connected-classroom" class="hidden bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-indigo-200 space-y-3">
+    <!-- 2. MY SEAT TICKET, MY GROUP & BUDDY CARD, AND ATTENDANCE CHECK-IN -->
+    <section id="section-connected-classroom" class="hidden st-card rounded-3xl p-4 sm:p-5 space-y-4">
       <div class="flex items-center justify-between gap-2">
-        <div class="min-w-0">
-          <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[10px] font-extrabold">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> เชื่อมต่อกับระบบครูแล้ว
-          </span>
-          <h3 id="dash-room-title" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1 truncate">
-            ห้องเรียนออนไลน์
-          </h3>
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-500/25 text-lg">
+            <i class="fa-solid fa-chair"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-600">My Classroom & Seat</div>
+            <h3 id="dash-room-title" class="text-base sm:text-lg font-extrabold text-slate-900 truncate">
+              ห้องเรียนออนไลน์
+            </h3>
+          </div>
         </div>
         <button
           type="button"
           onclick="leaveClassroomManually()"
-          class="px-2.5 py-1.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white text-[11px] font-bold shrink-0 transition"
+          class="px-3 py-1.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white text-[11px] font-extrabold shrink-0 transition"
           title="ออกจากห้องเรียนนี้"
         >
           <i class="fa-solid fa-door-open mr-1"></i>ออกห้อง
         </button>
       </div>
 
-      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 space-y-2">
-        <label class="block text-[11px] font-bold text-slate-600">ชื่อของคุณในผังที่นั่งห้องเรียนนี้:</label>
+      <!-- Visual Seat Ticket Boarding Pass -->
+      <div id="dash-seat-banner" class="hidden rounded-2xl p-3.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 text-white shadow-md relative overflow-hidden">
+        <div class="absolute right-2 -bottom-4 text-white/10 text-6xl pointer-events-none"><i class="fa-solid fa-chair"></i></div>
+        <div class="relative flex items-center justify-between gap-3">
+          <div>
+            <div class="text-[11px] font-bold text-emerald-100 uppercase tracking-wider">ตำแหน่งโต๊ะเรียนของคุณ</div>
+            <div id="dash-seat-coord" class="text-lg sm:text-xl font-extrabold mt-0.5">แถวที่ 1 • คอลัมน์ที่ 2</div>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-2xl shrink-0">
+            🪑
+          </div>
+        </div>
+      </div>
+
+      <!-- My Mixed-Ability Group, Assigned Role (Group 5) or Buddy Partner (Group 6) -->
+      <div id="dash-group-card" class="hidden rounded-2xl p-3.5 bg-violet-50 border-2 border-violet-200 space-y-2.5">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white flex items-center justify-center text-sm shadow-xs">
+              <i class="fa-solid fa-people-group"></i>
+            </span>
+            <div>
+              <div id="dash-group-title" class="text-sm font-extrabold text-violet-900">กลุ่มที่ 1</div>
+              <div id="dash-group-subtitle" class="text-[11px] text-slate-600">สมาชิกในกลุ่มของคุณ</div>
+            </div>
+          </div>
+          <span id="dash-group-badge-pill" class="px-2.5 py-0.5 rounded-full bg-violet-600 text-white text-[10px] font-extrabold shrink-0">กลุ่ม 4 คน</span>
+        </div>
+
+        <!-- Dynamic Role Banner (Groups of 5) or Buddy Banner (Groups of 6) -->
+        <div id="dash-group-highlight" class="hidden p-2.5 rounded-xl bg-white border border-violet-200 flex items-center justify-between gap-2"></div>
+
+        <!-- Teammates Chips -->
+        <div id="dash-group-members" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <!-- Roster Identity Picker -->
+      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 space-y-1.5">
+        <label class="block text-[11px] font-bold text-slate-600">
+          <i class="fa-solid fa-id-card text-indigo-500 mr-1"></i>ชื่อของคุณในผังที่นั่งห้องนี้:
+        </label>
         <select
           id="dash-roster-match-select"
           onchange="linkStudentToRosterId(this.value)"
@@ -737,72 +785,91 @@
         >
           <option value="">-- แตะเพื่อเลือกชื่อของคุณ --</option>
         </select>
-
-        <div id="dash-seat-banner" class="hidden p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between">
-          <span class="text-xs font-semibold text-emerald-800"><i class="fa-solid fa-chair mr-1"></i> ตำแหน่งโต๊ะของคุณ:</span>
-          <span id="dash-seat-coord" class="text-sm font-extrabold text-emerald-900">แถวที่ 1 คอลัมน์ที่ 2</span>
-        </div>
       </div>
 
+      <!-- Big Rewarding Attendance Check-in CTA -->
       <button
         type="button"
         id="dash-btn-checkin"
         onclick="studentCheckInNow()"
-        class="w-full py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-md flex items-center justify-between transition active:scale-[0.99]"
+        class="w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold text-sm shadow-lg shadow-emerald-500/25 flex items-center justify-between transition active:scale-[0.98]"
       >
-        <div class="flex items-center gap-2.5">
-          <i class="fa-solid fa-user-check text-xl"></i>
-          <span>เช็คชื่อเข้าเรียนวันนี้</span>
+        <div class="flex items-center gap-3">
+          <span class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-user-check"></i>
+          </span>
+          <div class="text-left">
+            <div class="text-sm font-extrabold leading-tight">เช็คชื่อเข้าเรียนวันนี้</div>
+            <div id="dash-checkin-sub" class="text-[11px] text-emerald-100 font-medium">แตะเพื่อยืนยันการเข้าเรียนกับครู</div>
+          </div>
         </div>
-        <span id="dash-checkin-badge" class="px-2.5 py-0.5 rounded-full bg-white/20 text-[11px]">แตะเพื่อเช็คชื่อ</span>
+        <span id="dash-checkin-badge" class="px-3 py-1 rounded-full bg-white/20 text-xs font-extrabold">แตะเช็คชื่อ</span>
       </button>
     </section>
 
-    <!-- 3. LIVE HELP REQUEST (Hidden when not joined / removed by teacher) -->
-    <section id="help-request-card" class="hidden bg-white rounded-3xl p-4 sm:p-5 shadow-sm border-2 border-rose-200 space-y-3">
+    <!-- 3. EXPRESSIVE LIVE HELP REQUEST WITH 1-TAP QUICK CHIPS -->
+    <section id="help-request-card" class="hidden st-card rounded-3xl p-4 sm:p-5 border-2 border-rose-200 space-y-3">
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5">
-          <div class="ui-icon-btn rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-rose-500 to-amber-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-rose-500/25 text-lg">
             <i class="fa-solid fa-hand-sparkles"></i>
           </div>
           <div>
-            <h3 class="text-sm sm:text-base font-extrabold text-slate-900">ขอความช่วยเหลือจากครู</h3>
+            <h3 class="text-sm sm:text-base font-extrabold text-slate-900">ยกมือขอความช่วยเหลือ</h3>
             <p class="text-[11px] text-slate-500">โต๊ะของคุณบนหน้าจอครูจะกะพริบแจ้งเตือนทันที</p>
           </div>
         </div>
-        <span id="dash-help-status-pill" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[10px] font-bold shrink-0">ปกติ</span>
+        <span id="dash-help-status-pill" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[10px] font-extrabold shrink-0">ปกติ</span>
+      </div>
+
+      <!-- Quick Tap Question Chips -->
+      <div class="flex flex-wrap gap-1.5">
+        <button type="button" onclick="fillQuickHelpChip('ไม่เข้าใจโจทย์ข้อนี้ครับ/ค่ะ')" class="px-2.5 py-1 rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-[11px] font-bold transition active:scale-95">
+          ❓ ไม่เข้าใจโจทย์
+        </button>
+        <button type="button" onclick="fillQuickHelpChip('ช่วยตรวจคำตอบให้หน่อยครับ/ค่ะ')" class="px-2.5 py-1 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-[11px] font-bold transition active:scale-95">
+          👀 ช่วยตรวจงานหน่อย
+        </button>
+        <button type="button" onclick="fillQuickHelpChip('ขอคำแนะนำเพิ่มเติมครับ/ค่ะ')" class="px-2.5 py-1 rounded-full bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 text-[11px] font-bold transition active:scale-95">
+          💡 ขอคำแนะนำเพิ่ม
+        </button>
       </div>
 
       <input
         type="text"
         id="dash-help-note"
-        placeholder="พิมพ์สิ่งที่สงสัยถึงครู (เช่น ข้อ 2 ทำยังไงครับ / ช่วยตรวจงานหน่อยค่ะ)"
-        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs outline-none focus:border-rose-400"
+        placeholder="พิมพ์สิ่งที่สงสัยถึงครู หรือแตะปุ่มด่วนด้านบน..."
+        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs outline-none focus:border-rose-400 transition"
       />
 
       <button
         type="button"
         id="dash-btn-help"
         onclick="toggleLiveHelpToTeacher()"
-        class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-extrabold text-sm shadow-md transition active:scale-[0.99]"
+        class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-extrabold text-sm shadow-lg shadow-rose-500/25 transition active:scale-[0.98]"
       >
         🙋 กดยกมือขอความช่วยเหลือ
       </button>
     </section>
 
-    <!-- 4. ASSIGNMENTS & DIRECT SUBMISSION SYNC (Hidden when not joined / removed by teacher) -->
-    <section id="section-student-tasks" class="hidden bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-amber-200 space-y-3">
+    <!-- 4. ASSIGNMENTS MISSION BOARD -->
+    <section id="section-student-tasks" class="hidden st-card rounded-3xl p-4 sm:p-5 border border-amber-200 space-y-3.5">
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5">
-          <div class="ui-icon-btn rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-            <i class="fa-solid fa-file-pen"></i>
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-amber-500/25 text-lg">
+            <i class="fa-solid fa-rocket"></i>
           </div>
           <div>
-            <h3 class="text-sm sm:text-base font-extrabold text-slate-900">งานที่ได้รับมอบหมาย</h3>
-            <p class="text-[11px] text-slate-500">สถานะการส่งงานซิงก์ตรงกับหน้าจอครูอัตโนมัติ</p>
+            <h3 class="text-sm sm:text-base font-extrabold text-slate-900">ภารกิจงานที่ได้รับมอบหมาย</h3>
+            <p class="text-[11px] text-slate-500">ส่งงานแล้วกดยืนยัน สถานะจะซิงก์ไปหน้าจอครูทันที</p>
           </div>
         </div>
-        <span id="dash-tasks-summary-pill" class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 text-[11px] font-extrabold shrink-0">0/0</span>
+        <span id="dash-tasks-summary-pill" class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-extrabold shrink-0 border border-amber-300">0/0</span>
+      </div>
+
+      <!-- Assignments Mini Progress Bar -->
+      <div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+        <div id="dash-tasks-progress-bar" class="h-full rounded-full bg-gradient-to-r from-amber-400 via-emerald-500 to-teal-500 transition-all duration-500" style="width: 0%;"></div>
       </div>
 
       <div id="dash-tasks-list" class="space-y-2.5">
@@ -814,7 +881,7 @@
 
   <!-- ================= CONFIRMATION DIALOG (LOGOUT) ================= -->
   <div id="st-confirm-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-[120] hidden items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-slate-200 text-center p-6">
+    <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-slate-200 text-center p-6 animate-shuffle">
       <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-4 text-2xl">
         <i class="fa-solid fa-right-from-bracket"></i>
       </div>
@@ -1078,6 +1145,7 @@
     </div>
   </div>
 
+
   <!-- Toast Container -->
   <div id="st-toast-container" class="fixed bottom-5 right-5 left-5 sm:left-auto z-50 flex flex-col gap-2 pointer-events-none"></div>
 
@@ -1098,6 +1166,33 @@
     let html5QrCodeInstance = null;
     let isJoiningNow = false;
 
+    // Playful, Dimensional, Cute Kawaii SVG Student Avatar Presets (3D gradients, glossy eyes & blush)
+    const AVATAR_PRESETS = [
+      { id: 'boy1', label: 'หนุ่มน้อยยิ้มใส', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#e0f2fe"/><stop offset="100%" stop-color="#7dd3fc"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff0db"/><stop offset="65%" stop-color="#fbd39b"/><stop offset="100%" stop-color="#e9ad6c"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#334155"/><stop offset="100%" stop-color="#0f172a"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0369a1"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.6"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="16" cy="20" r="4" fill="#fff" opacity="0.55"/><circle cx="85" cy="24" r="3" fill="#fff" opacity="0.6"/><circle cx="82" cy="76" r="5" fill="#fff" opacity="0.35"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M40 75 L50 86 L60 75 Z" fill="#ffffff" opacity="0.92"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#e5a668"/><circle cx="24" cy="54" r="6.5" fill="#f3bd82"/><circle cx="76" cy="54" r="6.5" fill="#f3bd82"/><circle cx="50" cy="52" r="27" fill="url(#sk)"/><path d="M21 50 C19 22 40 13 55 16 C72 17 82 28 79 50 C74 37 64 31 54 35 C46 27 32 32 21 50 Z" fill="url(#hr)"/><path d="M32 26 Q46 19 60 25" stroke="#94a3b8" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.55"/><ellipse cx="34" cy="60" rx="6.5" ry="4" fill="url(#bl)"/><ellipse cx="66" cy="60" rx="6.5" ry="4" fill="url(#bl)"/><circle cx="39.5" cy="53" r="4.3" fill="#0f172a"/><circle cx="60.5" cy="53" r="4.3" fill="#0f172a"/><circle cx="41" cy="51.3" r="1.6" fill="#fff"/><circle cx="62" cy="51.3" r="1.6" fill="#fff"/><circle cx="38" cy="54.8" r="0.8" fill="#fff" opacity="0.8"/><circle cx="59" cy="54.8" r="0.8" fill="#fff" opacity="0.8"/><path d="M35 45 Q39.5 42.5 44 45" stroke="#334155" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M56 45 Q60.5 42.5 65 45" stroke="#334155" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M43 63 Q50 71 57 63" stroke="#9a3412" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 'boy2', label: 'หนุ่มแว่นเนิร์ด', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#ede9fe"/><stop offset="100%" stop-color="#a5b4fc"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff4e4"/><stop offset="68%" stop-color="#fde0b2"/><stop offset="100%" stop-color="#eab676"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#475569"/><stop offset="100%" stop-color="#1e293b"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#3730a3"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f472b6" stop-opacity="0.55"/><stop offset="100%" stop-color="#f472b6" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="18" cy="22" r="3.5" fill="#fff" opacity="0.6"/><circle cx="84" cy="18" r="4.5" fill="#fff" opacity="0.45"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M41 75 L50 87 L59 75 Z" fill="#fff"/><path d="M48 82 L52 82 L53 95 L50 98 L47 95 Z" fill="#f59e0b"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#e5ae73"/><circle cx="24" cy="54" r="6.5" fill="#f4c58e"/><circle cx="76" cy="54" r="6.5" fill="#f4c58e"/><circle cx="50" cy="52" r="27" fill="url(#sk)"/><path d="M20 51 C20 20 48 13 62 17 C76 20 82 32 79 51 C70 36 58 34 46 31 C36 37 28 38 20 51 Z" fill="url(#hr)"/><path d="M34 24 Q50 18 65 25" stroke="#cbd5e1" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.45"/><ellipse cx="34" cy="61" rx="6" ry="3.6" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6" ry="3.6" fill="url(#bl)"/><circle cx="39" cy="53" r="3.9" fill="#0f172a"/><circle cx="61" cy="53" r="3.9" fill="#0f172a"/><circle cx="40.3" cy="51.6" r="1.4" fill="#fff"/><circle cx="62.3" cy="51.6" r="1.4" fill="#fff"/><rect x="29.5" y="45.5" width="18" height="14" rx="5.5" fill="#ffffff" fill-opacity="0.22" stroke="#1e293b" stroke-width="2.6"/><rect x="52.5" y="45.5" width="18" height="14" rx="5.5" fill="#ffffff" fill-opacity="0.22" stroke="#1e293b" stroke-width="2.6"/><line x1="47.5" y1="52" x2="52.5" y2="52" stroke="#1e293b" stroke-width="2.6"/><path d="M44 64 Q50 69.5 56 64" stroke="#9a3412" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 'boy3', label: 'หนุ่มหยักศกขี้เล่น', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#fef3c7"/><stop offset="100%" stop-color="#fdba74"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#ffe8cc"/><stop offset="68%" stop-color="#f5be82"/><stop offset="100%" stop-color="#dd9857"/></radialGradient><radialGradient id="hr" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#57534e"/><stop offset="100%" stop-color="#1c1917"/></radialGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#c2410c"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.52"/><stop offset="100%" stop-color="#f43f5e" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="16" cy="24" r="4" fill="#fff" opacity="0.55"/><circle cx="84" cy="20" r="3" fill="#fff" opacity="0.6"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M35 76 Q50 86 65 76" stroke="#fed7aa" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#d99456"/><circle cx="24" cy="55" r="6.5" fill="#ebaf72"/><circle cx="76" cy="55" r="6.5" fill="#ebaf72"/><circle cx="50" cy="54" r="26.5" fill="url(#sk)"/><g fill="url(#hr)"><circle cx="27" cy="36" r="10"/><circle cx="38" cy="27" r="11"/><circle cx="52" cy="25" r="12"/><circle cx="65" cy="28" r="11"/><circle cx="74" cy="37" r="9.5"/><circle cx="34" cy="36" r="7.5"/><circle cx="50" cy="34" r="8"/><circle cx="66" cy="36" r="7.5"/></g><ellipse cx="34" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54" r="4.3" fill="#1c1917"/><circle cx="41" cy="52.4" r="1.5" fill="#fff"/><path d="M56 54.5 Q60.5 49.5 65 54.5" stroke="#1c1917" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M41 63 Q50 73 59 63 Z" fill="#991b1b"/><path d="M44 69 Q50 72 56 69 Q50 65.5 44 69 Z" fill="#fb7185"/><path d="M42.5 63.6 L57.5 63.6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>` },
+      { id: 'boy4', label: 'หนุ่มหมวกแก๊ปสปอร์ต', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#ccfbf1"/><stop offset="100%" stop-color="#5eead4"/></radialGradient><radialGradient id="sk" cx="42%" cy="38%" r="65%"><stop offset="0%" stop-color="#fff0db"/><stop offset="68%" stop-color="#fbd39b"/><stop offset="100%" stop-color="#e5a668"/></radialGradient><linearGradient id="cap" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#14b8a6"/><stop offset="100%" stop-color="#0f766e"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#0369a1"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.55"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="15" cy="72" r="4" fill="#fff" opacity="0.5"/><circle cx="84" cy="24" r="4" fill="#fff" opacity="0.55"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M39 75 Q50 84 61 75" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#e2a365"/><circle cx="24" cy="56" r="6.5" fill="#f3be83"/><circle cx="76" cy="56" r="6.5" fill="#f3be83"/><circle cx="50" cy="54" r="26.5" fill="url(#sk)"/><path d="M23 44 C26 19 74 19 77 44 Z" fill="url(#cap)"/><path d="M20 42 Q52 34 86 43 Q74 49 52 46 Q32 45 20 42 Z" fill="#115e59"/><circle cx="50" cy="30" r="4" fill="#fef08a"/><ellipse cx="34" cy="61" rx="6" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54.5" r="4.2" fill="#0f172a"/><circle cx="60.5" cy="54.5" r="4.2" fill="#0f172a"/><circle cx="41" cy="53" r="1.5" fill="#fff"/><circle cx="62" cy="53" r="1.5" fill="#fff"/><path d="M41 64 Q50 73 59 64 Z" fill="#fff" stroke="#0f172a" stroke-width="2" stroke-linejoin="round"/></svg>` },
+      { id: 'boy5', label: 'หนุ่มผมตั้งสุดเท่', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#dcfce7"/><stop offset="100%" stop-color="#86efac"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff1df"/><stop offset="68%" stop-color="#fbd39b"/><stop offset="100%" stop-color="#e5a668"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#78350f"/><stop offset="100%" stop-color="#451a03"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.55"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><path d="M82 16 L84 21 L89 23 L84 25 L82 30 L80 25 L75 23 L80 21 Z" fill="#fef08a"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M40 75 L50 86 L60 75 Z" fill="#ecfdf5"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#e3a466"/><circle cx="24" cy="55" r="6.5" fill="#f2bd83"/><circle cx="76" cy="55" r="6.5" fill="#f2bd83"/><circle cx="50" cy="53" r="26.5" fill="url(#sk)"/><path d="M22 48 L24 31 L34 34 L42 17 L52 28 L63 16 L69 31 L79 29 L78 48 C68 36 32 36 22 48 Z" fill="url(#hr)"/><ellipse cx="34" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54" r="4.3" fill="#1e293b"/><circle cx="60.5" cy="54" r="4.3" fill="#1e293b"/><circle cx="41" cy="52.4" r="1.5" fill="#fff"/><circle cx="62" cy="52.4" r="1.5" fill="#fff"/><path d="M43 64 Q50 70 57 64" stroke="#9a3412" stroke-width="2.7" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 'girl1', label: 'สาวน้อยมัดแกละ', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#fdf2f8"/><stop offset="100%" stop-color="#f9a8d4"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff4e6"/><stop offset="68%" stop-color="#fde0b8"/><stop offset="100%" stop-color="#ebb478"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4c1d95"/><stop offset="100%" stop-color="#1e1b4b"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#be185d"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.65"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="15" cy="20" r="3.5" fill="#fff" opacity="0.7"/><circle cx="85" cy="22" r="4" fill="#fff" opacity="0.6"/><circle cx="17" cy="48" r="12" fill="url(#hr)"/><circle cx="83" cy="48" r="12" fill="url(#hr)"/><circle cx="25" cy="43" r="4" fill="#fb7185"/><circle cx="75" cy="43" r="4" fill="#fb7185"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M36 76 Q43 85 50 80 Q57 85 64 76" fill="#fff"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e6ae74"/><circle cx="50" cy="53" r="26.5" fill="url(#sk)"/><path d="M22 50 C22 20 78 20 78 50 C70 36 58 34 50 38 C42 34 30 36 22 50 Z" fill="url(#hr)"/><path d="M33 27 Q50 20 67 27" stroke="#c4b5fd" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/><ellipse cx="33" cy="60" rx="6.5" ry="4" fill="url(#bl)"/><ellipse cx="67" cy="60" rx="6.5" ry="4" fill="url(#bl)"/><circle cx="39" cy="53.5" r="4.5" fill="#1e1b4b"/><circle cx="61" cy="53.5" r="4.5" fill="#1e1b4b"/><circle cx="40.6" cy="51.8" r="1.7" fill="#fff"/><circle cx="62.6" cy="51.8" r="1.7" fill="#fff"/><circle cx="37.6" cy="55.2" r="0.9" fill="#fff"/><circle cx="59.6" cy="55.2" r="0.9" fill="#fff"/><path d="M44 63.5 Q50 69.5 56 63.5" stroke="#be123c" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 'girl2', label: 'สาวผมบ็อบติดกิ๊บ', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#fff1f2"/><stop offset="100%" stop-color="#fda4af"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff3e2"/><stop offset="68%" stop-color="#fcdab0"/><stop offset="100%" stop-color="#e8ae72"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#581c87"/><stop offset="100%" stop-color="#2e1065"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f43f5e"/><stop offset="100%" stop-color="#be123c"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.6"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><path d="M18 56 C18 18 82 18 82 56 L84 74 C76 78 68 78 65 73 L35 73 C32 78 24 78 16 74 Z" fill="url(#hr)"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M40 75 L50 86 L60 75 Z" fill="#fff1f2"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e5ac72"/><circle cx="50" cy="54" r="25.5" fill="url(#sk)"/><path d="M23 47 C26 24 74 24 77 47 L67 43 L62 47 L52 41 L42 47 L34 42 Z" fill="url(#hr)"/><rect x="61" y="34" width="11" height="4.5" rx="2.2" transform="rotate(14 66 36)" fill="#fde047" stroke="#f59e0b" stroke-width="0.8"/><ellipse cx="34" cy="61" rx="6" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54.5" r="4.3" fill="#1e1b4b"/><circle cx="60.5" cy="54.5" r="4.3" fill="#1e1b4b"/><circle cx="41" cy="52.8" r="1.6" fill="#fff"/><circle cx="62" cy="52.8" r="1.6" fill="#fff"/><path d="M43.5 64 Q50 70.5 56.5 64" stroke="#be123c" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 'girl3', label: 'สาวแว่นน่ารัก', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#f3e8ff"/><stop offset="100%" stop-color="#d8b4fe"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff4e4"/><stop offset="68%" stop-color="#fde0b8"/><stop offset="100%" stop-color="#eab477"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6b21a8"/><stop offset="100%" stop-color="#3b0764"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7e22ce"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f472b6" stop-opacity="0.58"/><stop offset="100%" stop-color="#f472b6" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><path d="M18 58 C18 18 82 18 82 58 L80 86 L20 86 Z" fill="url(#hr)"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M40 75 L50 85 L60 75 Z" fill="#fff"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e6ae74"/><circle cx="50" cy="53" r="25.5" fill="url(#sk)"/><path d="M24 47 C27 24 73 24 76 47 C64 35 36 35 24 47 Z" fill="url(#hr)"/><ellipse cx="33" cy="61" rx="6" ry="3.6" fill="url(#bl)"/><ellipse cx="67" cy="61" rx="6" ry="3.6" fill="url(#bl)"/><circle cx="39" cy="54" r="3.9" fill="#1e1b4b"/><circle cx="61" cy="54" r="3.9" fill="#1e1b4b"/><circle cx="40.3" cy="52.6" r="1.4" fill="#fff"/><circle cx="62.3" cy="52.6" r="1.4" fill="#fff"/><circle cx="39" cy="54" r="8.5" fill="#ffffff" fill-opacity="0.22" stroke="#ec4899" stroke-width="2.5"/><circle cx="61" cy="54" r="8.5" fill="#ffffff" fill-opacity="0.22" stroke="#ec4899" stroke-width="2.5"/><line x1="47.5" y1="54" x2="52.5" y2="54" stroke="#ec4899" stroke-width="2.5"/><path d="M44.5 64.5 Q50 69.5 55.5 64.5" stroke="#be185d" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 'girl4', label: 'สาวดังโงะติดโบว์', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#fae8ff"/><stop offset="100%" stop-color="#f0abfc"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff4e4"/><stop offset="68%" stop-color="#fde0b8"/><stop offset="100%" stop-color="#ebb478"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#334155"/><stop offset="100%" stop-color="#0f172a"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d946ef"/><stop offset="100%" stop-color="#a21caf"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.62"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="16" cy="22" r="3" fill="#fff" opacity="0.7"/><circle cx="84" cy="24" r="3.5" fill="#fff" opacity="0.6"/><circle cx="50" cy="21" r="12" fill="url(#hr)"/><path d="M35 23 L50 29 L35 35 C33 31 33 27 35 23 Z" fill="#f43f5e"/><path d="M65 23 L50 29 L65 35 C67 31 67 27 65 23 Z" fill="#f43f5e"/><circle cx="50" cy="29" r="3.5" fill="#ffe4e6"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M38 76 Q50 86 62 76" stroke="#fae8ff" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e5ad73"/><circle cx="50" cy="54" r="25.5" fill="url(#sk)"/><path d="M24 50 C24 25 76 25 76 50 C64 36 36 36 24 50 Z" fill="url(#hr)"/><ellipse cx="34" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><path d="M35 54.5 Q39.5 49.5 44 54.5" stroke="#0f172a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M56 54.5 Q60.5 49.5 65 54.5" stroke="#0f172a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M43 63.5 Q50 71.5 57 63.5 Z" fill="#fb7185" stroke="#be123c" stroke-width="1.8" stroke-linejoin="round"/></svg>` },
+      { id: 'girl5', label: 'สาวผมยาวติดดาว', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#ecfdf5"/><stop offset="100%" stop-color="#6ee7b7"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff3e2"/><stop offset="68%" stop-color="#fbd39b"/><stop offset="100%" stop-color="#e5a668"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#92400e"/><stop offset="100%" stop-color="#451a03"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.6"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><path d="M16 56 C16 17 84 17 84 56 L87 90 L13 90 Z" fill="url(#hr)"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M39 75 L50 86 L61 75 Z" fill="#ecfdf5"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e5a76a"/><circle cx="50" cy="54" r="25.5" fill="url(#sk)"/><path d="M23 48 C28 24 72 24 77 48 C65 36 53 35 45 41 C38 35 28 38 23 48 Z" fill="url(#hr)"/><path d="M30 33 L32 37 L36 37.5 L33 40 L34 44 L30 42 L26 44 L27 40 L24 37.5 L28 37 Z" fill="#fde047" stroke="#eab308" stroke-width="0.7"/><ellipse cx="34" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54.5" r="4.4" fill="#291509"/><circle cx="60.5" cy="54.5" r="4.4" fill="#291509"/><circle cx="41" cy="52.8" r="1.6" fill="#fff"/><circle cx="62" cy="52.8" r="1.6" fill="#fff"/><circle cx="38" cy="56" r="0.8" fill="#fff"/><circle cx="59" cy="56" r="0.8" fill="#fff"/><path d="M43.5 64 Q50 70.5 56.5 64" stroke="#9a3412" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` }
+    ].map(item => ({
+      ...item,
+      dataUrl: 'data:image/svg+xml;utf8,' + encodeURIComponent(item.svg)
+    }));
+
+
+    function getStudentAvatarUrl(rosterObj) {
+      if (rosterObj && rosterObj.photo) return rosterObj.photo;
+      const name = (rosterObj && rosterObj.name) || (studentUser && studentUser.fullname) || '';
+      const num = Number((rosterObj && rosterObj.number) || (studentUser && studentUser.number) || 1);
+      const gender = (rosterObj && rosterObj.gender) || detectStudentGender(name, num);
+      const pool = gender === 'F' ? AVATAR_PRESETS.slice(5, 10) : AVATAR_PRESETS.slice(0, 5);
+      return pool[num % pool.length].dataUrl;
+    }
+
     function isCloudConfigured() {
       return typeof APP_CONFIG !== 'undefined' && APP_CONFIG.API_URL && !APP_CONFIG.API_URL.includes('YOUR_SCRIPT_ID');
     }
@@ -1107,6 +1202,23 @@
       if (/^(ด\.ญ\.|เด็กหญิง|น\.ส\.|นางสาว|ญ\.)/.test(txt)) return 'F';
       if (/^(ด\.ช\.|เด็กชาย|นาย|ช\.)/.test(txt)) return 'M';
       return (Number(number) || 1) % 2 === 1 ? 'M' : 'F';
+    }
+
+    function launchMiniConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 55,
+          spread: 65,
+          origin: { y: 0.72 }
+        });
+      }
+    }
+
+    function getThaiTimeGreeting() {
+      const h = new Date().getHours();
+      if (h < 12) return 'สวัสดีตอนเช้า';
+      if (h < 17) return 'สวัสดีตอนบ่าย';
+      return 'สวัสดีตอนเย็น';
     }
 
     // Immediate auth gate -> route to unified login.html with role=student if not signed in
@@ -1150,6 +1262,24 @@
       }
     }
 
+    function renderStudentProfileAvatars(rosterObj = null) {
+      const avatarUrl = getStudentAvatarUrl(rosterObj);
+      const numVal = (rosterObj && rosterObj.number) || (studentUser && studentUser.number) || '-';
+      const navWrap = document.getElementById('nav-st-avatar-wrap');
+      const numPill = document.getElementById('nav-st-number-pill');
+      const heroWrap = document.getElementById('hero-st-avatar');
+
+      if (navWrap) {
+        navWrap.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="w-full h-full object-cover" />`;
+      }
+      if (numPill) {
+        numPill.textContent = `#${numVal}`;
+      }
+      if (heroWrap) {
+        heroWrap.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="w-full h-full object-cover" />`;
+      }
+    }
+
     window.onload = async function () {
       const rawSession = localStorage.getItem(STUDENT_SESSION_KEY);
       if (!rawSession) return;
@@ -1161,9 +1291,11 @@
       applyStudentBrandLogo();
       applyBrowserTabFavicon();
 
-      document.getElementById('nav-st-number').textContent = studentUser.number || '-';
+      const navNumEl = document.getElementById('nav-st-number');
+      if (navNumEl) navNumEl.textContent = studentUser.number || '-';
       document.getElementById('nav-st-name').textContent = `${studentUser.fullname}${studentUser.nickname ? ` (${studentUser.nickname})` : ''}`;
       document.getElementById('nav-st-room').textContent = 'ยังไม่ได้เข้าร่วมห้องเรียน';
+      renderStudentProfileAvatars(null);
 
       const params = new URLSearchParams(window.location.search);
       const urlClassId = params.get('classId') || localStorage.getItem('PENDING_JOIN_CLASS_ID') || '';
@@ -1179,10 +1311,8 @@
       }
 
       if (urlClassId || urlTeacher) {
-        // Explicit arrival from scanning Classroom QR Code -> join immediately!
         await joinTeacherClassroom(urlTeacher, urlClassId, true);
       } else {
-        // Restore previous joined session ONLY if student is still in the teacher's classroom roster
         const savedJoin = loadSavedJoinedRoomState();
         if (savedJoin && savedJoin.classId && savedJoin.studentId) {
           teacherUsername = savedJoin.teacher || '';
@@ -1192,11 +1322,10 @@
           isJoinedToClassroom = true;
           await loadTeacherClassroomData(false);
         } else {
-          showDisconnectedState('idle', 'ยังไม่ได้เข้าร่วมห้องเรียน กรุณาสแกน QR Code จากหน้าจอครู หรือพิมพ์ Username ของครูด้านล่างเพื่อเข้าร่วม');
+          showDisconnectedState('idle', 'ยังไม่ได้เข้าร่วมห้องเรียน แตะปุ่ม "เปิดกล้องสแกน" ด้านล่างเพื่อสแกน QR จากหน้าจอครู หรือพิมพ์ Username ครูเพื่อเริ่มใช้งาน ✨');
         }
       }
 
-      // Instant cross-tab sync when teacher deletes or updates students in the same browser
       window.addEventListener('storage', (ev) => {
         if (ev.key === MULTI_CLASS_KEY && isJoinedToClassroom) {
           loadTeacherClassroomData(false);
@@ -1205,7 +1334,6 @@
         }
       });
 
-      // Periodic Cloud sync every 5 seconds so removals, desk moves, new tasks & resolved help alerts reflect live
       setInterval(() => {
         if (isJoinedToClassroom && !isJoiningNow) {
           loadTeacherClassroomData(false);
@@ -1214,9 +1342,8 @@
     };
 
     /*************************************************************************
-     * 1. THEME, ICON SIZE, LOGO & LOGOUT CONFIRMATION
+     * 1. THEME, ICON SIZE, FAVICON, LOGO & LOGOUT CONFIRMATION
      *************************************************************************/
-    // --- BROWSER TAB LOGO (FAVICON) CONTROLLER ---
     const DEFAULT_TAB_FAVICON_URI = 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%234f46e5%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%237c3aed%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22url%28%23g%29%22/%3E%3Cpath%20d%3D%22M21%2017h22a3%203%200%200%201%203%203v12H18V20a3%203%200%200%201%203-3zm-5%2017h32a3%203%200%200%201%203%203v4a2%202%200%200%201-2%202h-3v8a2%202%200%200%201-4%200v-8H22v8a2%202%200%200%201-4%200v-8h-3a2%202%200%200%201-2-2v-4a3%203%200%200%201%203-3z%22%20fill%3D%22%23ffffff%22/%3E%3C/svg%3E';
     const FAVICON_COLOR_HEX = {
       indigo:  ['#4f46e5', '#7c3aed'],
@@ -1257,14 +1384,10 @@
           const raw = localStorage.getItem('SMART_SEATING_CUSTOM_LOGO_V1');
           if (raw) logo = JSON.parse(raw);
         }
-
-        // 1. If user uploaded a custom 1:1 logo image, apply it directly to the browser tab!
         if (logo && logo.type === 'image' && logo.dataUrl) {
           setBrowserTabFavicon(logo.dataUrl, 'image/png');
           return;
         }
-
-        // 2. Otherwise check if a static ./favicon.png file exists in the project folder
         const probe = new Image();
         probe.onload = () => setBrowserTabFavicon('./favicon.png', 'image/png');
         probe.onerror = () => {
@@ -1346,16 +1469,36 @@
       window.location.href = 'login.html?role=student&switch=1';
     }
 
+    function fillQuickHelpChip(text) {
+      const inp = document.getElementById('dash-help-note');
+      if (!inp) return;
+      inp.value = text;
+      inp.focus();
+    }
+
     /*************************************************************************
      * 2. EXPLICIT JOIN, LIVE MEMBERSHIP VERIFICATION & AUTO-DISCONNECT
      *************************************************************************/
     function setConnectedCardsVisible(visible) {
-      ['section-connected-classroom', 'help-request-card', 'section-student-tasks'].forEach(id => {
+      ['st-mission-hero', 'section-connected-classroom', 'help-request-card', 'section-student-tasks'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
         if (visible) el.classList.remove('hidden');
         else el.classList.add('hidden');
       });
+      const dot = document.getElementById('nav-conn-dot');
+      const qrChip = document.getElementById('qr-status-chip');
+      if (dot) {
+        dot.className = visible
+          ? 'w-2 h-2 rounded-full bg-emerald-300 animate-pulse shrink-0'
+          : 'w-2 h-2 rounded-full bg-amber-300 shrink-0';
+      }
+      if (qrChip) {
+        qrChip.textContent = visible ? '✓ เชื่อมต่อแล้ว' : 'พร้อมสแกน';
+        qrChip.className = visible
+          ? 'px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold shrink-0'
+          : 'px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-extrabold shrink-0';
+      }
     }
 
     function showDisconnectedState(reasonType, message) {
@@ -1373,8 +1516,8 @@
           banner.className = 'p-3.5 rounded-2xl border-2 border-rose-400 bg-rose-50 text-rose-800 text-xs font-bold flex items-start gap-2.5';
           if (icon) icon.className = 'fa-solid fa-user-slash text-rose-600 text-base mt-0.5 shrink-0';
         } else {
-          banner.className = 'p-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-600 text-xs font-semibold flex items-start gap-2.5';
-          if (icon) icon.className = 'fa-solid fa-circle-info text-indigo-500 text-base mt-0.5 shrink-0';
+          banner.className = 'p-3.5 rounded-2xl border border-indigo-200 bg-indigo-50/70 text-indigo-900 text-xs font-semibold flex items-start gap-2.5';
+          if (icon) icon.className = 'fa-solid fa-sparkles text-indigo-500 text-base mt-0.5 shrink-0';
         }
       }
     }
@@ -1409,7 +1552,6 @@
       showToast('ออกจากห้องเรียนเรียบร้อยแล้ว', 'slate');
     }
 
-    // Helper: Apply student join directly into LocalStorage (for same-browser / offline instant sync)
     function applyLocalStudentJoin(targetClassId, nowMs) {
       const multiRaw = localStorage.getItem(MULTI_CLASS_KEY);
       if (!multiRaw) return null;
@@ -1475,7 +1617,6 @@
           cls.students.sort((a, b) => (Number(a.number) || 0) - (Number(b.number) || 0));
         }
 
-        // Seat student on first empty desk if not already seated
         const rows = Number(cls.rows) || 4;
         const cols = Number(cls.cols) || 6;
         let alreadySeated = false;
@@ -1524,7 +1665,6 @@
       }
     }
 
-    // Explicit Join Flow: Registers student in Teacher's classroom (Cloud + LocalStorage)
     async function joinTeacherClassroom(targetTeacher, targetClassId, notify = true) {
       if (!studentUser) return;
       isJoiningNow = true;
@@ -1546,7 +1686,6 @@
       let joinedResult = null;
 
       try {
-        // 1. Join via Google Apps Script Cloud (Cross-device sync to Teacher's PC)
         if (teacherUsername && isCloudConfigured()) {
           try {
             const res = await fetch(APP_CONFIG.API_URL, {
@@ -1574,7 +1713,6 @@
           } catch (cloudErr) {}
         }
 
-        // 2. Also mirror join to LocalStorage (for instant same-browser sync & offline fallback)
         const localJoin = applyLocalStudentJoin(joinedResult ? joinedResult.classId : targetClassId, joinedResult ? joinedResult.joinedAt : nowMs);
         if (!joinedResult && localJoin) {
           joinedResult = localJoin;
@@ -1598,6 +1736,7 @@
           renderConnectedClassroomUI();
 
           if (notify) {
+            launchMiniConfetti();
             showToast(`เข้าร่วมห้อง "${classroomData.classroomTitle}" สำเร็จ! รายชื่อของคุณปรากฏบนผังครูแล้ว 🎉`, 'emerald');
           }
         } else {
@@ -1610,7 +1749,6 @@
       }
     }
 
-    // Check if the current student was removed by the teacher
     function checkIsStudentStillInClassroom(cls) {
       if (!cls || !Array.isArray(cls.students)) return { present: false, studentId: null };
 
@@ -1628,18 +1766,14 @@
         return { present: false, studentId: null };
       }
 
-      // Check by matchedRosterStudentId first
       if (matchedRosterStudentId) {
         const byId = cls.students.find(s => s.id === matchedRosterStudentId);
         if (byId) return { present: true, studentId: byId.id };
       }
-
-      // Fallback check by accountUsername (only if not marked removed)
       if (accUser) {
         const byAcc = cls.students.find(s => String(s.accountUsername || '').toLowerCase() === accUser);
         if (byAcc) return { present: true, studentId: byAcc.id };
       }
-
       return { present: false, studentId: null };
     }
 
@@ -1659,7 +1793,6 @@
       let localClassExistsInMulti = false;
       let localClassList = [];
 
-      // 1. Fetch from Google Apps Script Cloud (cross-device)
       if (teacherUsername && isCloudConfigured()) {
         try {
           const res = await fetch(APP_CONFIG.API_URL, {
@@ -1682,7 +1815,6 @@
         } catch (e) {}
       }
 
-      // 2. Also check LocalStorage (same-browser instant sync)
       const multiRaw = localStorage.getItem(MULTI_CLASS_KEY);
       if (multiRaw) {
         try {
@@ -1700,7 +1832,6 @@
 
       if (showNotify && syncIcon) syncIcon.classList.remove('fa-spin');
 
-      // Choose the freshest snapshot between Cloud and LocalStorage
       let latestClass = null;
       if (cloudRemoved && !localClassExistsInMulti) {
         disconnectFromClassroom('removed', 'ห้องเรียนนี้ถูกลบโดยครูผู้สอนแล้ว กรุณาเชื่อมต่อห้องเรียนใหม่');
@@ -1727,7 +1858,6 @@
         return;
       }
 
-      // CRITICAL BUG FIX #2: Verify student is STILL in the classroom roster!
       const membership = checkIsStudentStillInClassroom(latestClass);
       if (!membership.present) {
         disconnectFromClassroom('removed', 'คุณถูกนำออกจากห้องเรียนโดยครูผู้สอนแล้ว กรุณาสแกน QR Code หรือกดเชื่อมต่อใหม่หากต้องการเข้าห้องอีกครั้ง');
@@ -1772,8 +1902,11 @@
     function renderConnectedClassroomUI() {
       if (!classroomData || !isJoinedToClassroom) return;
 
-      document.getElementById('dash-room-title').textContent = classroomData.classroomTitle || 'ห้องเรียนออนไลน์';
-      document.getElementById('nav-st-room').textContent = classroomData.classroomTitle || `ห้อง ${studentUser.classroom}`;
+      const roomTitle = classroomData.classroomTitle || 'ห้องเรียนออนไลน์';
+      document.getElementById('dash-room-title').textContent = roomTitle;
+      document.getElementById('nav-st-room').textContent = roomTitle;
+      const heroPill = document.getElementById('hero-room-pill');
+      if (heroPill) heroPill.textContent = roomTitle;
 
       const roster = classroomData.students || [];
       const selectEl = document.getElementById('dash-roster-match-select');
@@ -1783,6 +1916,13 @@
           `<option value="${st.id}" ${st.id === matchedRosterStudentId ? 'selected' : ''}>เลขที่ ${st.number} • ${escapeHtml(st.name)} ${st.nickname ? `(${escapeHtml(st.nickname)})` : ''}</option>`
         ).join('');
 
+      const myRosterObj = roster.find(s => s.id === matchedRosterStudentId) || null;
+      renderStudentProfileAvatars(myRosterObj);
+
+      const displayNick = (myRosterObj && (myRosterObj.nickname || myRosterObj.name)) || (studentUser && (studentUser.nickname || studentUser.fullname)) || 'นักเรียน';
+      const greetingEl = document.getElementById('hero-greeting-text');
+      if (greetingEl) greetingEl.textContent = `${getThaiTimeGreeting()}, ${displayNick}!`;
+
       updateStudentSeatAndActionStatus();
     }
 
@@ -1791,7 +1931,128 @@
       matchedRosterStudentId = rosterId;
       localStorage.setItem(`MATCHED_ROSTER_${activeClassId}_${studentUser.username}`, rosterId);
       saveJoinedRoomState();
-      updateStudentSeatAndActionStatus();
+      renderConnectedClassroomUI();
+    }
+
+    function renderMyGroupShowcase() {
+      const card = document.getElementById('dash-group-card');
+      const titleEl = document.getElementById('dash-group-title');
+      const subEl = document.getElementById('dash-group-subtitle');
+      const pillEl = document.getElementById('dash-group-badge-pill');
+      const hlEl = document.getElementById('dash-group-highlight');
+      const membersEl = document.getElementById('dash-group-members');
+      if (!card || !classroomData || !matchedRosterStudentId) return;
+
+      const ga = classroomData.groupAssignments;
+      const myInfo = ga && ga.byStudentId && ga.byStudentId[matchedRosterStudentId];
+      if (!myInfo) {
+        card.classList.add('hidden');
+        return;
+      }
+
+      card.classList.remove('hidden');
+      const roster = classroomData.students || [];
+      const teammates = roster.filter(st => {
+        const info = ga.byStudentId[st.id];
+        return info && info.groupIndex === myInfo.groupIndex;
+      });
+
+      if (titleEl) titleEl.textContent = `กลุ่มที่ ${myInfo.groupIndex} ของคุณ`;
+      if (subEl) subEl.textContent = `สมาชิกทั้งหมด ${teammates.length} คน • สัดส่วน ${ga.ratioLabel || ''}`;
+      if (pillEl) pillEl.textContent = `กลุ่ม ${ga.groupSize || teammates.length} คน`;
+
+      // Highlight assigned Role (Groups of 5) or Buddy Partner (Groups of 6)
+      if (hlEl) {
+        if (myInfo.roleLabel) {
+          hlEl.classList.remove('hidden');
+          hlEl.innerHTML = `
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="text-xl">${myInfo.roleIcon || '⭐'}</span>
+              <div class="min-w-0">
+                <div class="text-[10px] font-bold text-slate-500">หน้าที่ของคุณในกลุ่มนี้</div>
+                <div class="text-xs sm:text-sm font-extrabold text-violet-900 truncate">${escapeHtml(myInfo.roleLabel)}</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-violet-100 text-violet-800 text-[10px] font-extrabold shrink-0">My Role</span>
+          `;
+        } else if (myInfo.buddyPair) {
+          const buddyPartner = teammates.find(st => st.id !== matchedRosterStudentId && ga.byStudentId[st.id] && ga.byStudentId[st.id].buddyPair === myInfo.buddyPair);
+          hlEl.classList.remove('hidden');
+          hlEl.innerHTML = `
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="text-xl">🤝</span>
+              <div class="min-w-0">
+                <div class="text-[10px] font-bold text-slate-500">คู่บัดดี้ที่ ${myInfo.buddyPair} ของคุณ</div>
+                <div class="text-xs sm:text-sm font-extrabold text-teal-900 truncate">${buddyPartner ? escapeHtml(buddyPartner.nickname || buddyPartner.name) : 'รอจับคู่บัดดี้'}</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 text-[10px] font-extrabold shrink-0">คู่บัดดี้ ${myInfo.buddyPair}</span>
+          `;
+        } else {
+          hlEl.classList.add('hidden');
+        }
+      }
+
+      if (membersEl) {
+        membersEl.innerHTML = teammates.map(st => {
+          const isMe = st.id === matchedRosterStudentId;
+          const tInfo = ga.byStudentId[st.id] || {};
+          const av = getStudentAvatarUrl(st);
+          return `
+            <span class="inline-flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full text-[11px] font-bold border ${
+              isMe
+                ? 'bg-indigo-600 text-white border-indigo-700 shadow-xs'
+                : 'bg-white text-slate-800 border-violet-200'
+            }">
+              <img src="${av}" alt="" class="w-5 h-5 rounded-full object-cover bg-white" />
+              <span>${escapeHtml(st.nickname || st.name)}</span>
+              ${tInfo.roleIcon ? `<span title="${escapeHtml(tInfo.roleLabel)}">${tInfo.roleIcon}</span>` : (tInfo.buddyPair ? `<span class="text-[9px] opacity-80">คู่${tInfo.buddyPair}</span>` : '')}
+            </span>
+          `;
+        }).join('');
+      }
+    }
+
+    function updateMissionHeroProgress(isCheckedIn, doneTasks, totalTasks) {
+      const pctEl = document.getElementById('hero-progress-pct');
+      const barEl = document.getElementById('hero-progress-bar');
+      const motEl = document.getElementById('hero-motivation-text');
+      const pCheck = document.getElementById('mission-pill-checkin');
+      const pTasks = document.getElementById('mission-pill-tasks');
+
+      const tasksComplete = totalTasks === 0 || doneTasks >= totalTasks;
+      let score = 34; // Joined room
+      if (isCheckedIn) score += 33;
+      if (totalTasks > 0) score += Math.round((doneTasks / totalTasks) * 33);
+      else if (isCheckedIn) score = 100;
+      score = Math.min(100, score);
+
+      if (pctEl) pctEl.textContent = `${score}%`;
+      if (barEl) barEl.style.width = `${score}%`;
+
+      if (pCheck) {
+        if (isCheckedIn) {
+          pCheck.textContent = '✓ เช็คชื่อแล้ว';
+          pCheck.className = 'px-1.5 py-1 rounded-xl bg-emerald-400/25 border border-emerald-300/50 text-emerald-100';
+        } else {
+          pCheck.textContent = '• รอเช็คชื่อ';
+          pCheck.className = 'px-1.5 py-1 rounded-xl bg-white/10 border border-white/15 text-white/80';
+        }
+      }
+      if (pTasks) {
+        if (tasksComplete && totalTasks > 0) {
+          pTasks.textContent = `✓ งาน ${doneTasks}/${totalTasks}`;
+          pTasks.className = 'px-1.5 py-1 rounded-xl bg-amber-300/30 border border-amber-200/60 text-amber-50';
+        } else {
+          pTasks.textContent = `• งาน ${doneTasks}/${totalTasks}`;
+          pTasks.className = 'px-1.5 py-1 rounded-xl bg-white/10 border border-white/15 text-white/80';
+        }
+      }
+      if (motEl) {
+        if (score >= 100) motEl.textContent = 'สุดยอดมาก! คุณทำภารกิจห้องเรียนวันนี้ครบ 100% แล้ว 🏆✨';
+        else if (!isCheckedIn) motEl.textContent = 'แตะปุ่ม "เช็คชื่อเข้าเรียนวันนี้" เพื่อเก็บภารกิจแรกกันเลย!';
+        else motEl.textContent = `เช็คชื่อเรียบร้อย! เหลืองานอีก ${Math.max(0, totalTasks - doneTasks)} ชิ้น สู้ๆ นะ 🚀`;
+      }
     }
 
     function updateStudentSeatAndActionStatus() {
@@ -1815,16 +2076,23 @@
       seatBanner.classList.remove('hidden');
       document.getElementById('dash-seat-coord').textContent = foundCoord;
 
+      // 1.5 Group & Buddy Card
+      renderMyGroupShowcase();
+
       // 2. Attendance Status
       const today = new Date().toISOString().split('T')[0];
       const attStatus = (classroomData.attendance && classroomData.attendance[today] && classroomData.attendance[today][matchedRosterStudentId]) || '';
+      const isCheckedIn = attStatus === 'present';
       const checkinBadge = document.getElementById('dash-checkin-badge');
-      if (attStatus === 'present') {
+      const checkinSub = document.getElementById('dash-checkin-sub');
+      if (isCheckedIn) {
         checkinBadge.textContent = '✓ เช็คชื่อแล้ว';
-        checkinBadge.className = 'px-2.5 py-0.5 rounded-full bg-white text-emerald-700 text-[11px] font-extrabold';
+        checkinBadge.className = 'px-3 py-1 rounded-full bg-white text-emerald-700 text-xs font-extrabold shadow-xs';
+        if (checkinSub) checkinSub.textContent = 'บันทึกการเข้าเรียนวันนี้เรียบร้อยแล้ว ✨';
       } else {
-        checkinBadge.textContent = 'แตะเพื่อเช็คชื่อ';
-        checkinBadge.className = 'px-2.5 py-0.5 rounded-full bg-white/20 text-white text-[11px] font-bold';
+        checkinBadge.textContent = 'แตะเช็คชื่อ';
+        checkinBadge.className = 'px-3 py-1 rounded-full bg-white/20 text-white text-xs font-extrabold';
+        if (checkinSub) checkinSub.textContent = 'แตะเพื่อยืนยันการเข้าเรียนกับครู';
       }
 
       // 3. Help Request Status
@@ -1839,49 +2107,65 @@
         helpPill.textContent = 'กำลังรอคุณครู...';
         helpPill.className = 'px-2.5 py-1 rounded-full bg-rose-600 text-white text-[10px] font-extrabold animate-pulse shrink-0';
         helpBtn.innerHTML = '⏳ ส่งสัญญาณขอความช่วยเหลือแล้ว (แตะเพื่อยกเลิก)';
-        helpBtn.className = 'w-full py-3.5 rounded-2xl bg-slate-800 text-white font-extrabold text-sm shadow-md transition';
+        helpBtn.className = 'w-full py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-sm shadow-md transition';
       } else {
         helpCard.classList.remove('help-active-ring', 'border-rose-500');
         helpPill.textContent = 'ปกติ';
-        helpPill.className = 'px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[10px] font-bold shrink-0';
+        helpPill.className = 'px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[10px] font-extrabold shrink-0';
         helpBtn.innerHTML = '🙋 กดยกมือขอความช่วยเหลือ';
-        helpBtn.className = 'w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-extrabold text-sm shadow-md transition';
+        helpBtn.className = 'w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-extrabold text-sm shadow-lg shadow-rose-500/25 transition active:scale-[0.98]';
       }
 
-      // 4. Tasks List
+      // 4. Tasks List + Mission Progress Hero
+      const tasks = (classroomData && classroomData.tasks) || [];
+      const doneCount = tasks.filter(t => t.submissions && t.submissions[matchedRosterStudentId] === 'submitted').length;
+      updateMissionHeroProgress(isCheckedIn, doneCount, tasks.length);
       renderStudentTasksList();
     }
 
     function renderStudentTasksList() {
       const listEl = document.getElementById('dash-tasks-list');
       const pillEl = document.getElementById('dash-tasks-summary-pill');
+      const barEl = document.getElementById('dash-tasks-progress-bar');
       const tasks = (classroomData && classroomData.tasks) || [];
 
       const doneCount = matchedRosterStudentId
         ? tasks.filter(t => t.submissions && t.submissions[matchedRosterStudentId] === 'submitted').length
         : 0;
       if (pillEl) pillEl.textContent = `${doneCount}/${tasks.length}`;
+      if (barEl) barEl.style.width = tasks.length > 0 ? `${Math.round((doneCount / tasks.length) * 100)}%` : '0%';
 
       if (tasks.length === 0) {
-        listEl.innerHTML = '<div class="text-center py-6 text-xs text-slate-400">ยังไม่มีรายการงานที่มอบหมายในห้องนี้</div>';
+        listEl.innerHTML = `
+          <div class="text-center py-8 px-4 rounded-2xl bg-slate-50 border border-dashed border-slate-200 space-y-1.5">
+            <div class="text-3xl">🎉</div>
+            <div class="text-xs font-extrabold text-slate-700">ยังไม่มีการบ้านหรือใบงานค้างในห้องนี้</div>
+            <div class="text-[11px] text-slate-400">เมื่อครูมอบหมายงานใหม่ รายการจะปรากฏที่นี่อัตโนมัติ</div>
+          </div>
+        `;
         return;
       }
 
-      listEl.innerHTML = tasks.map(t => {
+      listEl.innerHTML = tasks.map((t, idx) => {
         const subStatus = (matchedRosterStudentId && t.submissions && t.submissions[matchedRosterStudentId]) || 'pending';
         const isDone = subStatus === 'submitted';
 
         return `
-          <div class="p-3.5 rounded-2xl border ${isDone ? 'border-emerald-300 bg-emerald-50/40' : 'border-slate-200 bg-slate-50/60'} space-y-2.5">
+          <div class="p-3.5 rounded-2xl border-2 transition ${isDone ? 'border-emerald-300 bg-emerald-50/40' : 'border-slate-200/90 bg-slate-50/60 hover:border-indigo-300'} space-y-3">
             <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0">
-                <div class="text-xs sm:text-sm font-extrabold text-slate-900">${escapeHtml(t.title)}</div>
-                <div class="text-[11px] text-slate-500">กำหนดส่ง: ${escapeHtml(t.dueDate || '-')}</div>
+              <div class="flex items-start gap-2.5 min-w-0">
+                <span class="w-8 h-8 rounded-xl ${isDone ? 'bg-emerald-500 text-white' : 'bg-amber-100 text-amber-800'} flex items-center justify-center text-xs font-extrabold shrink-0">
+                  ${isDone ? '<i class="fa-solid fa-check"></i>' : (idx + 1)}
+                </span>
+                <div class="min-w-0">
+                  <div class="text-xs sm:text-sm font-extrabold text-slate-900 leading-snug">${escapeHtml(t.title)}</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5"><i class="fa-regular fa-calendar mr-1"></i>กำหนดส่ง: ${escapeHtml(t.dueDate || '-')}</div>
+                </div>
               </div>
               <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold shrink-0 ${
-                isDone ? 'bg-emerald-600 text-white' : 'bg-amber-100 text-amber-800 border border-amber-300'
+                isDone ? 'bg-emerald-600 text-white shadow-xs' : 'bg-amber-100 text-amber-800 border border-amber-300'
               }">
-                ${isDone ? '✓ ส่งงานแล้ว' : 'ยังไม่ส่ง'}
+                ${isDone ? '✓ ส่งแล้ว' : 'ยังไม่ส่ง'}
               </span>
             </div>
 
@@ -1889,7 +2173,8 @@
               <a
                 href="${escapeHtml(t.url)}"
                 target="_blank"
-                class="py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold text-center flex items-center justify-center gap-1.5 shadow-2xs"
+                rel="noopener noreferrer"
+                class="py-2.5 px-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-xs font-extrabold text-center flex items-center justify-center gap-1.5 shadow-sm transition active:scale-[0.98]"
               >
                 <i class="fa-solid fa-arrow-up-right-from-square"></i> เปิดทำใบงาน
               </a>
@@ -1897,8 +2182,8 @@
                 type="button"
                 onclick="toggleTaskSubmission('${t.id}')"
                 class="py-2.5 px-3 rounded-xl ${
-                  isDone ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-amber-500 hover:bg-amber-600 text-slate-950'
-                } text-xs font-extrabold flex items-center justify-center gap-1.5 shadow-2xs transition"
+                  isDone ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-slate-950'
+                } text-xs font-extrabold flex items-center justify-center gap-1.5 shadow-sm transition active:scale-[0.98]"
               >
                 <i class="fa-solid ${isDone ? 'fa-circle-check' : 'fa-paper-plane'}"></i> ${isDone ? 'ส่งแล้ว (แตะแก้ไข)' : 'แจ้งส่งงานแล้ว'}
               </button>
@@ -1919,7 +2204,6 @@
 
       const nowMs = Date.now();
 
-      // 1. Push live event to Google Apps Script Cloud first if configured so we detect server-side removal immediately
       if (teacherUsername && isCloudConfigured()) {
         try {
           const res = await fetch(APP_CONFIG.API_URL, {
@@ -1942,7 +2226,6 @@
         } catch (e) {}
       }
 
-      // 2. Write to shared LocalStorage (checking membership first!)
       const multiRaw = localStorage.getItem(MULTI_CLASS_KEY);
       if (multiRaw) {
         try {
@@ -1982,7 +2265,6 @@
         } catch (e) {}
       }
 
-      // 3. Update local classroomData
       if (classroomData) {
         if (actionType === 'checkin') {
           const today = new Date().toISOString().split('T')[0];
@@ -2016,7 +2298,10 @@
 
     async function studentCheckInNow() {
       const ok = await pushStudentActionToTeacher('checkin', {});
-      if (ok) showToast('เช็คชื่อเข้าเรียนเรียบร้อยแล้ว! ซิงก์ไปยังระบบครูแล้ว ✅', 'emerald');
+      if (ok) {
+        launchMiniConfetti();
+        showToast('เช็คชื่อเข้าเรียนเรียบร้อยแล้ว! ซิงก์ไปยังระบบครูแล้ว ✅', 'emerald');
+      }
     }
 
     async function toggleLiveHelpToTeacher() {
@@ -2054,6 +2339,7 @@
 
       const ok = await pushStudentActionToTeacher('submitTask', { taskId, status: nextStatus });
       if (ok) {
+        if (nextStatus === 'submitted') launchMiniConfetti();
         showToast(
           nextStatus === 'submitted'
             ? 'ส่งสถานะ "ส่งงานแล้ว" ไปยังระบบของครูเรียบร้อย! 🎉'
@@ -2109,12 +2395,10 @@
           processScannedQrText(decodedText);
         };
 
-        // Attempt 1: Prefer rear camera (mobile phones / tablets)
         try {
           await html5QrCodeInstance.start({ facingMode: 'environment' }, scanConfig, onSuccess, () => {});
           return;
         } catch (envErr) {
-          // Attempt 2: Fallback to enumerating cameras (laptops / desktops / iOS front camera)
           const cameras = await Html5Qrcode.getCameras();
           if (!cameras || cameras.length === 0) {
             throw envErr;
@@ -2151,7 +2435,6 @@
       }
     }
 
-    // Multi-scale & inverted-safe QR image decoder using jsQR (handles screenshots, dark-mode crops, and high-res photos)
     function decodeQrFileWithJsQr(file) {
       return new Promise((resolve) => {
         if (typeof jsQR !== 'function') {
@@ -2208,14 +2491,12 @@
 
       showToast('กำลังอ่าน QR Code จากรูปภาพ...', 'indigo');
 
-      // 1. Try jsQR multi-scale padded decoder first (fast & works on dark-mode/high-res screenshots)
       const jsQrDecoded = await decodeQrFileWithJsQr(file);
       if (jsQrDecoded) {
         processScannedQrText(jsQrDecoded);
         return;
       }
 
-      // 2. Fallback to html5-qrcode headless scanFile(file, false)
       if (typeof Html5Qrcode !== 'undefined') {
         const fileScanner = new Html5Qrcode('qr-file-temp');
         try {
@@ -2239,7 +2520,6 @@
       if (!val) return;
       document.getElementById('manual-room-link').value = '';
 
-      // If user typed a plain teacher username (not a URL or query string)
       if (!/^https?:\/\//i.test(val) && !val.includes('?') && !val.includes('=')) {
         joinTeacherClassroom(val.toLowerCase(), '', true);
         return;
@@ -2262,7 +2542,6 @@
       if (!text) return;
 
       try {
-        // Support full URLs, protocol-less URLs, and relative query strings (?classId=...&teacher=...)
         let parsedUrl = null;
         if (/^https?:\/\//i.test(text) || /^file:\/\//i.test(text)) {
           parsedUrl = new URL(text);
@@ -2282,7 +2561,6 @@
             return;
           }
 
-          // Scanned an assignment QR link -> mark submitted if matched + open safely (with popup-blocker banner fallback)
           const finalUrl = parsedUrl.toString();
           const activeTask = classroomData && classroomData.tasks && classroomData.tasks.find(t =>
             t.url && (t.url.trim() === text || t.url.trim() === finalUrl)
@@ -2301,7 +2579,6 @@
           return;
         }
 
-        // Plain text fallback (e.g. teacher username QR)
         if (/^[a-zA-Z0-9_]{3,30}$/.test(text)) {
           joinTeacherClassroom(text.toLowerCase(), '', true);
           return;
@@ -2713,6 +2990,7 @@
     }
 
 
+
     function escapeHtml(str) {
       if (!str) return '';
       return String(str)
@@ -2732,7 +3010,7 @@
         amber: 'bg-amber-900 text-white border-amber-700',
         slate: 'bg-slate-800 text-white border-slate-700'
       };
-      toast.className = `px-4 py-3 rounded-2xl border shadow-lg text-xs font-bold flex items-center gap-2 ${colors[color] || colors.indigo}`;
+      toast.className = `px-4 py-3 rounded-2xl border shadow-xl text-xs font-bold flex items-center gap-2 animate-shuffle ${colors[color] || colors.indigo}`;
       toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> <span>${escapeHtml(message)}</span>`;
       container.appendChild(toast);
       setTimeout(() => toast.remove(), 3500);
