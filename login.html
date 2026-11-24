@@ -26,6 +26,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Mali:wght@400;500;600;700&family=Niramit:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Prompt:wght@300;400;500;600;700&family=Sarabun:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="config.js"></script>
+  <script src="avatars.js"></script>
+  <script src="i18n.js"></script>
   <style>
     /* ================= CUSTOM UPLOADED FONTS ================= */
     @font-face {
@@ -375,13 +377,22 @@
       color: #f8fafc !important;
       border-color: #334155 !important;
     }
+    body.dark-theme input::placeholder {
+      color: #94a3b8 !important;
+      opacity: 1 !important;
+    }
     body.dark-theme label,
     body.dark-theme .text-slate-700,
     body.dark-theme .text-slate-800 {
-      color: #e2e8f0 !important;
+      color: #f1f5f9 !important;
     }
-    body.dark-theme .text-slate-500 {
-      color: #94a3b8 !important;
+    body.dark-theme .text-slate-500,
+    body.dark-theme .text-slate-600 {
+      color: #cbd5e1 !important;
+    }
+    body.dark-theme .text-indigo-600,
+    body.dark-theme .hover\:text-indigo-800:hover {
+      color: #a5b4fc !important;
     }
     body.dark-theme .bg-slate-50 {
       background-color: #162032 !important;
@@ -391,6 +402,60 @@
       background-color: #064e3b !important;
       border-color: #10b981 !important;
       color: #d1fae5 !important;
+    }
+    /* High-contrast Dark Mode for Top Controls, Role Cards, Tabs & Tip Box */
+    body.dark-theme #btn-lang-toggle,
+    body.dark-theme #btn-global-scale-toggle,
+    body.dark-theme #login-theme-btn {
+      background-color: #1e293b !important;
+      border-color: #475569 !important;
+      color: #f8fafc !important;
+    }
+    body.dark-theme #btn-lang-toggle:hover,
+    body.dark-theme #btn-global-scale-toggle:hover,
+    body.dark-theme #login-theme-btn:hover {
+      background-color: #334155 !important;
+    }
+    body.dark-theme .smart-lang-dropdown {
+      background-color: #0f172a !important;
+      border-color: #334155 !important;
+      color: #f8fafc !important;
+    }
+    body.dark-theme .smart-lang-dropdown [data-lang-option]:not(.bg-indigo-600) {
+      color: #e2e8f0 !important;
+    }
+    body.dark-theme .smart-lang-dropdown [data-lang-option]:not(.bg-indigo-600):hover {
+      background-color: #1e293b !important;
+      color: #ffffff !important;
+    }
+    body.dark-theme #role-btn-teacher.bg-indigo-50 {
+      background-color: #312e81 !important;
+      border-color: #818cf8 !important;
+      color: #ffffff !important;
+    }
+    body.dark-theme #role-btn-student.bg-sky-50 {
+      background-color: #0c4a6e !important;
+      border-color: #38bdf8 !important;
+      color: #ffffff !important;
+    }
+    body.dark-theme #role-btn-teacher.bg-white,
+    body.dark-theme #role-btn-student.bg-white {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+      color: #cbd5e1 !important;
+    }
+    body.dark-theme #auth-mode-tabs button.bg-white {
+      background-color: #0f172a !important;
+      color: #a5b4fc !important;
+      border-bottom-color: #818cf8 !important;
+    }
+    body.dark-theme #auth-mode-tabs button:not(.bg-white) {
+      color: #94a3b8 !important;
+    }
+    body.dark-theme #login-role-tip {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+      color: #e2e8f0 !important;
     }
 
     /* ================= GLOBAL OVERALL SCALE SYSTEM (25% - 150%) ================= */
@@ -424,8 +489,35 @@
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 via-slate-100 to-sky-100 flex items-center justify-center p-4 transition-colors duration-300">
 
-  <!-- Top-right quick scale & theme controls -->
+  <!-- Top-right quick language, scale & theme controls -->
   <div class="fixed top-4 right-4 flex items-center gap-2 z-20">
+    <!-- Seamless Multi-Language Switcher -->
+    <div class="relative smart-lang-switcher-wrap">
+      <button
+        type="button"
+        id="btn-lang-toggle"
+        onclick="SmartI18n.toggleLangDropdown(event, 'login-lang-dropdown')"
+        class="h-11 px-3 rounded-2xl bg-white/90 hover:bg-white shadow-md border border-slate-200 text-slate-700 flex items-center justify-center gap-1.5 font-extrabold text-xs transition active:scale-95"
+        data-i18n-title="common.language"
+        title="ภาษา / Language"
+      >
+        <span data-lang-flag class="text-base leading-none">🇹🇭</span>
+        <span data-lang-badge>TH</span>
+        <i class="fa-solid fa-chevron-down text-[10px] opacity-60"></i>
+      </button>
+      <div id="login-lang-dropdown" class="smart-lang-dropdown hidden absolute right-0 mt-2 w-40 rounded-2xl bg-white shadow-xl border border-slate-200 p-1.5 z-50">
+        <button type="button" data-lang-option="th" onclick="SmartI18n.setLang('th')" class="w-full px-3 py-2 rounded-xl text-left text-xs flex items-center gap-2 transition">
+          <span>🇹🇭</span><span>ภาษาไทย (TH)</span>
+        </button>
+        <button type="button" data-lang-option="en" onclick="SmartI18n.setLang('en')" class="w-full px-3 py-2 rounded-xl text-left text-xs flex items-center gap-2 transition">
+          <span>🇺🇸</span><span>English (EN)</span>
+        </button>
+        <button type="button" data-lang-option="zh" onclick="SmartI18n.setLang('zh')" class="w-full px-3 py-2 rounded-xl text-left text-xs flex items-center gap-2 transition">
+          <span>🇨🇳</span><span>中文 (ZH)</span>
+        </button>
+      </div>
+    </div>
+
     <button
       type="button"
       id="btn-global-scale-toggle"
@@ -453,34 +545,40 @@
       <div id="auth-banner-logo-box" class="w-16 h-16 aspect-square rounded-2xl bg-white/15 backdrop-blur-xs flex items-center justify-center mx-auto mb-3 shadow-inner overflow-hidden">
         <i id="auth-banner-icon" class="fa-solid fa-chalkboard-user text-3xl"></i>
       </div>
-      <h1 class="text-xl font-extrabold">Smart Classroom Cloud</h1>
-      <p id="auth-banner-sub" class="text-xs text-indigo-100 mt-1">ระบบจัดการห้องเรียนสำหรับครูผู้สอนและนักเรียน</p>
+      <h1 class="text-xl font-extrabold" data-i18n="app.brand">Smart Classroom Cloud</h1>
+      <p id="auth-banner-sub" class="text-xs text-indigo-100 mt-1" data-i18n="login.subtitle">ระบบจัดการห้องเรียนอัจฉริยะสำหรับครูและนักเรียน</p>
     </div>
 
     <!-- ROLE SELECTION (Teacher vs Student) -->
-    <div class="p-4 pb-2 auth-surface bg-slate-50/80 border-b border-slate-200">
-      <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center mb-2">
-        เลือกบทบาทผู้ใช้งาน (Select Role)
+    <div class="p-4 pb-2.5 auth-surface bg-slate-50/80 border-b border-slate-200">
+      <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center mb-2" data-i18n="login.select_role">
+        เลือกบทบาทผู้ใช้งาน
       </div>
       <div class="grid grid-cols-2 gap-2.5">
         <button
           type="button"
           id="role-btn-teacher"
           onclick="selectRole('teacher')"
-          class="py-3 px-3 rounded-2xl border-2 border-indigo-600 bg-indigo-50 text-indigo-800 font-extrabold text-sm flex flex-col items-center gap-1 shadow-xs transition"
+          class="py-3 px-3 rounded-2xl border-2 border-indigo-600 bg-indigo-50 text-indigo-800 font-extrabold text-sm flex flex-col items-center gap-1 shadow-xs transition active:scale-[0.98]"
         >
-          <i class="fa-solid fa-chalkboard-user text-xl"></i>
-          <span>ครูผู้สอน (Teacher)</span>
+          <span class="w-9 h-9 rounded-xl bg-indigo-600/10 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-chalkboard-user"></i>
+          </span>
+          <span data-i18n="login.role_teacher">ครูผู้สอน</span>
+          <span class="text-[10px] font-medium opacity-75 leading-tight text-center" data-i18n="login.role_teacher_desc">จัดผังที่นั่ง เช็คชื่อ และมอบหมายงาน</span>
         </button>
 
         <button
           type="button"
           id="role-btn-student"
           onclick="selectRole('student')"
-          class="py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-sky-300 text-slate-600 font-bold text-sm flex flex-col items-center gap-1 transition"
+          class="py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-sky-300 text-slate-600 font-bold text-sm flex flex-col items-center gap-1 transition active:scale-[0.98]"
         >
-          <i class="fa-solid fa-graduation-cap text-xl"></i>
-          <span>นักเรียน (Student)</span>
+          <span class="w-9 h-9 rounded-xl bg-sky-500/10 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </span>
+          <span data-i18n="login.role_student">นักเรียน</span>
+          <span class="text-[10px] font-medium opacity-75 leading-tight text-center" data-i18n="login.role_student_desc">สแกน QR ดูที่นั่ง เช็คชื่อ ส่งงาน</span>
         </button>
       </div>
     </div>
@@ -488,10 +586,10 @@
     <!-- Mode Switcher Tabs (Login vs Register) -->
     <div id="auth-mode-tabs" class="grid grid-cols-2 border-b border-slate-200 auth-surface bg-slate-50/50">
       <button id="tab-login" onclick="switchMode('login')" class="py-3 text-sm font-bold text-indigo-600 border-b-2 border-indigo-600 bg-white transition">
-        <i class="fa-solid fa-right-to-bracket mr-1.5"></i> เข้าสู่ระบบ
+        <i class="fa-solid fa-right-to-bracket mr-1.5"></i> <span data-i18n="login.tab_login">เข้าสู่ระบบ</span>
       </button>
       <button id="tab-register" onclick="switchMode('register')" class="py-3 text-sm font-medium text-slate-500 hover:text-slate-700 transition">
-        <i class="fa-solid fa-user-plus mr-1.5"></i> สมัครสมาชิกใหม่
+        <i class="fa-solid fa-user-plus mr-1.5"></i> <span data-i18n="login.tab_register">สมัครสมาชิกใหม่</span>
       </button>
     </div>
 
@@ -753,9 +851,15 @@
 
         <button type="submit" id="btn-register-student"
           class="w-full py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-sm shadow-md shadow-sky-200 transition active:scale-[0.99]">
-          <i class="fa-solid fa-graduation-cap mr-1.5"></i> สมัครสมาชิกนักเรียน
+          <i class="fa-solid fa-graduation-cap mr-1.5"></i> <span data-i18n="login.btn_register_student">สมัครสมาชิกนักเรียน</span>
         </button>
       </form>
+
+      <!-- Helpful Role Tip -->
+      <div id="login-role-tip" class="mt-4 p-2.5 rounded-xl bg-indigo-50/70 border border-indigo-100 text-[11px] text-indigo-800 flex items-center gap-2">
+        <i class="fa-solid fa-lightbulb text-amber-500 shrink-0"></i>
+        <span id="login-role-tip-text" data-i18n="login.quick_tip_teacher">เคล็ดลับ: หลังเข้าสู่ระบบ สามารถแชร์ QR ให้เด็กสแกนเข้าห้องได้ทันที</span>
+      </div>
     </div>
   </div>
 
@@ -1488,26 +1592,34 @@
       if (role === 'teacher') {
         banner.className = 'bg-gradient-to-r from-indigo-600 to-violet-600 p-6 text-center text-white transition-all duration-300';
         if (bannerIcon) bannerIcon.className = 'fa-solid fa-chalkboard-user text-3xl';
-        bannerSub.textContent = 'เข้าสู่ระบบสำหรับครูผู้สอน • จัดผังที่นั่ง เช็คชื่อ และมอบหมายงาน';
-        btnT.className = 'py-3 px-3 rounded-2xl border-2 border-indigo-600 bg-indigo-50 text-indigo-800 font-extrabold text-sm flex flex-col items-center gap-1 shadow-xs transition';
-        btnS.className = 'py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-sky-300 text-slate-600 font-bold text-sm flex flex-col items-center gap-1 transition';
-        userLabel.textContent = 'ชื่อผู้ใช้งานครู (Username)';
+        bannerSub.textContent = t('login.role_teacher_desc');
+        btnT.className = 'py-3 px-3 rounded-2xl border-2 border-indigo-600 bg-indigo-50 text-indigo-800 font-extrabold text-sm flex flex-col items-center gap-1 shadow-xs transition active:scale-[0.98]';
+        btnS.className = 'py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-sky-300 text-slate-600 font-bold text-sm flex flex-col items-center gap-1 transition active:scale-[0.98]';
+        userLabel.textContent = t('login.teacher_user_label');
         btnLogin.className = 'w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-extrabold text-sm shadow-md shadow-indigo-200 transition active:scale-[0.99]';
-        btnLogin.innerHTML = '<i class="fa-solid fa-right-to-bracket mr-1.5"></i> เข้าสู่ระบบครูผู้สอน';
+        btnLogin.innerHTML = `<i class="fa-solid fa-right-to-bracket mr-1.5"></i> ${t('login.btn_login')} (${t('login.role_teacher')})`;
+        const tipEl = document.getElementById('login-role-tip-text');
+        if (tipEl) tipEl.textContent = t('login.quick_tip_teacher');
       } else {
         banner.className = 'bg-gradient-to-r from-sky-600 via-cyan-600 to-teal-600 p-6 text-center text-white transition-all duration-300';
         if (bannerIcon) bannerIcon.className = 'fa-solid fa-graduation-cap text-3xl';
-        bannerSub.textContent = 'เข้าสู่ระบบสำหรับนักเรียน • สแกน QR ส่งงาน และขอความช่วยเหลือ';
-        btnS.className = 'py-3 px-3 rounded-2xl border-2 border-sky-600 bg-sky-50 text-sky-900 font-extrabold text-sm flex flex-col items-center gap-1 shadow-xs transition';
-        btnT.className = 'py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-indigo-300 text-slate-600 font-bold text-sm flex flex-col items-center gap-1 transition';
-        userLabel.textContent = 'รหัสนักเรียน / Username';
+        bannerSub.textContent = t('login.role_student_desc');
+        btnS.className = 'py-3 px-3 rounded-2xl border-2 border-sky-600 bg-sky-50 text-sky-900 font-extrabold text-sm flex flex-col items-center gap-1 shadow-xs transition active:scale-[0.98]';
+        btnT.className = 'py-3 px-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-indigo-300 text-slate-600 font-bold text-sm flex flex-col items-center gap-1 transition active:scale-[0.98]';
+        userLabel.textContent = t('login.student_user_label');
         btnLogin.className = 'w-full py-3 rounded-xl bg-gradient-to-r from-sky-600 to-teal-600 hover:from-sky-700 hover:to-teal-700 text-white font-extrabold text-sm shadow-md shadow-sky-200 transition active:scale-[0.99]';
-        btnLogin.innerHTML = '<i class="fa-solid fa-right-to-bracket mr-1.5"></i> เข้าสู่ระบบนักเรียน';
+        btnLogin.innerHTML = `<i class="fa-solid fa-right-to-bracket mr-1.5"></i> ${t('login.btn_login')} (${t('login.role_student')})`;
+        const tipEl = document.getElementById('login-role-tip-text');
+        if (tipEl) tipEl.textContent = t('login.quick_tip_student');
       }
 
       updateForgotFormRoleFields();
       switchMode(currentMode);
     }
+
+    window.addEventListener('smart-lang-change', () => {
+      if (typeof selectRole === 'function') selectRole(selectedRole);
+    });
 
     function updateForgotFormRoleFields() {
       const sub = document.getElementById('forgot-role-subtitle');

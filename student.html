@@ -21,8 +21,10 @@
       }
     }
   </script>
-  <!-- Config -->
+  <!-- Config, Avatars & Multi-Language -->
   <script src="config.js"></script>
+  <script src="avatars.js"></script>
+  <script src="i18n.js"></script>
   <!-- Google Fonts (Fallbacks & Optional Web Fonts) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -399,6 +401,52 @@
       border-color: #a78bfa !important;
       color: #ede9fe !important;
     }
+    body.dark-theme .smart-lang-dropdown {
+      background-color: #0f172a !important;
+      border-color: #334155 !important;
+      color: #f8fafc !important;
+    }
+    body.dark-theme .smart-lang-dropdown [data-lang-option]:not(.bg-indigo-600) {
+      color: #e2e8f0 !important;
+    }
+    body.dark-theme .smart-lang-dropdown [data-lang-option]:not(.bg-indigo-600):hover {
+      background-color: #1e293b !important;
+      color: #ffffff !important;
+    }
+    body.dark-theme #st-quick-nav {
+      background-color: rgba(15, 23, 42, 0.92) !important;
+      border-color: #334155 !important;
+    }
+    body.dark-theme .st-nav-tab:not(.bg-indigo-600) {
+      color: #cbd5e1 !important;
+    }
+    body.dark-theme .st-nav-tab:not(.bg-indigo-600):hover {
+      background-color: #1e293b !important;
+      color: #ffffff !important;
+    }
+    body.dark-theme #st-onboarding-card {
+      background: linear-gradient(135deg, rgba(30, 27, 75, 0.8), rgba(15, 23, 42, 0.9)) !important;
+      border-color: #4338ca !important;
+    }
+    body.dark-theme #st-onboarding-card .bg-white\/80 {
+      background-color: rgba(30, 41, 59, 0.9) !important;
+      border-color: #334155 !important;
+      color: #f1f5f9 !important;
+    }
+    body.dark-theme #st-onboarding-card .text-indigo-900 {
+      color: #c7d2fe !important;
+    }
+    body.dark-theme #st-avatar-picker-wrap {
+      background-color: rgba(30, 41, 59, 0.85) !important;
+      border-color: #475569 !important;
+    }
+    body.dark-theme #st-avatar-picker-wrap .text-indigo-900 {
+      color: #e0e7ff !important;
+    }
+    body.dark-theme #st-avatar-picker-wrap .text-indigo-600 {
+      color: #a5b4fc !important;
+    }
+    }
     body.dark-theme .text-violet-900,
     body.dark-theme .text-violet-800 {
       color: #ddd6fe !important;
@@ -553,6 +601,32 @@
 
       <!-- Top-Right Tactile Icon Controls -->
       <div class="flex items-center gap-1.5 shrink-0">
+        <!-- Seamless Multi-Language Switcher -->
+        <div class="relative smart-lang-switcher-wrap">
+          <button
+            type="button"
+            id="st-btn-lang"
+            onclick="SmartI18n.toggleLangDropdown(event, 'st-lang-dropdown')"
+            class="h-[var(--st-btn-size)] px-2.5 rounded-2xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center gap-1 text-xs font-extrabold transition active:scale-95"
+            data-i18n-title="common.language"
+            title="ภาษา / Language"
+          >
+            <span data-lang-flag class="text-sm leading-none">🇹🇭</span>
+            <span data-lang-badge>TH</span>
+          </button>
+          <div id="st-lang-dropdown" class="smart-lang-dropdown hidden absolute right-0 mt-2 w-40 rounded-2xl bg-white text-slate-800 shadow-xl border border-slate-200 p-1.5 z-50">
+            <button type="button" data-lang-option="th" onclick="SmartI18n.setLang('th')" class="w-full px-3 py-2 rounded-xl text-left text-xs flex items-center gap-2 transition">
+              <span>🇹🇭</span><span>ภาษาไทย (TH)</span>
+            </button>
+            <button type="button" data-lang-option="en" onclick="SmartI18n.setLang('en')" class="w-full px-3 py-2 rounded-xl text-left text-xs flex items-center gap-2 transition">
+              <span>🇺🇸</span><span>English (EN)</span>
+            </button>
+            <button type="button" data-lang-option="zh" onclick="SmartI18n.setLang('zh')" class="w-full px-3 py-2 rounded-xl text-left text-xs flex items-center gap-2 transition">
+              <span>🇨🇳</span><span>中文 (ZH)</span>
+            </button>
+          </div>
+        </div>
+
         <button
           type="button"
           onclick="refreshClassroomConnection(true)"
@@ -617,6 +691,26 @@
   <!-- ================= MAIN STUDENT BENTO WORKSPACE ================= -->
   <main id="st-main-grid" class="max-w-xl w-full mx-auto p-3.5 sm:p-5 space-y-4 flex-1 pb-14 transition-all">
 
+    <!-- EASY-TO-NAVIGATE STUDENT TAB BAR (Shown when connected) -->
+    <nav id="st-quick-nav" class="hidden st-card rounded-2xl p-1.5 flex items-center gap-1 overflow-x-auto sticky top-[66px] z-20 shadow-md">
+      <button type="button" data-st-tab="all" onclick="setStudentNavTab('all')" class="st-nav-tab flex-1 min-w-[74px] py-2 px-2.5 rounded-xl text-xs font-extrabold bg-indigo-600 text-white shadow-xs flex items-center justify-center gap-1.5 transition whitespace-nowrap">
+        <i class="fa-solid fa-sparkles"></i><span data-i18n="st.nav_all">ทั้งหมด</span>
+      </button>
+      <button type="button" data-st-tab="seat" onclick="setStudentNavTab('seat')" class="st-nav-tab flex-1 min-w-[74px] py-2 px-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1.5 transition whitespace-nowrap">
+        <i class="fa-solid fa-chair text-emerald-600"></i><span data-i18n="st.nav_seat">ที่นั่ง & กลุ่ม</span>
+      </button>
+      <button type="button" data-st-tab="tasks" onclick="setStudentNavTab('tasks')" class="st-nav-tab flex-1 min-w-[74px] py-2 px-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1.5 transition whitespace-nowrap relative">
+        <i class="fa-solid fa-rocket text-amber-500"></i><span data-i18n="st.nav_tasks">ภารกิจ</span>
+        <span id="st-nav-tasks-badge" class="hidden px-1.5 py-0.2 rounded-full bg-amber-500 text-white text-[9px] font-extrabold">0</span>
+      </button>
+      <button type="button" data-st-tab="help" onclick="setStudentNavTab('help')" class="st-nav-tab flex-1 min-w-[74px] py-2 px-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1.5 transition whitespace-nowrap">
+        <i class="fa-solid fa-hand-sparkles text-rose-500"></i><span data-i18n="st.nav_help">ถามครู</span>
+      </button>
+      <button type="button" data-st-tab="scan" onclick="setStudentNavTab('scan')" class="st-nav-tab flex-1 min-w-[74px] py-2 px-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1.5 transition whitespace-nowrap">
+        <i class="fa-solid fa-qrcode text-sky-600"></i><span data-i18n="st.nav_scan">สแกน QR</span>
+      </button>
+    </nav>
+
     <!-- 0. GAMIFIED WELCOME & DAILY MISSION PROGRESS HERO (Shown when connected) -->
     <section id="st-mission-hero" class="hidden rounded-3xl p-4 sm:p-5 bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 text-white shadow-xl shadow-indigo-500/20 relative overflow-hidden">
       <div class="absolute -right-8 -top-10 w-40 h-40 rounded-full bg-white/10 blur-xl pointer-events-none"></div>
@@ -663,11 +757,33 @@
             <i class="fa-solid fa-qrcode"></i>
           </div>
           <div>
-            <h2 class="text-sm sm:text-base font-extrabold text-slate-900">สแกน QR / เชื่อมต่อห้องเรียน</h2>
-            <p class="text-[11px] text-slate-500">สแกน QR หน้าจอครูเพื่อเข้าห้องเรียน หรือสแกน QR ใบงาน</p>
+            <h2 class="text-sm sm:text-base font-extrabold text-slate-900" data-i18n="st.qr_title">สแกน QR / เชื่อมต่อห้องเรียน</h2>
+            <p class="text-[11px] text-slate-500" data-i18n="st.qr_sub">สแกน QR หน้าจอครูเพื่อเข้าห้องเรียน หรือสแกน QR ใบงาน</p>
           </div>
         </div>
-        <span id="qr-status-chip" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-extrabold shrink-0">พร้อมสแกน</span>
+        <span id="qr-status-chip" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-extrabold shrink-0" data-i18n="st.qr_ready">พร้อมสแกน</span>
+      </div>
+
+      <!-- Friendly 3-Step Onboarding Guide (Visible when not yet connected) -->
+      <div id="st-onboarding-card" class="rounded-2xl p-3 bg-gradient-to-r from-indigo-50 via-sky-50 to-violet-50 border border-indigo-200/80 space-y-2">
+        <div class="text-xs font-extrabold text-indigo-900 flex items-center gap-1.5">
+          <i class="fa-solid fa-compass text-indigo-600"></i>
+          <span data-i18n="st.onboarding_title">เริ่มต้นใช้งานง่ายๆ ใน 3 ขั้นตอน</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+          <div class="flex items-center gap-2 bg-white/80 rounded-xl p-2 border border-indigo-100">
+            <span class="w-5 h-5 rounded-full bg-indigo-600 text-white font-extrabold flex items-center justify-center shrink-0 text-[10px]">1</span>
+            <span class="font-semibold text-slate-700 leading-snug" data-i18n="st.onboarding_s1">สแกน QR หน้าจอครู หรือพิมพ์ชื่อผู้ใช้ครู</span>
+          </div>
+          <div class="flex items-center gap-2 bg-white/80 rounded-xl p-2 border border-sky-100">
+            <span class="w-5 h-5 rounded-full bg-sky-600 text-white font-extrabold flex items-center justify-center shrink-0 text-[10px]">2</span>
+            <span class="font-semibold text-slate-700 leading-snug" data-i18n="st.onboarding_s2">เลือกชื่อของคุณ & ดูตำแหน่งโต๊ะเรียน</span>
+          </div>
+          <div class="flex items-center gap-2 bg-white/80 rounded-xl p-2 border border-emerald-100">
+            <span class="w-5 h-5 rounded-full bg-emerald-600 text-white font-extrabold flex items-center justify-center shrink-0 text-[10px]">3</span>
+            <span class="font-semibold text-slate-700 leading-snug" data-i18n="st.onboarding_s3">เช็คชื่อ ส่งงาน และยกมือถามครูได้ทันที</span>
+          </div>
+        </div>
       </div>
 
       <!-- Disconnected / Removed Alert Banner -->
@@ -708,11 +824,11 @@
           onclick="startQrScanner()"
           class="py-3.5 px-3 rounded-2xl bg-gradient-to-r from-sky-500 via-indigo-600 to-violet-600 hover:from-sky-600 hover:to-violet-700 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 transition active:scale-[0.97]"
         >
-          <i class="fa-solid fa-camera text-base"></i> เปิดกล้องสแกน
+          <i class="fa-solid fa-camera text-base"></i> <span data-i18n="st.btn_open_cam">เปิดกล้องสแกน</span>
         </button>
 
         <label class="py-3.5 px-3 rounded-2xl bg-indigo-50 hover:bg-indigo-100 border-2 border-indigo-200 text-indigo-800 text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2 cursor-pointer transition text-center active:scale-[0.97]">
-          <i class="fa-solid fa-image text-indigo-600 text-base"></i> เลือกรูป QR
+          <i class="fa-solid fa-image text-indigo-600 text-base"></i> <span data-i18n="st.btn_pick_img">เลือกรูป QR</span>
           <input type="file" accept="image/*" class="hidden" onchange="scanQrFromImageFile(event)" />
         </label>
       </div>
@@ -724,11 +840,12 @@
           <input
             type="text"
             id="manual-room-link"
+            data-i18n-placeholder="st.manual_placeholder"
             placeholder="วางลิงก์ห้องเรียน หรือพิมพ์ Username ครู..."
             class="w-full pl-8 pr-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs outline-none focus:border-indigo-500 transition"
           />
         </div>
-        <button type="submit" id="btn-manual-join" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shrink-0 transition active:scale-95">
+        <button type="submit" id="btn-manual-join" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shrink-0 transition active:scale-95" data-i18n="st.btn_join">
           เข้าร่วม
         </button>
       </form>
@@ -781,13 +898,37 @@
         <div class="absolute right-2 -bottom-4 text-white/10 text-6xl pointer-events-none"><i class="fa-solid fa-chair"></i></div>
         <div class="relative flex items-center justify-between gap-3">
           <div>
-            <div class="text-[11px] font-bold text-emerald-100 uppercase tracking-wider">ตำแหน่งโต๊ะเรียนของคุณ</div>
+            <div class="text-[11px] font-bold text-emerald-100 uppercase tracking-wider" data-i18n="st.seat_label">ตำแหน่งโต๊ะเรียนของคุณ</div>
             <div id="dash-seat-coord" class="text-lg sm:text-xl font-extrabold mt-0.5">แถวที่ 1 • คอลัมน์ที่ 2</div>
           </div>
           <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-2xl shrink-0">
             🪑
           </div>
         </div>
+      </div>
+
+      <!-- Interactive Classroom Mini-Map (Highlights Student's Seat & Groupmates) -->
+      <div id="dash-seat-minimap-wrap" class="hidden rounded-2xl p-3 bg-slate-50 border border-slate-200/80 space-y-2">
+        <div class="flex items-center justify-between text-[11px] font-extrabold text-slate-700">
+          <span><i class="fa-solid fa-map-location-dot text-emerald-600 mr-1.5"></i><span data-i18n="st.minimap_title">แผนผังห้องเรียน (ตำแหน่งของคุณ)</span></span>
+          <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold" data-i18n="st.minimap_board">กระดานหน้าห้อง</span>
+        </div>
+        <div class="w-full h-1.5 rounded-full bg-gradient-to-r from-emerald-400 via-teal-500 to-sky-500 opacity-80"></div>
+        <div id="dash-seat-minimap-grid" class="grid gap-1 pt-1"></div>
+      </div>
+
+      <!-- Interactive Cartoon Character Picker -->
+      <div id="st-avatar-picker-wrap" class="rounded-2xl p-3 bg-indigo-50/60 border border-indigo-200/80 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-extrabold text-indigo-900 flex items-center gap-1.5">
+            <i class="fa-solid fa-face-smile-beam text-indigo-600"></i>
+            <span data-i18n="st.avatar_pick_title">เลือกตัวการ์ตูนประจำตัว</span>
+          </span>
+          <button type="button" onclick="toggleStudentAvatarDrawer()" class="text-[11px] font-bold text-indigo-600 hover:underline">
+            <i class="fa-solid fa-wand-magic-sparkles mr-1"></i><span id="st-avatar-toggle-label">เปลี่ยน</span>
+          </button>
+        </div>
+        <div id="st-avatar-picker-grid" class="hidden grid grid-cols-6 gap-1.5 pt-1"></div>
       </div>
 
       <!-- My Mixed-Ability Group, Assigned Role (Group 5) or Buddy Partner (Group 6) -->
@@ -838,11 +979,11 @@
             <i class="fa-solid fa-user-check"></i>
           </span>
           <div class="text-left">
-            <div class="text-sm font-extrabold leading-tight">เช็คชื่อเข้าเรียนวันนี้</div>
-            <div id="dash-checkin-sub" class="text-[11px] text-emerald-100 font-medium">แตะเพื่อยืนยันการเข้าเรียนกับครู</div>
+            <div class="text-sm font-extrabold leading-tight" data-i18n="st.checkin_title">เช็คชื่อเข้าเรียนวันนี้</div>
+            <div id="dash-checkin-sub" class="text-[11px] text-emerald-100 font-medium" data-i18n="st.checkin_sub">แตะเพื่อยืนยันการเข้าเรียนกับครู</div>
           </div>
         </div>
-        <span id="dash-checkin-badge" class="px-3 py-1 rounded-full bg-white/20 text-xs font-extrabold">แตะเช็คชื่อ</span>
+        <span id="dash-checkin-badge" class="px-3 py-1 rounded-full bg-white/20 text-xs font-extrabold" data-i18n="st.checkin_badge">แตะเช็คชื่อ</span>
       </button>
     </section>
 
@@ -854,11 +995,11 @@
             <i class="fa-solid fa-hand-sparkles"></i>
           </div>
           <div>
-            <h3 class="text-sm sm:text-base font-extrabold text-slate-900">ยกมือขอความช่วยเหลือ</h3>
-            <p class="text-[11px] text-slate-500">โต๊ะของคุณบนหน้าจอครูจะกะพริบแจ้งเตือนทันที</p>
+            <h3 class="text-sm sm:text-base font-extrabold text-slate-900" data-i18n="st.help_title">ยกมือขอความช่วยเหลือ</h3>
+            <p class="text-[11px] text-slate-500" data-i18n="st.help_sub">โต๊ะของคุณบนหน้าจอครูจะกะพริบแจ้งเตือนทันที</p>
           </div>
         </div>
-        <span id="dash-help-status-pill" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[10px] font-extrabold shrink-0">ปกติ</span>
+        <span id="dash-help-status-pill" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[10px] font-extrabold shrink-0" data-i18n="st.help_normal">ปกติ</span>
       </div>
 
       <!-- Quick Tap Question Chips -->
@@ -899,8 +1040,8 @@
             <i class="fa-solid fa-rocket"></i>
           </div>
           <div>
-            <h3 class="text-sm sm:text-base font-extrabold text-slate-900">ภารกิจงานที่ได้รับมอบหมาย</h3>
-            <p class="text-[11px] text-slate-500">ส่งงานแล้วกดยืนยัน สถานะจะซิงก์ไปหน้าจอครูทันที</p>
+            <h3 class="text-sm sm:text-base font-extrabold text-slate-900" data-i18n="st.tasks_title">ภารกิจงานที่ได้รับมอบหมาย</h3>
+            <p class="text-[11px] text-slate-500" data-i18n="st.tasks_sub">ส่งงานแล้วกดยืนยัน สถานะจะซิงก์ไปหน้าจอครูทันที</p>
           </div>
         </div>
         <span id="dash-tasks-summary-pill" class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-extrabold shrink-0 border border-amber-300">0/0</span>
@@ -1244,30 +1385,24 @@
     let html5QrCodeInstance = null;
     let isJoiningNow = false;
 
-    // Playful, Dimensional, Cute Kawaii SVG Student Avatar Presets (3D gradients, glossy eyes & blush)
-    const AVATAR_PRESETS = [
-      { id: 'boy1', label: 'หนุ่มน้อยยิ้มใส', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#e0f2fe"/><stop offset="100%" stop-color="#7dd3fc"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff0db"/><stop offset="65%" stop-color="#fbd39b"/><stop offset="100%" stop-color="#e9ad6c"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#334155"/><stop offset="100%" stop-color="#0f172a"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0369a1"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.6"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="16" cy="20" r="4" fill="#fff" opacity="0.55"/><circle cx="85" cy="24" r="3" fill="#fff" opacity="0.6"/><circle cx="82" cy="76" r="5" fill="#fff" opacity="0.35"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M40 75 L50 86 L60 75 Z" fill="#ffffff" opacity="0.92"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#e5a668"/><circle cx="24" cy="54" r="6.5" fill="#f3bd82"/><circle cx="76" cy="54" r="6.5" fill="#f3bd82"/><circle cx="50" cy="52" r="27" fill="url(#sk)"/><path d="M21 50 C19 22 40 13 55 16 C72 17 82 28 79 50 C74 37 64 31 54 35 C46 27 32 32 21 50 Z" fill="url(#hr)"/><path d="M32 26 Q46 19 60 25" stroke="#94a3b8" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.55"/><ellipse cx="34" cy="60" rx="6.5" ry="4" fill="url(#bl)"/><ellipse cx="66" cy="60" rx="6.5" ry="4" fill="url(#bl)"/><circle cx="39.5" cy="53" r="4.3" fill="#0f172a"/><circle cx="60.5" cy="53" r="4.3" fill="#0f172a"/><circle cx="41" cy="51.3" r="1.6" fill="#fff"/><circle cx="62" cy="51.3" r="1.6" fill="#fff"/><circle cx="38" cy="54.8" r="0.8" fill="#fff" opacity="0.8"/><circle cx="59" cy="54.8" r="0.8" fill="#fff" opacity="0.8"/><path d="M35 45 Q39.5 42.5 44 45" stroke="#334155" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M56 45 Q60.5 42.5 65 45" stroke="#334155" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M43 63 Q50 71 57 63" stroke="#9a3412" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>` },
-      { id: 'boy2', label: 'หนุ่มแว่นเนิร์ด', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#ede9fe"/><stop offset="100%" stop-color="#a5b4fc"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff4e4"/><stop offset="68%" stop-color="#fde0b2"/><stop offset="100%" stop-color="#eab676"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#475569"/><stop offset="100%" stop-color="#1e293b"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#3730a3"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f472b6" stop-opacity="0.55"/><stop offset="100%" stop-color="#f472b6" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="18" cy="22" r="3.5" fill="#fff" opacity="0.6"/><circle cx="84" cy="18" r="4.5" fill="#fff" opacity="0.45"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M41 75 L50 87 L59 75 Z" fill="#fff"/><path d="M48 82 L52 82 L53 95 L50 98 L47 95 Z" fill="#f59e0b"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#e5ae73"/><circle cx="24" cy="54" r="6.5" fill="#f4c58e"/><circle cx="76" cy="54" r="6.5" fill="#f4c58e"/><circle cx="50" cy="52" r="27" fill="url(#sk)"/><path d="M20 51 C20 20 48 13 62 17 C76 20 82 32 79 51 C70 36 58 34 46 31 C36 37 28 38 20 51 Z" fill="url(#hr)"/><path d="M34 24 Q50 18 65 25" stroke="#cbd5e1" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.45"/><ellipse cx="34" cy="61" rx="6" ry="3.6" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6" ry="3.6" fill="url(#bl)"/><circle cx="39" cy="53" r="3.9" fill="#0f172a"/><circle cx="61" cy="53" r="3.9" fill="#0f172a"/><circle cx="40.3" cy="51.6" r="1.4" fill="#fff"/><circle cx="62.3" cy="51.6" r="1.4" fill="#fff"/><rect x="29.5" y="45.5" width="18" height="14" rx="5.5" fill="#ffffff" fill-opacity="0.22" stroke="#1e293b" stroke-width="2.6"/><rect x="52.5" y="45.5" width="18" height="14" rx="5.5" fill="#ffffff" fill-opacity="0.22" stroke="#1e293b" stroke-width="2.6"/><line x1="47.5" y1="52" x2="52.5" y2="52" stroke="#1e293b" stroke-width="2.6"/><path d="M44 64 Q50 69.5 56 64" stroke="#9a3412" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` },
-      { id: 'boy3', label: 'หนุ่มหยักศกขี้เล่น', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#fef3c7"/><stop offset="100%" stop-color="#fdba74"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#ffe8cc"/><stop offset="68%" stop-color="#f5be82"/><stop offset="100%" stop-color="#dd9857"/></radialGradient><radialGradient id="hr" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#57534e"/><stop offset="100%" stop-color="#1c1917"/></radialGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#c2410c"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.52"/><stop offset="100%" stop-color="#f43f5e" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="16" cy="24" r="4" fill="#fff" opacity="0.55"/><circle cx="84" cy="20" r="3" fill="#fff" opacity="0.6"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M35 76 Q50 86 65 76" stroke="#fed7aa" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#d99456"/><circle cx="24" cy="55" r="6.5" fill="#ebaf72"/><circle cx="76" cy="55" r="6.5" fill="#ebaf72"/><circle cx="50" cy="54" r="26.5" fill="url(#sk)"/><g fill="url(#hr)"><circle cx="27" cy="36" r="10"/><circle cx="38" cy="27" r="11"/><circle cx="52" cy="25" r="12"/><circle cx="65" cy="28" r="11"/><circle cx="74" cy="37" r="9.5"/><circle cx="34" cy="36" r="7.5"/><circle cx="50" cy="34" r="8"/><circle cx="66" cy="36" r="7.5"/></g><ellipse cx="34" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54" r="4.3" fill="#1c1917"/><circle cx="41" cy="52.4" r="1.5" fill="#fff"/><path d="M56 54.5 Q60.5 49.5 65 54.5" stroke="#1c1917" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M41 63 Q50 73 59 63 Z" fill="#991b1b"/><path d="M44 69 Q50 72 56 69 Q50 65.5 44 69 Z" fill="#fb7185"/><path d="M42.5 63.6 L57.5 63.6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>` },
-      { id: 'boy4', label: 'หนุ่มหมวกแก๊ปสปอร์ต', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#ccfbf1"/><stop offset="100%" stop-color="#5eead4"/></radialGradient><radialGradient id="sk" cx="42%" cy="38%" r="65%"><stop offset="0%" stop-color="#fff0db"/><stop offset="68%" stop-color="#fbd39b"/><stop offset="100%" stop-color="#e5a668"/></radialGradient><linearGradient id="cap" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#14b8a6"/><stop offset="100%" stop-color="#0f766e"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#0369a1"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.55"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="15" cy="72" r="4" fill="#fff" opacity="0.5"/><circle cx="84" cy="24" r="4" fill="#fff" opacity="0.55"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M39 75 Q50 84 61 75" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#e2a365"/><circle cx="24" cy="56" r="6.5" fill="#f3be83"/><circle cx="76" cy="56" r="6.5" fill="#f3be83"/><circle cx="50" cy="54" r="26.5" fill="url(#sk)"/><path d="M23 44 C26 19 74 19 77 44 Z" fill="url(#cap)"/><path d="M20 42 Q52 34 86 43 Q74 49 52 46 Q32 45 20 42 Z" fill="#115e59"/><circle cx="50" cy="30" r="4" fill="#fef08a"/><ellipse cx="34" cy="61" rx="6" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54.5" r="4.2" fill="#0f172a"/><circle cx="60.5" cy="54.5" r="4.2" fill="#0f172a"/><circle cx="41" cy="53" r="1.5" fill="#fff"/><circle cx="62" cy="53" r="1.5" fill="#fff"/><path d="M41 64 Q50 73 59 64 Z" fill="#fff" stroke="#0f172a" stroke-width="2" stroke-linejoin="round"/></svg>` },
-      { id: 'boy5', label: 'หนุ่มผมตั้งสุดเท่', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#dcfce7"/><stop offset="100%" stop-color="#86efac"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff1df"/><stop offset="68%" stop-color="#fbd39b"/><stop offset="100%" stop-color="#e5a668"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#78350f"/><stop offset="100%" stop-color="#451a03"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.55"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><path d="M82 16 L84 21 L89 23 L84 25 L82 30 L80 25 L75 23 L80 21 Z" fill="#fef08a"/><path d="M22 100 C24 78 36 74 50 74 C64 74 76 78 78 100 Z" fill="url(#sh)"/><path d="M40 75 L50 86 L60 75 Z" fill="#ecfdf5"/><rect x="44" y="68" width="12" height="11" rx="5" fill="#e3a466"/><circle cx="24" cy="55" r="6.5" fill="#f2bd83"/><circle cx="76" cy="55" r="6.5" fill="#f2bd83"/><circle cx="50" cy="53" r="26.5" fill="url(#sk)"/><path d="M22 48 L24 31 L34 34 L42 17 L52 28 L63 16 L69 31 L79 29 L78 48 C68 36 32 36 22 48 Z" fill="url(#hr)"/><ellipse cx="34" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54" r="4.3" fill="#1e293b"/><circle cx="60.5" cy="54" r="4.3" fill="#1e293b"/><circle cx="41" cy="52.4" r="1.5" fill="#fff"/><circle cx="62" cy="52.4" r="1.5" fill="#fff"/><path d="M43 64 Q50 70 57 64" stroke="#9a3412" stroke-width="2.7" fill="none" stroke-linecap="round"/></svg>` },
-      { id: 'girl1', label: 'สาวน้อยมัดแกละ', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#fdf2f8"/><stop offset="100%" stop-color="#f9a8d4"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff4e6"/><stop offset="68%" stop-color="#fde0b8"/><stop offset="100%" stop-color="#ebb478"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4c1d95"/><stop offset="100%" stop-color="#1e1b4b"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#be185d"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.65"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="15" cy="20" r="3.5" fill="#fff" opacity="0.7"/><circle cx="85" cy="22" r="4" fill="#fff" opacity="0.6"/><circle cx="17" cy="48" r="12" fill="url(#hr)"/><circle cx="83" cy="48" r="12" fill="url(#hr)"/><circle cx="25" cy="43" r="4" fill="#fb7185"/><circle cx="75" cy="43" r="4" fill="#fb7185"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M36 76 Q43 85 50 80 Q57 85 64 76" fill="#fff"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e6ae74"/><circle cx="50" cy="53" r="26.5" fill="url(#sk)"/><path d="M22 50 C22 20 78 20 78 50 C70 36 58 34 50 38 C42 34 30 36 22 50 Z" fill="url(#hr)"/><path d="M33 27 Q50 20 67 27" stroke="#c4b5fd" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/><ellipse cx="33" cy="60" rx="6.5" ry="4" fill="url(#bl)"/><ellipse cx="67" cy="60" rx="6.5" ry="4" fill="url(#bl)"/><circle cx="39" cy="53.5" r="4.5" fill="#1e1b4b"/><circle cx="61" cy="53.5" r="4.5" fill="#1e1b4b"/><circle cx="40.6" cy="51.8" r="1.7" fill="#fff"/><circle cx="62.6" cy="51.8" r="1.7" fill="#fff"/><circle cx="37.6" cy="55.2" r="0.9" fill="#fff"/><circle cx="59.6" cy="55.2" r="0.9" fill="#fff"/><path d="M44 63.5 Q50 69.5 56 63.5" stroke="#be123c" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` },
-      { id: 'girl2', label: 'สาวผมบ็อบติดกิ๊บ', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#fff1f2"/><stop offset="100%" stop-color="#fda4af"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff3e2"/><stop offset="68%" stop-color="#fcdab0"/><stop offset="100%" stop-color="#e8ae72"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#581c87"/><stop offset="100%" stop-color="#2e1065"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f43f5e"/><stop offset="100%" stop-color="#be123c"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.6"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><path d="M18 56 C18 18 82 18 82 56 L84 74 C76 78 68 78 65 73 L35 73 C32 78 24 78 16 74 Z" fill="url(#hr)"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M40 75 L50 86 L60 75 Z" fill="#fff1f2"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e5ac72"/><circle cx="50" cy="54" r="25.5" fill="url(#sk)"/><path d="M23 47 C26 24 74 24 77 47 L67 43 L62 47 L52 41 L42 47 L34 42 Z" fill="url(#hr)"/><rect x="61" y="34" width="11" height="4.5" rx="2.2" transform="rotate(14 66 36)" fill="#fde047" stroke="#f59e0b" stroke-width="0.8"/><ellipse cx="34" cy="61" rx="6" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54.5" r="4.3" fill="#1e1b4b"/><circle cx="60.5" cy="54.5" r="4.3" fill="#1e1b4b"/><circle cx="41" cy="52.8" r="1.6" fill="#fff"/><circle cx="62" cy="52.8" r="1.6" fill="#fff"/><path d="M43.5 64 Q50 70.5 56.5 64" stroke="#be123c" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` },
-      { id: 'girl3', label: 'สาวแว่นน่ารัก', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#f3e8ff"/><stop offset="100%" stop-color="#d8b4fe"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff4e4"/><stop offset="68%" stop-color="#fde0b8"/><stop offset="100%" stop-color="#eab477"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6b21a8"/><stop offset="100%" stop-color="#3b0764"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7e22ce"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f472b6" stop-opacity="0.58"/><stop offset="100%" stop-color="#f472b6" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><path d="M18 58 C18 18 82 18 82 58 L80 86 L20 86 Z" fill="url(#hr)"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M40 75 L50 85 L60 75 Z" fill="#fff"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e6ae74"/><circle cx="50" cy="53" r="25.5" fill="url(#sk)"/><path d="M24 47 C27 24 73 24 76 47 C64 35 36 35 24 47 Z" fill="url(#hr)"/><ellipse cx="33" cy="61" rx="6" ry="3.6" fill="url(#bl)"/><ellipse cx="67" cy="61" rx="6" ry="3.6" fill="url(#bl)"/><circle cx="39" cy="54" r="3.9" fill="#1e1b4b"/><circle cx="61" cy="54" r="3.9" fill="#1e1b4b"/><circle cx="40.3" cy="52.6" r="1.4" fill="#fff"/><circle cx="62.3" cy="52.6" r="1.4" fill="#fff"/><circle cx="39" cy="54" r="8.5" fill="#ffffff" fill-opacity="0.22" stroke="#ec4899" stroke-width="2.5"/><circle cx="61" cy="54" r="8.5" fill="#ffffff" fill-opacity="0.22" stroke="#ec4899" stroke-width="2.5"/><line x1="47.5" y1="54" x2="52.5" y2="54" stroke="#ec4899" stroke-width="2.5"/><path d="M44.5 64.5 Q50 69.5 55.5 64.5" stroke="#be185d" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>` },
-      { id: 'girl4', label: 'สาวดังโงะติดโบว์', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#fae8ff"/><stop offset="100%" stop-color="#f0abfc"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff4e4"/><stop offset="68%" stop-color="#fde0b8"/><stop offset="100%" stop-color="#ebb478"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#334155"/><stop offset="100%" stop-color="#0f172a"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d946ef"/><stop offset="100%" stop-color="#a21caf"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.62"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><circle cx="16" cy="22" r="3" fill="#fff" opacity="0.7"/><circle cx="84" cy="24" r="3.5" fill="#fff" opacity="0.6"/><circle cx="50" cy="21" r="12" fill="url(#hr)"/><path d="M35 23 L50 29 L35 35 C33 31 33 27 35 23 Z" fill="#f43f5e"/><path d="M65 23 L50 29 L65 35 C67 31 67 27 65 23 Z" fill="#f43f5e"/><circle cx="50" cy="29" r="3.5" fill="#ffe4e6"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M38 76 Q50 86 62 76" stroke="#fae8ff" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e5ad73"/><circle cx="50" cy="54" r="25.5" fill="url(#sk)"/><path d="M24 50 C24 25 76 25 76 50 C64 36 36 36 24 50 Z" fill="url(#hr)"/><ellipse cx="34" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><path d="M35 54.5 Q39.5 49.5 44 54.5" stroke="#0f172a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M56 54.5 Q60.5 49.5 65 54.5" stroke="#0f172a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M43 63.5 Q50 71.5 57 63.5 Z" fill="#fb7185" stroke="#be123c" stroke-width="1.8" stroke-linejoin="round"/></svg>` },
-      { id: 'girl5', label: 'สาวผมยาวติดดาว', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="bg" cx="35%" cy="25%" r="75%"><stop offset="0%" stop-color="#ecfdf5"/><stop offset="100%" stop-color="#6ee7b7"/></radialGradient><radialGradient id="sk" cx="42%" cy="35%" r="65%"><stop offset="0%" stop-color="#fff3e2"/><stop offset="68%" stop-color="#fbd39b"/><stop offset="100%" stop-color="#e5a668"/></radialGradient><linearGradient id="hr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#92400e"/><stop offset="100%" stop-color="#451a03"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/></linearGradient><radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.6"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" fill="url(#bg)"/><path d="M16 56 C16 17 84 17 84 56 L87 90 L13 90 Z" fill="url(#hr)"/><path d="M23 100 C25 78 36 74 50 74 C64 74 75 78 77 100 Z" fill="url(#sh)"/><path d="M39 75 L50 86 L61 75 Z" fill="#ecfdf5"/><rect x="44" y="68" width="12" height="10" rx="5" fill="#e5a76a"/><circle cx="50" cy="54" r="25.5" fill="url(#sk)"/><path d="M23 48 C28 24 72 24 77 48 C65 36 53 35 45 41 C38 35 28 38 23 48 Z" fill="url(#hr)"/><path d="M30 33 L32 37 L36 37.5 L33 40 L34 44 L30 42 L26 44 L27 40 L24 37.5 L28 37 Z" fill="#fde047" stroke="#eab308" stroke-width="0.7"/><ellipse cx="34" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><ellipse cx="66" cy="61" rx="6.5" ry="3.8" fill="url(#bl)"/><circle cx="39.5" cy="54.5" r="4.4" fill="#291509"/><circle cx="60.5" cy="54.5" r="4.4" fill="#291509"/><circle cx="41" cy="52.8" r="1.6" fill="#fff"/><circle cx="62" cy="52.8" r="1.6" fill="#fff"/><circle cx="38" cy="56" r="0.8" fill="#fff"/><circle cx="59" cy="56" r="0.8" fill="#fff"/><path d="M43.5 64 Q50 70.5 56.5 64" stroke="#9a3412" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` }
-    ].map(item => ({
-      ...item,
-      dataUrl: 'data:image/svg+xml;utf8,' + encodeURIComponent(item.svg)
-    }));
+    const STUDENT_CUSTOM_AVATAR_KEY = 'SMART_SEATING_STUDENT_CUSTOM_AVATAR_V1';
+    let currentStudentNavTab = 'all';
 
-
+    // Uses redesigned AVATAR_PRESETS from avatars.js
     function getStudentAvatarUrl(rosterObj) {
       if (rosterObj && rosterObj.photo) return rosterObj.photo;
+      try {
+        const customId = localStorage.getItem(STUDENT_CUSTOM_AVATAR_KEY);
+        if (customId && window.AVATAR_PRESETS) {
+          const found = window.AVATAR_PRESETS.find(p => p.id === customId);
+          if (found) return found.dataUrl;
+        }
+      } catch (e) {}
       const name = (rosterObj && rosterObj.name) || (studentUser && studentUser.fullname) || '';
       const num = Number((rosterObj && rosterObj.number) || (studentUser && studentUser.number) || 1);
       const gender = (rosterObj && rosterObj.gender) || detectStudentGender(name, num);
-      const pool = gender === 'F' ? AVATAR_PRESETS.slice(5, 10) : AVATAR_PRESETS.slice(0, 5);
+      const pool = (window.AVATAR_PRESETS || []).filter(p => p.gender === gender);
+      if (!pool.length) return '';
       return pool[num % pool.length].dataUrl;
     }
 
@@ -1558,12 +1693,24 @@
      * 2. EXPLICIT JOIN, LIVE MEMBERSHIP VERIFICATION & AUTO-DISCONNECT
      *************************************************************************/
     function setConnectedCardsVisible(visible) {
-      ['st-mission-hero', 'section-connected-classroom', 'help-request-card', 'section-student-tasks'].forEach(id => {
+      ['st-quick-nav', 'st-mission-hero', 'section-connected-classroom', 'help-request-card', 'section-student-tasks'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
         if (visible) el.classList.remove('hidden');
         else el.classList.add('hidden');
       });
+      const onboardingEl = document.getElementById('st-onboarding-card');
+      if (onboardingEl) {
+        if (visible) onboardingEl.classList.add('hidden');
+        else onboardingEl.classList.remove('hidden');
+      }
+      if (visible) {
+        renderStudentAvatarPicker();
+        setStudentNavTab(currentStudentNavTab || 'all');
+      } else {
+        const scanSec = document.getElementById('section-qr-connect');
+        if (scanSec) scanSec.classList.remove('hidden');
+      }
       const dot = document.getElementById('nav-conn-dot');
       const qrChip = document.getElementById('qr-status-chip');
       if (dot) {
@@ -1577,6 +1724,104 @@
           ? 'px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold shrink-0'
           : 'px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-extrabold shrink-0';
       }
+    }
+
+    function setStudentNavTab(tab) {
+      currentStudentNavTab = tab || 'all';
+      document.querySelectorAll('.st-nav-tab').forEach(btn => {
+        const isTarget = btn.getAttribute('data-st-tab') === currentStudentNavTab;
+        if (isTarget) {
+          btn.classList.add('bg-indigo-600', 'text-white', 'shadow-xs', 'font-extrabold');
+          btn.classList.remove('text-slate-600', 'hover:bg-slate-100', 'font-bold');
+        } else {
+          btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-xs', 'font-extrabold');
+          btn.classList.add('text-slate-600', 'hover:bg-slate-100', 'font-bold');
+        }
+      });
+      const map = {
+        'section-qr-connect': currentStudentNavTab === 'all' || currentStudentNavTab === 'scan',
+        'st-mission-hero': currentStudentNavTab === 'all',
+        'section-connected-classroom': currentStudentNavTab === 'all' || currentStudentNavTab === 'seat',
+        'help-request-card': currentStudentNavTab === 'all' || currentStudentNavTab === 'help',
+        'section-student-tasks': currentStudentNavTab === 'all' || currentStudentNavTab === 'tasks'
+      };
+      Object.entries(map).forEach(([id, show]) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (show) el.classList.remove('hidden');
+        else el.classList.add('hidden');
+      });
+    }
+
+    function toggleStudentAvatarDrawer() {
+      const grid = document.getElementById('st-avatar-picker-grid');
+      if (!grid) return;
+      grid.classList.toggle('hidden');
+      renderStudentAvatarPicker();
+    }
+
+    function selectStudentCustomAvatar(presetId) {
+      try { localStorage.setItem(STUDENT_CUSTOM_AVATAR_KEY, presetId); } catch (e) {}
+      const rosterObj = (classroomData && classroomData.students || []).find(s => s.id === matchedRosterStudentId) || null;
+      renderStudentProfileAvatars(rosterObj);
+      renderStudentAvatarPicker();
+      renderSeatMiniMap();
+      launchMiniConfetti();
+    }
+
+    function renderStudentAvatarPicker() {
+      const grid = document.getElementById('st-avatar-picker-grid');
+      if (!grid || !window.AVATAR_PRESETS) return;
+      let selectedId = '';
+      try { selectedId = localStorage.getItem(STUDENT_CUSTOM_AVATAR_KEY) || ''; } catch (e) {}
+      grid.innerHTML = window.AVATAR_PRESETS.map(p => {
+        const active = p.id === selectedId;
+        return `
+          <button type="button" onclick="selectStudentCustomAvatar('${p.id}')"
+            title="${window.SMART_AVATARS ? window.SMART_AVATARS.getAvatarLabel(p) : p.label}"
+            class="aspect-square rounded-2xl overflow-hidden border-2 ${active ? 'border-indigo-600 ring-2 ring-indigo-300 scale-105' : 'border-white hover:border-indigo-300'} bg-white shadow-xs transition active:scale-95">
+            <img src="${p.dataUrl}" alt="${p.label}" class="w-full h-full object-cover" />
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderSeatMiniMap() {
+      const wrap = document.getElementById('dash-seat-minimap-wrap');
+      const gridEl = document.getElementById('dash-seat-minimap-grid');
+      if (!wrap || !gridEl || !classroomData || !matchedRosterStudentId) {
+        if (wrap) wrap.classList.add('hidden');
+        return;
+      }
+      const rows = Number(classroomData.rows) || 5;
+      const cols = Number(classroomData.cols) || 6;
+      const desks = classroomData.desks || {};
+      const myGroup = (classroomData.abilityGroups || []).find(g => Array.isArray(g.studentIds) && g.studentIds.includes(matchedRosterStudentId));
+      const groupSet = new Set(myGroup ? myGroup.studentIds : []);
+      const myAvatar = getStudentAvatarUrl((classroomData.students || []).find(s => s.id === matchedRosterStudentId));
+
+      gridEl.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+      let html = '';
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const d = desks[`${r}-${c}`];
+          if (!d || d.disabled) {
+            html += `<div class="h-7 rounded-lg bg-slate-200/50 border border-dashed border-slate-300/60"></div>`;
+          } else if (d.studentId === matchedRosterStudentId) {
+            html += `<div class="h-7 rounded-lg bg-emerald-500 text-white border-2 border-emerald-300 shadow-sm flex items-center justify-center animate-pulse" title="You">
+              <img src="${myAvatar}" class="w-5 h-5 rounded-full object-cover border border-white" />
+            </div>`;
+          } else if (d.studentId && groupSet.has(d.studentId)) {
+            html += `<div class="h-7 rounded-lg bg-violet-200 border border-violet-400 flex items-center justify-center text-[9px] font-extrabold text-violet-900"><i class="fa-solid fa-user-group"></i></div>`;
+          } else if (d.studentId) {
+            html += `<div class="h-7 rounded-lg bg-white border border-slate-300 flex items-center justify-center text-[9px] text-slate-400"><i class="fa-solid fa-user"></i></div>`;
+          } else {
+            html += `<div class="h-7 rounded-lg bg-slate-100 border border-slate-200"></div>`;
+          }
+        }
+      }
+      gridEl.innerHTML = html;
+      wrap.classList.remove('hidden');
     }
 
     function showDisconnectedState(reasonType, message) {
@@ -2153,6 +2398,7 @@
       }
       seatBanner.classList.remove('hidden');
       document.getElementById('dash-seat-coord').textContent = foundCoord;
+      renderSeatMiniMap();
 
       // 1.5 Group & Buddy Card
       renderMyGroupShowcase();
@@ -2197,6 +2443,16 @@
       // 4. Tasks List + Mission Progress Hero
       const tasks = (classroomData && classroomData.tasks) || [];
       const doneCount = tasks.filter(t => t.submissions && t.submissions[matchedRosterStudentId] === 'submitted').length;
+      const pendingTasks = Math.max(0, tasks.length - doneCount);
+      const navBadge = document.getElementById('st-nav-tasks-badge');
+      if (navBadge) {
+        if (pendingTasks > 0) {
+          navBadge.textContent = String(pendingTasks);
+          navBadge.classList.remove('hidden');
+        } else {
+          navBadge.classList.add('hidden');
+        }
+      }
       updateMissionHeroProgress(isCheckedIn, doneCount, tasks.length);
       renderStudentTasksList();
     }
