@@ -243,6 +243,16 @@
       --st-icon-size: 1.32rem;
     }
 
+    html, body {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar,
+    #st-quick-nav::-webkit-scrollbar {
+      display: none;
+    }
+
     body {
       font-family: var(--app-font-family);
       background: linear-gradient(155deg, #eef2ff 0%, #f0f9ff 48%, #fdf2f8 100%);
@@ -511,12 +521,13 @@
         max-width: 68rem !important;
         display: grid !important;
         grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
-        gap: 1.15rem !important;
+        gap: 0.9rem !important;
         align-items: start !important;
       }
       #st-main-grid > section {
         margin-top: 0 !important;
       }
+      #st-quick-nav { grid-column: span 12 / span 12; }
       #st-mission-hero { grid-column: span 12 / span 12; }
       #section-qr-connect { grid-column: span 5 / span 5; }
       #section-connected-classroom { grid-column: span 7 / span 7; }
@@ -594,7 +605,7 @@
           <div id="nav-st-name" class="text-sm sm:text-base font-extrabold truncate leading-tight">นักเรียน</div>
           <div class="flex items-center gap-1.5 mt-0.5">
             <span id="nav-conn-dot" class="w-2 h-2 rounded-full bg-amber-300 shrink-0"></span>
-            <span id="nav-st-room" class="text-[11px] text-white/90 truncate font-medium">ยังไม่ได้เชื่อมต่อห้องเรียน</span>
+            <span id="nav-st-room" class="text-xs sm:text-sm text-white/90 truncate font-medium" data-i18n="st.not_connected">ยังไม่ได้เชื่อมต่อห้องเรียน</span>
           </div>
         </div>
       </div>
@@ -689,10 +700,10 @@
   </header>
 
   <!-- ================= MAIN STUDENT BENTO WORKSPACE ================= -->
-  <main id="st-main-grid" class="max-w-xl w-full mx-auto p-3.5 sm:p-5 space-y-4 flex-1 pb-14 transition-all">
+  <main id="st-main-grid" class="max-w-xl w-full mx-auto p-3 sm:p-4 space-y-3 flex-1 pb-4 transition-all">
 
     <!-- EASY-TO-NAVIGATE STUDENT TAB BAR (Shown when connected) -->
-    <nav id="st-quick-nav" class="hidden st-card rounded-2xl p-1.5 flex items-center gap-1 overflow-x-auto sticky top-[66px] z-20 shadow-md">
+    <nav id="st-quick-nav" class="hidden st-card rounded-2xl p-1.5 flex flex-wrap items-center gap-1 sticky top-[62px] z-20 shadow-md">
       <button type="button" data-st-tab="all" onclick="setStudentNavTab('all')" class="st-nav-tab flex-1 min-w-[74px] py-2 px-2.5 rounded-xl text-xs font-extrabold bg-indigo-600 text-white shadow-xs flex items-center justify-center gap-1.5 transition whitespace-nowrap">
         <i class="fa-solid fa-sparkles"></i><span data-i18n="st.nav_all">ทั้งหมด</span>
       </button>
@@ -716,34 +727,34 @@
       <div class="absolute -right-8 -top-10 w-40 h-40 rounded-full bg-white/10 blur-xl pointer-events-none"></div>
       <div class="absolute -left-10 -bottom-10 w-36 h-36 rounded-full bg-sky-300/20 blur-xl pointer-events-none"></div>
 
-      <div class="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="relative flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="flex items-center gap-3.5 min-w-0">
           <div id="hero-st-avatar" class="w-16 h-16 rounded-3xl overflow-hidden border-3 border-white/90 shadow-lg bg-white/20 shrink-0 ring-4 ring-white/20"></div>
           <div class="min-w-0">
-            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 text-[11px] font-bold backdrop-blur-xs mb-1">
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 text-xs sm:text-sm font-bold backdrop-blur-xs mb-1">
               <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
-              <span id="hero-room-pill">เชื่อมต่อห้องเรียนแล้ว</span>
+              <span id="hero-room-pill" data-i18n="st.connected_pill">เชื่อมต่อห้องเรียนแล้ว</span>
             </div>
             <h1 class="text-lg sm:text-xl font-extrabold truncate">
               <span id="hero-greeting-text">สวัสดีครับ!</span> <span class="animate-wave">👋</span>
             </h1>
-            <p id="hero-motivation-text" class="text-xs text-white/90 mt-0.5">พร้อมลุยภารกิจในห้องเรียนวันนี้กันหรือยัง?</p>
+            <p id="hero-motivation-text" class="text-sm sm:text-base text-white/95 mt-0.5" data-i18n="st.hero_motivation">พร้อมลุยภารกิจในห้องเรียนวันนี้กันหรือยัง?</p>
           </div>
         </div>
 
         <!-- Daily Mission Progress Meter -->
         <div class="bg-white/15 backdrop-blur-md rounded-2xl p-3 border border-white/20 min-w-[230px] sm:max-w-xs space-y-2">
-          <div class="flex items-center justify-between text-xs font-extrabold">
-            <span><i class="fa-solid fa-trophy text-amber-300 mr-1.5"></i>ภารกิจวันนี้</span>
-            <span id="hero-progress-pct" class="px-2 py-0.5 rounded-full bg-white text-indigo-700 text-[11px]">33%</span>
+          <div class="flex items-center justify-between text-xs sm:text-sm font-extrabold">
+            <span><i class="fa-solid fa-trophy text-amber-300 mr-1.5"></i><span data-i18n="st.hero_mission_title">ภารกิจวันนี้</span></span>
+            <span id="hero-progress-pct" class="px-2 py-0.5 rounded-full bg-white text-indigo-700 text-xs font-extrabold">33%</span>
           </div>
           <div class="w-full h-2.5 rounded-full bg-black/25 overflow-hidden">
             <div id="hero-progress-bar" class="h-full rounded-full bg-gradient-to-r from-amber-300 via-emerald-300 to-teal-300 transition-all duration-500" style="width: 33%;"></div>
           </div>
-          <div class="grid grid-cols-3 gap-1 text-[10px] font-bold text-center pt-0.5">
-            <div id="mission-pill-join" class="px-1.5 py-1 rounded-xl bg-emerald-400/25 border border-emerald-300/50 text-emerald-100">✓ เข้าห้อง</div>
-            <div id="mission-pill-checkin" class="px-1.5 py-1 rounded-xl bg-white/10 border border-white/15 text-white/75">• เช็คชื่อ</div>
-            <div id="mission-pill-tasks" class="px-1.5 py-1 rounded-xl bg-white/10 border border-white/15 text-white/75">• ส่งงาน</div>
+          <div class="grid grid-cols-3 gap-1 text-xs font-bold text-center pt-0.5">
+            <div id="mission-pill-join" class="px-1.5 py-1 rounded-xl bg-emerald-400/25 border border-emerald-300/50 text-emerald-100" data-i18n="st.pill_join">✓ เข้าห้อง</div>
+            <div id="mission-pill-checkin" class="px-1.5 py-1 rounded-xl bg-white/10 border border-white/15 text-white/75" data-i18n="st.pill_checkin">• เช็คชื่อ</div>
+            <div id="mission-pill-tasks" class="px-1.5 py-1 rounded-xl bg-white/10 border border-white/15 text-white/75" data-i18n="st.pill_tasks">• ส่งงาน</div>
           </div>
         </div>
       </div>
@@ -758,36 +769,36 @@
           </div>
           <div>
             <h2 class="text-sm sm:text-base font-extrabold text-slate-900" data-i18n="st.qr_title">สแกน QR / เชื่อมต่อห้องเรียน</h2>
-            <p class="text-[11px] text-slate-500" data-i18n="st.qr_sub">สแกน QR หน้าจอครูเพื่อเข้าห้องเรียน หรือสแกน QR ใบงาน</p>
+            <p class="text-xs sm:text-sm text-slate-600" data-i18n="st.qr_sub">สแกน QR หน้าจอครูเพื่อเข้าห้องเรียน หรือสแกน QR ใบงาน</p>
           </div>
         </div>
-        <span id="qr-status-chip" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-extrabold shrink-0" data-i18n="st.qr_ready">พร้อมสแกน</span>
+        <span id="qr-status-chip" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-extrabold shrink-0" data-i18n="st.qr_ready">พร้อมสแกน</span>
       </div>
 
       <!-- Friendly 3-Step Onboarding Guide (Visible when not yet connected) -->
       <div id="st-onboarding-card" class="rounded-2xl p-3 bg-gradient-to-r from-indigo-50 via-sky-50 to-violet-50 border border-indigo-200/80 space-y-2">
-        <div class="text-xs font-extrabold text-indigo-900 flex items-center gap-1.5">
+        <div class="text-xs sm:text-sm font-extrabold text-indigo-900 flex items-center gap-1.5">
           <i class="fa-solid fa-compass text-indigo-600"></i>
           <span data-i18n="st.onboarding_title">เริ่มต้นใช้งานง่ายๆ ใน 3 ขั้นตอน</span>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs sm:text-sm">
           <div class="flex items-center gap-2 bg-white/80 rounded-xl p-2 border border-indigo-100">
-            <span class="w-5 h-5 rounded-full bg-indigo-600 text-white font-extrabold flex items-center justify-center shrink-0 text-[10px]">1</span>
+            <span class="w-5 h-5 rounded-full bg-indigo-600 text-white font-extrabold flex items-center justify-center shrink-0 text-xs">1</span>
             <span class="font-semibold text-slate-700 leading-snug" data-i18n="st.onboarding_s1">สแกน QR หน้าจอครู หรือพิมพ์ชื่อผู้ใช้ครู</span>
           </div>
           <div class="flex items-center gap-2 bg-white/80 rounded-xl p-2 border border-sky-100">
-            <span class="w-5 h-5 rounded-full bg-sky-600 text-white font-extrabold flex items-center justify-center shrink-0 text-[10px]">2</span>
+            <span class="w-5 h-5 rounded-full bg-sky-600 text-white font-extrabold flex items-center justify-center shrink-0 text-xs">2</span>
             <span class="font-semibold text-slate-700 leading-snug" data-i18n="st.onboarding_s2">เลือกชื่อของคุณ & ดูตำแหน่งโต๊ะเรียน</span>
           </div>
           <div class="flex items-center gap-2 bg-white/80 rounded-xl p-2 border border-emerald-100">
-            <span class="w-5 h-5 rounded-full bg-emerald-600 text-white font-extrabold flex items-center justify-center shrink-0 text-[10px]">3</span>
+            <span class="w-5 h-5 rounded-full bg-emerald-600 text-white font-extrabold flex items-center justify-center shrink-0 text-xs">3</span>
             <span class="font-semibold text-slate-700 leading-snug" data-i18n="st.onboarding_s3">เช็คชื่อ ส่งงาน และยกมือถามครูได้ทันที</span>
           </div>
         </div>
       </div>
 
       <!-- Disconnected / Removed Alert Banner -->
-      <div id="st-disconnected-banner" class="hidden p-3.5 rounded-2xl border text-xs font-bold flex items-start gap-2.5">
+      <div id="st-disconnected-banner" class="hidden p-3.5 rounded-2xl border text-sm font-bold flex items-start gap-2.5">
         <i id="st-disconnected-icon" class="fa-solid fa-circle-info text-base mt-0.5 shrink-0"></i>
         <div id="st-disconnected-msg" class="leading-relaxed"></div>
       </div>
@@ -886,10 +897,10 @@
         <button
           type="button"
           onclick="leaveClassroomManually()"
-          class="px-3 py-1.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white text-[11px] font-extrabold shrink-0 transition"
+          class="px-3 py-1.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white text-xs font-extrabold shrink-0 transition"
           title="ออกจากห้องเรียนนี้"
         >
-          <i class="fa-solid fa-door-open mr-1"></i>ออกห้อง
+          <i class="fa-solid fa-door-open mr-1"></i><span data-i18n="st.btn_leave">ออกห้อง</span>
         </button>
       </div>
 
@@ -939,11 +950,11 @@
               <i class="fa-solid fa-people-group"></i>
             </span>
             <div>
-              <div id="dash-group-title" class="text-sm font-extrabold text-violet-900">กลุ่มที่ 1</div>
-              <div id="dash-group-subtitle" class="text-[11px] text-slate-600">สมาชิกในกลุ่มของคุณ</div>
+              <div id="dash-group-title" class="text-sm sm:text-base font-extrabold text-violet-900">กลุ่มที่ 1</div>
+              <div id="dash-group-subtitle" class="text-xs sm:text-sm text-slate-600">สมาชิกในกลุ่มของคุณ</div>
             </div>
           </div>
-          <span id="dash-group-badge-pill" class="px-2.5 py-0.5 rounded-full bg-violet-600 text-white text-[10px] font-extrabold shrink-0">กลุ่ม 4 คน</span>
+          <span id="dash-group-badge-pill" class="px-2.5 py-0.5 rounded-full bg-violet-600 text-white text-xs font-extrabold shrink-0">กลุ่ม 4 คน</span>
         </div>
 
         <!-- Dynamic Role Banner (Groups of 5) or Buddy Banner (Groups of 6) -->
@@ -955,8 +966,8 @@
 
       <!-- Roster Identity Picker -->
       <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 space-y-1.5">
-        <label class="block text-[11px] font-bold text-slate-600">
-          <i class="fa-solid fa-id-card text-indigo-500 mr-1"></i>ชื่อของคุณในผังที่นั่งห้องนี้:
+        <label class="block text-xs sm:text-sm font-bold text-slate-600">
+          <i class="fa-solid fa-id-card text-indigo-500 mr-1"></i><span data-i18n="st.roster_label">ชื่อของคุณในผังที่นั่งห้องนี้:</span>
         </label>
         <select
           id="dash-roster-match-select"
@@ -972,15 +983,15 @@
         type="button"
         id="dash-btn-checkin"
         onclick="studentCheckInNow()"
-        class="w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold text-sm shadow-lg shadow-emerald-500/25 flex items-center justify-between transition active:scale-[0.98]"
+        class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold text-sm shadow-lg shadow-emerald-500/25 flex items-center justify-between transition active:scale-[0.98]"
       >
         <div class="flex items-center gap-3">
           <span class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-lg">
             <i class="fa-solid fa-user-check"></i>
           </span>
           <div class="text-left">
-            <div class="text-sm font-extrabold leading-tight" data-i18n="st.checkin_title">เช็คชื่อเข้าเรียนวันนี้</div>
-            <div id="dash-checkin-sub" class="text-[11px] text-emerald-100 font-medium" data-i18n="st.checkin_sub">แตะเพื่อยืนยันการเข้าเรียนกับครู</div>
+            <div class="text-sm sm:text-base font-extrabold leading-tight" data-i18n="st.checkin_title">เช็คชื่อเข้าเรียนวันนี้</div>
+            <div id="dash-checkin-sub" class="text-xs sm:text-sm text-emerald-100 font-medium" data-i18n="st.checkin_sub">แตะเพื่อยืนยันการเข้าเรียนกับครู</div>
           </div>
         </div>
         <span id="dash-checkin-badge" class="px-3 py-1 rounded-full bg-white/20 text-xs font-extrabold" data-i18n="st.checkin_badge">แตะเช็คชื่อ</span>
@@ -988,7 +999,7 @@
     </section>
 
     <!-- 3. EXPRESSIVE LIVE HELP REQUEST WITH 1-TAP QUICK CHIPS -->
-    <section id="help-request-card" class="hidden st-card rounded-3xl p-4 sm:p-5 border-2 border-rose-200 space-y-3">
+    <section id="help-request-card" class="hidden st-card rounded-3xl p-4 sm:p-4 border-2 border-rose-200 space-y-3">
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5">
           <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-rose-500 to-amber-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-rose-500/25 text-lg">
@@ -996,21 +1007,21 @@
           </div>
           <div>
             <h3 class="text-sm sm:text-base font-extrabold text-slate-900" data-i18n="st.help_title">ยกมือขอความช่วยเหลือ</h3>
-            <p class="text-[11px] text-slate-500" data-i18n="st.help_sub">โต๊ะของคุณบนหน้าจอครูจะกะพริบแจ้งเตือนทันที</p>
+            <p class="text-xs sm:text-sm text-slate-600" data-i18n="st.help_sub">โต๊ะของคุณบนหน้าจอครูจะกะพริบแจ้งเตือนทันที</p>
           </div>
         </div>
-        <span id="dash-help-status-pill" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[10px] font-extrabold shrink-0" data-i18n="st.help_normal">ปกติ</span>
+        <span id="dash-help-status-pill" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-xs font-extrabold shrink-0" data-i18n="st.help_normal">ปกติ</span>
       </div>
 
       <!-- Quick Tap Question Chips -->
       <div class="flex flex-wrap gap-1.5">
-        <button type="button" onclick="fillQuickHelpChip('ไม่เข้าใจโจทย์ข้อนี้ครับ/ค่ะ')" class="px-2.5 py-1 rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-[11px] font-bold transition active:scale-95">
+        <button type="button" onclick="fillQuickHelpChip(t('st.help_chip_1_val'))" class="px-2.5 py-1 rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs font-bold transition active:scale-95" data-i18n="st.help_chip_1">
           ❓ ไม่เข้าใจโจทย์
         </button>
-        <button type="button" onclick="fillQuickHelpChip('ช่วยตรวจคำตอบให้หน่อยครับ/ค่ะ')" class="px-2.5 py-1 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-[11px] font-bold transition active:scale-95">
+        <button type="button" onclick="fillQuickHelpChip(t('st.help_chip_2_val'))" class="px-2.5 py-1 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-xs font-bold transition active:scale-95" data-i18n="st.help_chip_2">
           👀 ช่วยตรวจงานหน่อย
         </button>
-        <button type="button" onclick="fillQuickHelpChip('ขอคำแนะนำเพิ่มเติมครับ/ค่ะ')" class="px-2.5 py-1 rounded-full bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 text-[11px] font-bold transition active:scale-95">
+        <button type="button" onclick="fillQuickHelpChip(t('st.help_chip_3_val'))" class="px-2.5 py-1 rounded-full bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 text-xs font-bold transition active:scale-95" data-i18n="st.help_chip_3">
           💡 ขอคำแนะนำเพิ่ม
         </button>
       </div>
@@ -1018,22 +1029,24 @@
       <input
         type="text"
         id="dash-help-note"
+        data-i18n-placeholder="st.help_placeholder"
         placeholder="พิมพ์สิ่งที่สงสัยถึงครู หรือแตะปุ่มด่วนด้านบน..."
-        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs outline-none focus:border-rose-400 transition"
+        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs sm:text-sm outline-none focus:border-rose-400 transition"
       />
 
       <button
         type="button"
         id="dash-btn-help"
         onclick="toggleLiveHelpToTeacher()"
-        class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-extrabold text-sm shadow-lg shadow-rose-500/25 transition active:scale-[0.98]"
+        class="w-full py-3 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-extrabold text-sm shadow-lg shadow-rose-500/25 transition active:scale-[0.98]"
+        data-i18n="st.help_btn"
       >
         🙋 กดยกมือขอความช่วยเหลือ
       </button>
     </section>
 
     <!-- 4. ASSIGNMENTS MISSION BOARD -->
-    <section id="section-student-tasks" class="hidden st-card rounded-3xl p-4 sm:p-5 border border-amber-200 space-y-3.5">
+    <section id="section-student-tasks" class="hidden st-card rounded-3xl p-4 sm:p-4 border border-amber-200 space-y-3">
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5">
           <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-amber-500/25 text-lg">
@@ -1041,7 +1054,7 @@
           </div>
           <div>
             <h3 class="text-sm sm:text-base font-extrabold text-slate-900" data-i18n="st.tasks_title">ภารกิจงานที่ได้รับมอบหมาย</h3>
-            <p class="text-[11px] text-slate-500" data-i18n="st.tasks_sub">ส่งงานแล้วกดยืนยัน สถานะจะซิงก์ไปหน้าจอครูทันที</p>
+            <p class="text-xs sm:text-sm text-slate-600" data-i18n="st.tasks_sub">ส่งงานแล้วกดยืนยัน สถานะจะซิงก์ไปหน้าจอครูทันที</p>
           </div>
         </div>
         <span id="dash-tasks-summary-pill" class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-extrabold shrink-0 border border-amber-300">0/0</span>
@@ -1065,13 +1078,13 @@
       <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-4 text-2xl">
         <i class="fa-solid fa-right-from-bracket"></i>
       </div>
-      <h3 class="text-lg font-extrabold text-slate-900 mb-1.5">ยืนยันการออกจากระบบ?</h3>
-      <p class="text-xs sm:text-sm text-slate-500 mb-6">คุณต้องการออกจากระบบนักเรียนเพื่อกลับไปหน้าเลือกบทบาทใช่หรือไม่?</p>
+      <h3 class="text-lg font-extrabold text-slate-900 mb-1.5" data-i18n="st.logout_title">ยืนยันการออกจากระบบ?</h3>
+      <p class="text-sm sm:text-base text-slate-600 mb-6" data-i18n="st.logout_desc">คุณต้องการออกจากระบบนักเรียนเพื่อกลับไปหน้าเลือกบทบาทใช่หรือไม่?</p>
       <div class="flex items-center justify-center gap-2.5">
-        <button type="button" onclick="closeStudentLogoutConfirm()" class="flex-1 py-2.5 px-4 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition">
+        <button type="button" onclick="closeStudentLogoutConfirm()" class="flex-1 py-2.5 px-4 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition" data-i18n="common.cancel">
           ยกเลิก
         </button>
-        <button type="button" onclick="executeStudentLogout()" class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow-md transition">
+        <button type="button" onclick="executeStudentLogout()" class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow-md transition" data-i18n="common.logout">
           ออกจากระบบ
         </button>
       </div>
@@ -1092,7 +1105,7 @@
           </div>
           <div class="min-w-0">
             <h3 class="font-extrabold text-base sm:text-lg truncate">ตั้งค่าการแสดงผลและธีม (Settings)</h3>
-            <p class="text-xs text-white/85 truncate">ปรับฟอนต์ ขนาดตัวอักษร โทนสี UI และภาพพื้นหลังตามต้องการ</p>
+            <p class="text-xs sm:text-sm text-white/90 truncate">ปรับฟอนต์ ขนาดตัวอักษร โทนสี UI และภาพพื้นหลังตามต้องการ</p>
           </div>
         </div>
         <button type="button" onclick="closeSettingsModal()" class="w-9 h-9 rounded-xl bg-white/15 hover:bg-white/25 flex items-center justify-center shrink-0 transition">
@@ -1139,7 +1152,7 @@
             <button type="button" onclick="setAppearanceUiScale(125)" data-uiscale="125" class="ui-scale-step-btn py-2 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">125%</button>
             <button type="button" onclick="setAppearanceUiScale(150)" data-uiscale="150" class="ui-scale-step-btn py-2 rounded-xl border border-slate-300 bg-white text-xs font-extrabold text-slate-700 hover:border-indigo-400 transition">150%</button>
           </div>
-          <p class="text-[11px] text-slate-500">ปรับย่อ-ขยายทุกองค์ประกอบทั้งหน้าเว็บพร้อมกัน (ปุ่ม การ์ด ตัวอักษร ผังที่นั่ง และหน้าต่างทั้งหมด) • คีย์ลัด Alt + / Alt - / Alt 0</p>
+          <p class="text-xs sm:text-sm text-slate-600">ปรับย่อ-ขยายทุกองค์ประกอบทั้งหน้าเว็บพร้อมกัน (ปุ่ม การ์ด ตัวอักษร ผังที่นั่ง และหน้าต่างทั้งหมด) • คีย์ลัด Alt + / Alt - / Alt 0</p>
         </section>
 
         <!-- SECTION 1: FONT FAMILY SELECTOR -->
@@ -1429,9 +1442,9 @@
 
     function getThaiTimeGreeting() {
       const h = new Date().getHours();
-      if (h < 12) return 'สวัสดีตอนเช้า';
-      if (h < 17) return 'สวัสดีตอนบ่าย';
-      return 'สวัสดีตอนเย็น';
+      if (h < 12) return t('st.greeting_morning');
+      if (h < 17) return t('st.greeting_afternoon');
+      return t('st.greeting_evening');
     }
 
     // Immediate auth gate -> route to unified login.html with role=student if not signed in
@@ -1507,7 +1520,7 @@
       const navNumEl = document.getElementById('nav-st-number');
       if (navNumEl) navNumEl.textContent = studentUser.number || '-';
       document.getElementById('nav-st-name').textContent = `${studentUser.fullname}${studentUser.nickname ? ` (${studentUser.nickname})` : ''}`;
-      document.getElementById('nav-st-room').textContent = 'ยังไม่ได้เข้าร่วมห้องเรียน';
+      document.getElementById('nav-st-room').textContent = t('st.not_joined');
       renderStudentProfileAvatars(null);
 
       const params = new URLSearchParams(window.location.search);
@@ -1535,7 +1548,7 @@
           isJoinedToClassroom = true;
           await loadTeacherClassroomData(false);
         } else {
-          showDisconnectedState('idle', 'ยังไม่ได้เข้าร่วมห้องเรียน แตะปุ่ม "เปิดกล้องสแกน" ด้านล่างเพื่อสแกน QR จากหน้าจอครู หรือพิมพ์ Username ครูเพื่อเริ่มใช้งาน ✨');
+          showDisconnectedState('idle', t('st.disconnected_idle'));
         }
       }
 
@@ -1719,10 +1732,10 @@
           : 'w-2 h-2 rounded-full bg-amber-300 shrink-0';
       }
       if (qrChip) {
-        qrChip.textContent = visible ? '✓ เชื่อมต่อแล้ว' : 'พร้อมสแกน';
+        qrChip.textContent = visible ? t('st.qr_connected') : t('st.qr_ready');
         qrChip.className = visible
-          ? 'px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold shrink-0'
-          : 'px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-extrabold shrink-0';
+          ? 'px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-extrabold shrink-0'
+          : 'px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-extrabold shrink-0';
       }
     }
 
@@ -1830,16 +1843,16 @@
       const msgEl = document.getElementById('st-disconnected-msg');
 
       setConnectedCardsVisible(false);
-      document.getElementById('nav-st-room').textContent = 'ยังไม่ได้เชื่อมต่อห้องเรียน';
+      document.getElementById('nav-st-room').textContent = t('st.not_connected');
 
       if (banner && msgEl) {
         banner.classList.remove('hidden');
         msgEl.textContent = message;
         if (reasonType === 'removed') {
-          banner.className = 'p-3.5 rounded-2xl border-2 border-rose-400 bg-rose-50 text-rose-800 text-xs font-bold flex items-start gap-2.5';
+          banner.className = 'p-3.5 rounded-2xl border-2 border-rose-400 bg-rose-50 text-rose-800 text-sm font-bold flex items-start gap-2.5';
           if (icon) icon.className = 'fa-solid fa-user-slash text-rose-600 text-base mt-0.5 shrink-0';
         } else {
-          banner.className = 'p-3.5 rounded-2xl border border-indigo-200 bg-indigo-50/70 text-indigo-900 text-xs font-semibold flex items-start gap-2.5';
+          banner.className = 'p-3.5 rounded-2xl border border-indigo-200 bg-indigo-50/70 text-indigo-900 text-sm font-semibold flex items-start gap-2.5';
           if (icon) icon.className = 'fa-solid fa-sparkles text-indigo-500 text-base mt-0.5 shrink-0';
         }
       }
@@ -2225,7 +2238,7 @@
     function renderConnectedClassroomUI() {
       if (!classroomData || !isJoinedToClassroom) return;
 
-      const roomTitle = classroomData.classroomTitle || 'ห้องเรียนออนไลน์';
+      const roomTitle = classroomData.classroomTitle || t('st.room_online');
       document.getElementById('dash-room-title').textContent = roomTitle;
       document.getElementById('nav-st-room').textContent = roomTitle;
       const heroPill = document.getElementById('hero-room-pill');
@@ -2234,15 +2247,15 @@
       const roster = classroomData.students || [];
       const selectEl = document.getElementById('dash-roster-match-select');
 
-      selectEl.innerHTML = `<option value="">-- รายชื่อในห้อง (${roster.length} คน) --</option>` +
+      selectEl.innerHTML = `<option value="">${escapeHtml(t('st.roster_count', { n: roster.length }))}</option>` +
         roster.map(st =>
-          `<option value="${st.id}" ${st.id === matchedRosterStudentId ? 'selected' : ''}>เลขที่ ${st.number} • ${escapeHtml(st.name)} ${st.nickname ? `(${escapeHtml(st.nickname)})` : ''}</option>`
+          `<option value="${st.id}" ${st.id === matchedRosterStudentId ? 'selected' : ''}>${escapeHtml(t('st.roster_option', { num: st.number, name: st.name }))} ${st.nickname ? `(${escapeHtml(st.nickname)})` : ''}</option>`
         ).join('');
 
       const myRosterObj = roster.find(s => s.id === matchedRosterStudentId) || null;
       renderStudentProfileAvatars(myRosterObj);
 
-      const displayNick = (myRosterObj && (myRosterObj.nickname || myRosterObj.name)) || (studentUser && (studentUser.nickname || studentUser.fullname)) || 'นักเรียน';
+      const displayNick = (myRosterObj && (myRosterObj.nickname || myRosterObj.name)) || (studentUser && (studentUser.nickname || studentUser.fullname)) || t('st.default_name');
       const greetingEl = document.getElementById('hero-greeting-text');
       if (greetingEl) greetingEl.textContent = `${getThaiTimeGreeting()}, ${displayNick}!`;
 
@@ -2280,9 +2293,9 @@
         return info && info.groupIndex === myInfo.groupIndex;
       });
 
-      if (titleEl) titleEl.textContent = `กลุ่มที่ ${myInfo.groupIndex} ของคุณ`;
-      if (subEl) subEl.textContent = `สมาชิกทั้งหมด ${teammates.length} คน • สัดส่วน ${ga.ratioLabel || ''}`;
-      if (pillEl) pillEl.textContent = `กลุ่ม ${ga.groupSize || teammates.length} คน`;
+      if (titleEl) titleEl.textContent = t('st.group_title', { n: myInfo.groupIndex });
+      if (subEl) subEl.textContent = t('st.group_sub', { n: teammates.length, ratio: ga.ratioLabel || '' });
+      if (pillEl) pillEl.textContent = t('st.group_pill', { n: ga.groupSize || teammates.length });
 
       // Highlight assigned Role (Groups of 5) or Buddy Partner (Groups of 6)
       if (hlEl) {
@@ -2292,11 +2305,11 @@
             <div class="flex items-center gap-2 min-w-0">
               <span class="text-xl">${myInfo.roleIcon || '⭐'}</span>
               <div class="min-w-0">
-                <div class="text-[10px] font-bold text-slate-500">หน้าที่ของคุณในกลุ่มนี้</div>
+                <div class="text-xs font-bold text-slate-500">${escapeHtml(t('st.role_label'))}</div>
                 <div class="text-xs sm:text-sm font-extrabold text-violet-900 truncate">${escapeHtml(myInfo.roleLabel)}</div>
               </div>
             </div>
-            <span class="px-2 py-0.5 rounded-full bg-violet-100 text-violet-800 text-[10px] font-extrabold shrink-0">My Role</span>
+            <span class="px-2 py-0.5 rounded-full bg-violet-100 text-violet-800 text-xs font-extrabold shrink-0">My Role</span>
           `;
         } else if (myInfo.buddyPair) {
           const buddyPartner = teammates.find(st => st.id !== matchedRosterStudentId && ga.byStudentId[st.id] && ga.byStudentId[st.id].buddyPair === myInfo.buddyPair);
@@ -2305,11 +2318,11 @@
             <div class="flex items-center gap-2 min-w-0">
               <span class="text-xl">🤝</span>
               <div class="min-w-0">
-                <div class="text-[10px] font-bold text-slate-500">คู่บัดดี้ที่ ${myInfo.buddyPair} ของคุณ</div>
-                <div class="text-xs sm:text-sm font-extrabold text-teal-900 truncate">${buddyPartner ? escapeHtml(buddyPartner.nickname || buddyPartner.name) : 'รอจับคู่บัดดี้'}</div>
+                <div class="text-xs font-bold text-slate-500">${escapeHtml(t('st.buddy_label', { n: myInfo.buddyPair }))}</div>
+                <div class="text-xs sm:text-sm font-extrabold text-teal-900 truncate">${buddyPartner ? escapeHtml(buddyPartner.nickname || buddyPartner.name) : escapeHtml(t('st.buddy_waiting'))}</div>
               </div>
             </div>
-            <span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 text-[10px] font-extrabold shrink-0">คู่บัดดี้ ${myInfo.buddyPair}</span>
+            <span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 text-xs font-extrabold shrink-0">${escapeHtml(t('st.buddy_pill', { n: myInfo.buddyPair }))}</span>
           `;
         } else {
           hlEl.classList.add('hidden');
@@ -2353,28 +2366,32 @@
       if (pctEl) pctEl.textContent = `${score}%`;
       if (barEl) barEl.style.width = `${score}%`;
 
+      const pJoin = document.getElementById('mission-pill-join');
+      if (pJoin) pJoin.textContent = t('st.pill_join');
+
       if (pCheck) {
         if (isCheckedIn) {
-          pCheck.textContent = '✓ เช็คชื่อแล้ว';
+          pCheck.textContent = t('st.pill_checkin_done');
           pCheck.className = 'px-1.5 py-1 rounded-xl bg-emerald-400/25 border border-emerald-300/50 text-emerald-100';
         } else {
-          pCheck.textContent = '• รอเช็คชื่อ';
+          pCheck.textContent = t('st.pill_checkin_wait');
           pCheck.className = 'px-1.5 py-1 rounded-xl bg-white/10 border border-white/15 text-white/80';
         }
       }
       if (pTasks) {
+        const tasksStr = t('st.pill_tasks_count', { done: doneTasks, total: totalTasks });
         if (tasksComplete && totalTasks > 0) {
-          pTasks.textContent = `✓ งาน ${doneTasks}/${totalTasks}`;
+          pTasks.textContent = `✓ ${tasksStr}`;
           pTasks.className = 'px-1.5 py-1 rounded-xl bg-amber-300/30 border border-amber-200/60 text-amber-50';
         } else {
-          pTasks.textContent = `• งาน ${doneTasks}/${totalTasks}`;
+          pTasks.textContent = `• ${tasksStr}`;
           pTasks.className = 'px-1.5 py-1 rounded-xl bg-white/10 border border-white/15 text-white/80';
         }
       }
       if (motEl) {
-        if (score >= 100) motEl.textContent = 'สุดยอดมาก! คุณทำภารกิจห้องเรียนวันนี้ครบ 100% แล้ว 🏆✨';
-        else if (!isCheckedIn) motEl.textContent = 'แตะปุ่ม "เช็คชื่อเข้าเรียนวันนี้" เพื่อเก็บภารกิจแรกกันเลย!';
-        else motEl.textContent = `เช็คชื่อเรียบร้อย! เหลืองานอีก ${Math.max(0, totalTasks - doneTasks)} ชิ้น สู้ๆ นะ 🚀`;
+        if (score >= 100) motEl.textContent = t('st.motivation_100');
+        else if (!isCheckedIn) motEl.textContent = t('st.motivation_checkin');
+        else motEl.textContent = t('st.motivation_remaining', { n: Math.max(0, totalTasks - doneTasks) });
       }
     }
 
@@ -2387,12 +2404,12 @@
       }
 
       // 1. Seat Coordinate
-      let foundCoord = 'รอครูจัดโต๊ะบนผัง';
+      let foundCoord = t('st.seat_waiting');
       const desks = classroomData.desks || {};
       for (const [key, d] of Object.entries(desks)) {
         if (d && !d.disabled && d.studentId === matchedRosterStudentId) {
           const [r, c] = key.split('-').map(Number);
-          foundCoord = `แถวที่ ${r + 1} • คอลัมน์ที่ ${c + 1}`;
+          foundCoord = t('st.seat_coord', { r: r + 1, c: c + 1 });
           break;
         }
       }
@@ -2410,13 +2427,13 @@
       const checkinBadge = document.getElementById('dash-checkin-badge');
       const checkinSub = document.getElementById('dash-checkin-sub');
       if (isCheckedIn) {
-        checkinBadge.textContent = '✓ เช็คชื่อแล้ว';
+        checkinBadge.textContent = t('st.checkin_badge_done');
         checkinBadge.className = 'px-3 py-1 rounded-full bg-white text-emerald-700 text-xs font-extrabold shadow-xs';
-        if (checkinSub) checkinSub.textContent = 'บันทึกการเข้าเรียนวันนี้เรียบร้อยแล้ว ✨';
+        if (checkinSub) checkinSub.textContent = t('st.checkin_sub_done');
       } else {
-        checkinBadge.textContent = 'แตะเช็คชื่อ';
+        checkinBadge.textContent = t('st.checkin_badge');
         checkinBadge.className = 'px-3 py-1 rounded-full bg-white/20 text-white text-xs font-extrabold';
-        if (checkinSub) checkinSub.textContent = 'แตะเพื่อยืนยันการเข้าเรียนกับครู';
+        if (checkinSub) checkinSub.textContent = t('st.checkin_sub');
       }
 
       // 3. Help Request Status
@@ -2428,16 +2445,16 @@
 
       if (isHelping) {
         helpCard.classList.add('help-active-ring', 'border-rose-500');
-        helpPill.textContent = 'กำลังรอคุณครู...';
-        helpPill.className = 'px-2.5 py-1 rounded-full bg-rose-600 text-white text-[10px] font-extrabold animate-pulse shrink-0';
-        helpBtn.innerHTML = '⏳ ส่งสัญญาณขอความช่วยเหลือแล้ว (แตะเพื่อยกเลิก)';
-        helpBtn.className = 'w-full py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-sm shadow-md transition';
+        helpPill.textContent = t('st.help_waiting');
+        helpPill.className = 'px-2.5 py-1 rounded-full bg-rose-600 text-white text-xs font-extrabold animate-pulse shrink-0';
+        helpBtn.innerHTML = escapeHtml(t('st.help_btn_cancel'));
+        helpBtn.className = 'w-full py-3 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-sm shadow-md transition';
       } else {
         helpCard.classList.remove('help-active-ring', 'border-rose-500');
-        helpPill.textContent = 'ปกติ';
-        helpPill.className = 'px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[10px] font-extrabold shrink-0';
-        helpBtn.innerHTML = '🙋 กดยกมือขอความช่วยเหลือ';
-        helpBtn.className = 'w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-extrabold text-sm shadow-lg shadow-rose-500/25 transition active:scale-[0.98]';
+        helpPill.textContent = t('st.help_normal');
+        helpPill.className = 'px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-xs font-extrabold shrink-0';
+        helpBtn.innerHTML = escapeHtml(t('st.help_btn'));
+        helpBtn.className = 'w-full py-3 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-extrabold text-sm shadow-lg shadow-rose-500/25 transition active:scale-[0.98]';
       }
 
       // 4. Tasks List + Mission Progress Hero
@@ -2471,17 +2488,17 @@
 
       if (tasks.length === 0) {
         listEl.innerHTML = `
-          <div class="text-center py-8 px-4 rounded-2xl bg-slate-50 border border-dashed border-slate-200 space-y-1.5">
+          <div class="text-center py-6 px-4 rounded-2xl bg-slate-50 border border-dashed border-slate-200 space-y-1.5">
             <div class="text-3xl">🎉</div>
-            <div class="text-xs font-extrabold text-slate-700">ยังไม่มีการบ้านหรือใบงานค้างในห้องนี้</div>
-            <div class="text-[11px] text-slate-400">เมื่อครูมอบหมายงานใหม่ รายการจะปรากฏที่นี่อัตโนมัติ</div>
+            <div class="text-sm font-extrabold text-slate-700">${escapeHtml(t('st.tasks_empty_title'))}</div>
+            <div class="text-xs sm:text-sm text-slate-500">${escapeHtml(t('st.tasks_empty_sub'))}</div>
           </div>
         `;
         return;
       }
 
-      listEl.innerHTML = tasks.map((t, idx) => {
-        const subStatus = (matchedRosterStudentId && t.submissions && t.submissions[matchedRosterStudentId]) || 'pending';
+      listEl.innerHTML = tasks.map((task, idx) => {
+        const subStatus = (matchedRosterStudentId && task.submissions && task.submissions[matchedRosterStudentId]) || 'pending';
         const isDone = subStatus === 'submitted';
 
         return `
@@ -2492,34 +2509,34 @@
                   ${isDone ? '<i class="fa-solid fa-check"></i>' : (idx + 1)}
                 </span>
                 <div class="min-w-0">
-                  <div class="text-xs sm:text-sm font-extrabold text-slate-900 leading-snug">${escapeHtml(t.title)}</div>
-                  <div class="text-[11px] text-slate-500 mt-0.5"><i class="fa-regular fa-calendar mr-1"></i>กำหนดส่ง: ${escapeHtml(t.dueDate || '-')}</div>
+                  <div class="text-xs sm:text-sm font-extrabold text-slate-900 leading-snug">${escapeHtml(task.title)}</div>
+                  <div class="text-xs text-slate-500 mt-0.5"><i class="fa-regular fa-calendar mr-1"></i>${escapeHtml(t('st.task_due'))} ${escapeHtml(task.dueDate || '-')}</div>
                 </div>
               </div>
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold shrink-0 ${
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold shrink-0 ${
                 isDone ? 'bg-emerald-600 text-white shadow-xs' : 'bg-amber-100 text-amber-800 border border-amber-300'
               }">
-                ${isDone ? '✓ ส่งแล้ว' : 'ยังไม่ส่ง'}
+                ${escapeHtml(isDone ? t('st.task_done') : t('st.task_pending'))}
               </span>
             </div>
 
             <div class="grid grid-cols-2 gap-2">
               <a
-                href="${escapeHtml(t.url)}"
+                href="${escapeHtml(task.url)}"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="py-2.5 px-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-xs font-extrabold text-center flex items-center justify-center gap-1.5 shadow-sm transition active:scale-[0.98]"
               >
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> เปิดทำใบงาน
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> ${escapeHtml(t('st.task_open'))}
               </a>
               <button
                 type="button"
-                onclick="toggleTaskSubmission('${t.id}')"
+                onclick="toggleTaskSubmission('${task.id}')"
                 class="py-2.5 px-3 rounded-xl ${
                   isDone ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-slate-950'
                 } text-xs font-extrabold flex items-center justify-center gap-1.5 shadow-sm transition active:scale-[0.98]"
               >
-                <i class="fa-solid ${isDone ? 'fa-circle-check' : 'fa-paper-plane'}"></i> ${isDone ? 'ส่งแล้ว (แตะแก้ไข)' : 'แจ้งส่งงานแล้ว'}
+                <i class="fa-solid ${isDone ? 'fa-circle-check' : 'fa-paper-plane'}"></i> ${escapeHtml(isDone ? t('st.task_mark_edit') : t('st.task_mark_done'))}
               </button>
             </div>
           </div>
@@ -3477,11 +3494,29 @@
         amber: 'bg-amber-900 text-white border-amber-700',
         slate: 'bg-slate-800 text-white border-slate-700'
       };
-      toast.className = `px-4 py-3 rounded-2xl border shadow-xl text-xs font-bold flex items-center gap-2 animate-shuffle ${colors[color] || colors.indigo}`;
+      toast.className = `px-4 py-3 rounded-2xl border shadow-xl text-xs sm:text-sm font-bold flex items-center gap-2 animate-shuffle ${colors[color] || colors.indigo}`;
       toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> <span>${escapeHtml(message)}</span>`;
       container.appendChild(toast);
       setTimeout(() => toast.remove(), 3500);
     }
+
+    window.addEventListener('smart-lang-change', () => {
+      document.title = t('st.page_title');
+      if (isJoinedToClassroom && classroomData) {
+        renderConnectedClassroomUI();
+      } else {
+        setConnectedCardsVisible(false);
+        const navRoom = document.getElementById('nav-st-room');
+        if (navRoom) navRoom.textContent = t('st.not_connected');
+        const banner = document.getElementById('st-disconnected-banner');
+        if (banner && !banner.classList.contains('hidden')) {
+          showDisconnectedState('idle', t('st.disconnected_idle'));
+        }
+      }
+      if (document.getElementById('settings-modal') && !document.getElementById('settings-modal').classList.contains('hidden')) {
+        renderSettingsModalContent();
+      }
+    });
   </script>
 
   <!-- ================= GLOBAL SCALE QUICK POPOVER & FLOATING RECOVERY DOCK ================= -->
@@ -3492,8 +3527,8 @@
           <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
         </span>
         <div>
-          <div class="text-xs font-extrabold text-slate-900 leading-tight">ปรับขนาดทั้งหมด (Zoom)</div>
-          <div class="text-[10px] text-slate-500">เลือกได้ตั้งแต่ 25% ถึง 150%</div>
+          <div class="text-xs sm:text-sm font-extrabold text-slate-900 leading-tight">ปรับขนาดทั้งหมด (Zoom)</div>
+          <div class="text-xs text-slate-500">เลือกได้ตั้งแต่ 25% ถึง 150%</div>
         </div>
       </div>
       <button type="button" onclick="closeGlobalScalePopover()" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs transition">
